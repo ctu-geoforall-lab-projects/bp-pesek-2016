@@ -29,8 +29,7 @@ from PyQt4.QtCore import pyqtSignal, QSettings, QTranslator, qVersion, QCoreAppl
 from PyQt4.QtGui import QAction, QIcon, QDialog, QDialogButtonBox, QFileDialog, QListWidgetItem, QMessageBox
 import resources
 
-#***************************************************************************************************************
-#import move
+import move
 
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'suro_leveling_dockwidget_base.ui'))
@@ -58,7 +57,7 @@ class SuroLevelingDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.output.textChanged.connect(self.ablesolve)
         self.value.textChanged.connect(self.ablesolve)
         #***************************************************************************************************
-        #self.solve.clicked.connect(move.move_by_points)
+        self.solve.clicked.connect(self.move_by)
 
     def select_input(self):
         """select .csv file to edit"""
@@ -88,6 +87,10 @@ class SuroLevelingDockWidget(QtGui.QDockWidget, FORM_CLASS):
         else:
             self.solve.setEnabled(False)
 
+    def move_by(self):
+        """move"""
+
+        move.move_by_points(self.input.text(),self.output.text(),int(self.value.text()))
 
     def closeEvent(self, event):
         self.closingPlugin.emit()
