@@ -72,12 +72,12 @@ class SuroLevelingDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     def select_output(self):
         """choose directory to save returned data"""
-
-        self.directory = QFileDialog.getExistingDirectory(self, 'Save to file') + u'\leveled_data.csv'
-        if not self.directory:
+        outputDir = QFileDialog.getExistingDirectory(self, 'Save to file')
+        if not outputDir:
             return
 
-        self.output.setText(self.directory) #** divna lomitka * musi se zmenit na jmeno souboru ***********************
+        self.directory = outputDir + os.path.sep + u'leveled_data.csv'
+        self.output.setText(self.directory)
 
     def ablesolve(self):
         """set Solve button enable"""
