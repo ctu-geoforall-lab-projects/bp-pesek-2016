@@ -22,14 +22,17 @@
 """
 
 import os
-import csv
 
 from PyQt4 import QtGui, uic
 from PyQt4.QtCore import pyqtSignal, QSettings, QTranslator, qVersion, QCoreApplication, Qt
 from PyQt4.QtGui import QAction, QIcon, QDialog, QDialogButtonBox, QFileDialog, QListWidgetItem, QMessageBox
-import resources
+from qgis.core import QgsVectorLayer, QgsMapLayerRegistry
+#import resources
 
 import move
+#import csv
+#from PyQt4.QtGui import *
+#from PyQt4.QtCore import *
 
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'suro_leveling_dockwidget_base.ui'))
@@ -52,34 +55,40 @@ class SuroLevelingDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
         self.inputButton.clicked.connect(self.select_input)
         self.outputButton.clicked.connect(self.select_output)
+        self.showInput.clicked.connect(self.show_input)
+        #self.showInput.clicked.connect(self.show_as_layer(self.input.text())) #***************************************
 
-        self.input.textChanged.connect(self.ablesolve) # enable of Solve button
-        self.output.textChanged.connect(self.ablesolve)
-        self.value.textChanged.connect(self.ablesolve)
-        #***************************************************************************************************
+
+        self.input.textChanged.connect(self.able_solve) # enable solve button
+        self.output.textChanged.connect(self.able_solve)
+        self.value.textChanged.connect(self.able_solve)
+        self.input.textChanged.connect(self.able_show) # enable showInput button
+
         self.solve.clicked.connect(self.move_by)
 
     def select_input(self):
         """select .csv file to edit"""
 
-        self.filepath = QFileDialog.getOpenFileName(self, 'Load file','.', 'Comma Seperated Values (*.csv)')
+        self.filePath = QFileDialog.getOpenFileName(self, 'Load file','.', 'Comma Seperated Values (*.csv)')
 
-        if not self.filepath:
+        if self.filePath:
+            self.filePath=os.path.normpath(self.filePath)
+        else:
             return
 
-        self.input.setText(self.filepath)
-        self.output.setText(self.filepath[:-4]+u'_leveled.csv')
+        self.input.setText(self.filePath)
+        self.output.setText(self.filePath[:-4]+u'_leveled.csv')
 
     def select_output(self):
         """choose directory to save returned data"""
-        outputDir = QFileDialog.getExistingDirectory(self, 'Save to file')
-        if not outputDir:
+        self.outputDir = QFileDialog.getExistingDirectory(self, 'Save to file')
+        if not self.outputDir:
             return
 
-        self.directory = outputDir + os.path.sep + u'leveled_data.csv'
+        self.directory = os.path.normpath(self.outputDir) + os.path.sep + u'leveled_data.csv'
         self.output.setText(self.directory)
 
-    def ablesolve(self):
+    def able_solve(self):
         """set Solve button enable"""
 
         if self.input.text() and self.output.text() and self.value.text():
@@ -87,12 +96,48 @@ class SuroLevelingDockWidget(QtGui.QDockWidget, FORM_CLASS):
         else:
             self.solve.setEnabled(False)
 
+    def able_show(self):
+        """set showInput button enable"""
+
+        if self.input.text():
+            self.showInput.setEnabled(True)
+        else:
+            self.showInput.setEnabled(False)
+
+#************************************************************************************************************
+    def show_as_layer(self,filePath):
+        """show input csv as layer"""
+
+        uri = "file:" + 3*os.path.sep + filePath + "?crs=%s&delimiter=%s&xField=%s&yField=%s&decimal=%s" % ("EPSG:4326",",", "Lat_deg", "Lon_deg", ".")
+        uri = os.path.join(uri).replace('\\','/')
+        layerName = filePath.rsplit(os.path.sep,1)
+        layerName = layerName[1][:-4]
+        layer = QgsVectorLayer(uri, layerName, "delimitedtext")
+        QgsMapLayerRegistry.instance().addMapLayer(layer)
+
+    def show_input(self):
+        """show input csv as layer"""
+
+        uri = "file:" + 3*os.path.sep + self.input.text() + "?crs=%s&delimiter=%s&xField=%s&yField=%s&decimal=%s" % ("EPSG:4326",",", "Lat_deg", "Lon_deg", ".")
+        uri = os.path.join(uri).replace('\\','/')
+        layerName = self.input.text().rsplit(os.path.sep,1)
+        layerName = layerName[1][:-4]
+        layer = QgsVectorLayer(uri, layerName, "delimitedtext")
+        QgsMapLayerRegistry.instance().addMapLayer(layer)
+
+
     def move_by(self):
         """move"""
 
         move.move_by_points(self.input.text(),self.output.text(),int(self.value.text()))
+        uri = "file:" + 3*os.path.sep + self.output.text() + "?crs=%s&delimiter=%s&xField=%s&yField=%s&decimal=%s" % ("EPSG:4326",",", "Lat_deg", "Lon_deg", ".")
+        uri = os.path.join(uri).replace('\\','/')
+        layerName = self.output.text().rsplit(os.path.sep,1)
+        layerName = layerName[1][:-4]
+        layer = QgsVectorLayer(uri, layerName, "delimitedtext")
+        QgsMapLayerRegistry.instance().addMapLayer(layer)
 
-    def closeEvent(self, event):
+    def close_event(self, event): #closeEvent
         self.closingPlugin.emit()
         event.accept()
 
