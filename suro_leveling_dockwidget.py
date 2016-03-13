@@ -118,7 +118,7 @@ class SuroLevelingDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def show_input(self):
         """show input csv as layer"""
 
-        uri = "file:" + 3*os.path.sep + self.input.text() + "?crs=%s&delimiter=%s&xField=%s&yField=%s&decimal=%s" % ("EPSG:4326",",", "Lat_deg", "Lon_deg", ".")
+        uri = "file:" + 3*os.path.sep + self.input.text() + "?crs=%s&delimiter=%s&xField=%s&yField=%s&decimal=%s" % ("EPSG:4326",",", "Lon_deg", "Lat_deg", ".")
         uri = os.path.join(uri).replace('\\','/')
         layerName = self.input.text().rsplit(os.path.sep,1)
         layerName = layerName[1][:-4]
