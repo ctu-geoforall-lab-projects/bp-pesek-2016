@@ -130,7 +130,7 @@ class SuroLevelingDockWidget(QtGui.QDockWidget, FORM_CLASS):
         """move"""
 
         move.move_by_points(self.input.text(),self.output.text(),int(self.value.text()))
-        uri = "file:" + 3*os.path.sep + self.output.text() + "?crs=%s&delimiter=%s&xField=%s&yField=%s&decimal=%s" % ("EPSG:4326",",", "Lat_deg", "Lon_deg", ".")
+        uri = "file:" + 3*os.path.sep + self.output.text() + "?crs=%s&delimiter=%s&xField=%s&yField=%s&decimal=%s" % ("EPSG:4326",",", "Lon_deg", "Lat_deg", ".")
         uri = os.path.join(uri).replace('\\','/')
         layerName = self.output.text().rsplit(os.path.sep,1)
         layerName = layerName[1][:-4]
