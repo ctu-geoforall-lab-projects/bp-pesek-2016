@@ -64,9 +64,6 @@ class SuroLeveling:
         # Declare instance attributes
         self.actions = []
         self.menu = self.tr(u'&Suro Leveling')
-        # TODO: We are going to let the user set this up in a future iteration
-        self.toolbar = self.iface.addToolBar(u'SuroLeveling')
-        self.toolbar.setObjectName(u'SuroLeveling')
 
         #print "** INITIALIZING SuroLeveling"
 
@@ -97,7 +94,6 @@ class SuroLeveling:
         callback,
         enabled_flag=True,
         add_to_menu=True,
-        add_to_toolbar=True,
         status_tip=None,
         whats_this=None,
         parent=None):
@@ -120,10 +116,6 @@ class SuroLeveling:
         :param add_to_menu: Flag indicating whether the action should also
             be added to the menu. Defaults to True.
         :type add_to_menu: bool
-
-        :param add_to_toolbar: Flag indicating whether the action should also
-            be added to the toolbar. Defaults to True.
-        :type add_to_toolbar: bool
 
         :param status_tip: Optional text to show in a popup when mouse pointer
             hovers over the action.
@@ -151,15 +143,13 @@ class SuroLeveling:
         if whats_this is not None:
             action.setWhatsThis(whats_this)
 
-        if add_to_toolbar:
-            self.toolbar.addAction(action)
-
         if add_to_menu:
             self.iface.addPluginToMenu(
                 self.menu,
                 action)
 
         self.actions.append(action)
+        self.iface.addToolBarIcon(action)
 
         return action
 
@@ -203,8 +193,6 @@ class SuroLeveling:
                 self.tr(u'&Suro Leveling'),
                 action)
             self.iface.removeToolBarIcon(action)
-        # remove the toolbar
-        del self.toolbar
 
     #--------------------------------------------------------------------------
 
