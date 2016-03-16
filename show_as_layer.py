@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 /***************************************************************************
- Move (the main function)
+ SuroLevelingDockWidget
                                  A QGIS plugin
  todo
                              -------------------
@@ -21,36 +21,15 @@
  ***************************************************************************/
 """
 
-def move_by_points(inputfile,outputfile,value):
+import os
+from qgis.core import QgsVectorLayer, QgsMapLayerRegistry
 
-    """move by number of points"""
+def show(filePath):
+    """show csv as layer"""
 
-    f=open(inputfile,'rb')
-    g=open(outputfile,'wb')
-    g.write(f.readline())
-
-    if value>0: # bodu 1 dam hodnoty a cislo bodu 2
-        for x in range(value):
-            a=f.readline()
-
-        while a:
-            a=f.readline()
-            if a:
-                a=a.split(',',2) # changing the number of point
-                a[1]=str(int(a[1])-value)
-                a=','.join(a)
-                g.write(a)
-
-    else:
-        a=[1]
-
-        while a:
-            a=f.readline()
-            if a:
-                a=a.split(',',2) # changing the number of point
-                a[1]=str(int(a[1])-value)
-                a=','.join(a)
-                g.write(a)
-
-    f.close()
-    g.close()
+    uri = "file:" + 3*os.path.sep + filePath + "?crs=%s&delimiter=%s&xField=%s&yField=%s&decimal=%s" % ("EPSG:4326",",", "Lon_deg", "Lat_deg", ".")
+    uri = os.path.join(uri).replace('\\','/')
+    layerName = filePath.rsplit(os.path.sep,1)
+    layerName = layerName[1][:-4]
+    layer = QgsVectorLayer(uri, layerName, "delimitedtext")
+    QgsMapLayerRegistry.instance().addMapLayer(layer)

@@ -30,6 +30,7 @@ from qgis.core import QgsVectorLayer, QgsMapLayerRegistry
 #import resources
 
 import move
+import show_as_layer
 #import csv
 #from PyQt4.QtGui import *
 #from PyQt4.QtCore import *
@@ -56,8 +57,6 @@ class SuroLevelingDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.inputButton.clicked.connect(self.select_input)
         self.outputButton.clicked.connect(self.select_output)
         self.showInput.clicked.connect(self.show_input)
-        #self.showInput.clicked.connect(self.show_as_layer(self.input.text())) #***************************************
-
 
         self.input.textChanged.connect(self.able_solve) # enable solve button
         self.output.textChanged.connect(self.able_solve)
@@ -67,7 +66,7 @@ class SuroLevelingDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.solve.clicked.connect(self.move_by)
 
     def select_input(self):
-        """select .csv file to edit"""
+        """select csv file to edit"""
 
         self.filePath = QFileDialog.getOpenFileName(self, 'Load file','.', 'Comma Seperated Values (*.csv)')
 
@@ -104,38 +103,16 @@ class SuroLevelingDockWidget(QtGui.QDockWidget, FORM_CLASS):
         else:
             self.showInput.setEnabled(False)
 
-#************************************************************************************************************
-    def show_as_layer(self,filePath):
-        """show input csv as layer"""
-
-        uri = "file:" + 3*os.path.sep + filePath + "?crs=%s&delimiter=%s&xField=%s&yField=%s&decimal=%s" % ("EPSG:4326",",", "Lat_deg", "Lon_deg", ".")
-        uri = os.path.join(uri).replace('\\','/')
-        layerName = filePath.rsplit(os.path.sep,1)
-        layerName = layerName[1][:-4]
-        layer = QgsVectorLayer(uri, layerName, "delimitedtext")
-        QgsMapLayerRegistry.instance().addMapLayer(layer)
-
     def show_input(self):
         """show input csv as layer"""
 
-        uri = "file:" + 3*os.path.sep + self.input.text() + "?crs=%s&delimiter=%s&xField=%s&yField=%s&decimal=%s" % ("EPSG:4326",",", "Lon_deg", "Lat_deg", ".")
-        uri = os.path.join(uri).replace('\\','/')
-        layerName = self.input.text().rsplit(os.path.sep,1)
-        layerName = layerName[1][:-4]
-        layer = QgsVectorLayer(uri, layerName, "delimitedtext")
-        QgsMapLayerRegistry.instance().addMapLayer(layer)
-
+        show_as_layer.show(self.input.text())
 
     def move_by(self):
         """move"""
 
         move.move_by_points(self.input.text(),self.output.text(),int(self.value.text()))
-        uri = "file:" + 3*os.path.sep + self.output.text() + "?crs=%s&delimiter=%s&xField=%s&yField=%s&decimal=%s" % ("EPSG:4326",",", "Lon_deg", "Lat_deg", ".")
-        uri = os.path.join(uri).replace('\\','/')
-        layerName = self.output.text().rsplit(os.path.sep,1)
-        layerName = layerName[1][:-4]
-        layer = QgsVectorLayer(uri, layerName, "delimitedtext")
-        QgsMapLayerRegistry.instance().addMapLayer(layer)
+        show_as_layer.show(self.output.text())
 
     def close_event(self, event): #closeEvent
         self.closingPlugin.emit()
