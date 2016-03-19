@@ -111,7 +111,10 @@ class SuroLevelingDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def move_by(self):
         """move"""
 
-        move.move_by_points(self.input.text(),self.output.text(),int(self.value.text()))
+        if self.units.currentText() == 'values':
+            move.move_by_points(self.input.text(),self.output.text(),int(self.value.text()))
+        if self.units.currentText() == 'meters':
+            move.move_by_distance(self.input.text(),self.output.text(),float(self.value.text()))
         show_as_layer.show(self.output.text())
 
     def close_event(self, event): #closeEvent

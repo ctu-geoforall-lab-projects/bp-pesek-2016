@@ -21,8 +21,8 @@
   </property>
   <property name="maximumSize">
    <size>
-    <width>552000</width>
-    <height>229000</height>
+    <width>552</width>
+    <height>229</height>
    </size>
   </property>
   <property name="features">
@@ -83,16 +83,23 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="units">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
+       <widget class="QComboBox" name="units">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-        <property name="text">
-         <string>values</string>
-        </property>
+        <item>
+         <property name="text">
+          <string>values</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>meters</string>
+         </property>
+        </item>
        </widget>
       </item>
      </layout>
