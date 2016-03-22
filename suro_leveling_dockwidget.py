@@ -29,7 +29,7 @@ from PyQt4.QtGui import QAction, QIcon, QDialog, QDialogButtonBox, QFileDialog, 
 from qgis.core import QgsVectorLayer, QgsMapLayerRegistry
 #import resources
 
-import move
+from move import Move, MoveError
 import show_as_layer
 #import csv
 #from PyQt4.QtGui import *
@@ -110,11 +110,21 @@ class SuroLevelingDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     def move_by(self):
         """move"""
+        try:
+            move = Move(self.input.text(),self.output.text())
+        except IOError as e:
+            QMessageBox.critical(None, "Error", "{0}".format(e), QMessageBox.Abort)
+            return
 
-        if self.units.currentText() == 'values':
-            move.move_by_points(self.input.text(),self.output.text(),int(self.value.text()))
-        if self.units.currentText() == 'meters':
-            move.move_by_distance(self.input.text(),self.output.text(),float(self.value.text()))
+        try:
+            if self.units.currentText() == 'values':
+                move.by_points(int(self.value.text()))
+            elif self.units.currentText() == 'meters':
+                move.by_distance(float(self.value.text()))
+        except MoveError as e:
+            QMessageBox.critical(None, "Error", "{0}".format(e), QMessageBox.Abort)
+            return
+
         show_as_layer.show(self.output.text())
 
     def close_event(self, event): #closeEvent
