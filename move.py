@@ -44,9 +44,6 @@ class Move:
         if not self.outputfile or self.outputfile.closed:
             raise MoveError("Output file is not open")
 
-    def __del__(self):
-        self._close()
-
     def by_points(self, value):
         """move by number of points"""
         self._check()
@@ -111,7 +108,7 @@ class Move:
                 if p1!=p2:
                     aziA = d.bearing(p1,p2)
 
-                    h=distance/2
+                    h=distance/2.0
                     fi=[float(line1[len(numberOfLatColumn)-1])*pi/180]
                     lam=[float(line1[len(numberOfLonColumn)-1])*pi/180]
                     azi=[aziA]

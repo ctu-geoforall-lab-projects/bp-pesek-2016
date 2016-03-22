@@ -118,9 +118,18 @@ class SuroLevelingDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
         try:
             if self.units.currentText() == 'values':
-                move.by_points(int(self.value.text()))
+                try:
+                    move.by_points(int(self.value.text()))
+                except ValueError as e:
+                    QMessageBox.critical(None, "ERROR: Invalid number of values", "{0}".format(e), QMessageBox.Abort)
+                    return
+
             elif self.units.currentText() == 'meters':
-                move.by_distance(float(self.value.text()))
+                try:
+                    move.by_distance(float(self.value.text()))
+                except ValueError as e:
+                    QMessageBox.critical(None, "ERROR: Invalid number of values", "{0}".format(e), QMessageBox.Abort)
+                    return
         except MoveError as e:
             QMessageBox.critical(None, "Error", "{0}".format(e), QMessageBox.Abort)
             return
