@@ -81,7 +81,7 @@ class Move:
 
         self._close()
 
-    def by_distance(distance):
+    def by_distance(self, distance):
         """move by constant distance"""
         self._check()
         header=self.inputfile.readline()
