@@ -80,6 +80,46 @@ class Move:
 
     def by_distance(self, distance):
         """move by constant distance"""
+
+        def iterations(distance,h):
+            FIe1=0
+            LAMe1=0
+            FI=100
+            LAM=100
+
+            # iterations
+            while fabs(FI-FIe1)>0.0000000001 and fabs(LAM -LAMe1)>0.0000000001:
+                FI=FIe1
+                LAM=LAMe1
+                for i in range(0,int(ceil(distance/h))):
+                    kfi=[]
+                    klam=[]
+                    kazi=[]
+                    kfi.append(cos(azi[i])/(a*(1-(e2))/(pow((sqrt(1-(e2)*pow(sin(fi[i]),2))),3))))
+                    klam.append(sin(azi[i])/((a/(sqrt(1-(e2)*pow(sin(fi[i]),2))))*cos(fi[i])))
+                    kazi.append(sin(azi[i])*tan(fi[i])/(a/(sqrt(1-(e2)*pow(sin(fi[i]),2)))))
+                    for j in range(1,3):
+                        kfi.append(cos(azi[i]+kazi[j-1]*h/2)/(a*(1-(e2))/(pow(sqrt(1-(e2)*pow(sin(fi[i]+kfi[j-1]*h/2),2)),3))))
+                        klam.append(sin(azi[i]+kazi[j-1]*h/2)/((a/(sqrt(1-(e2)*pow(sin(fi[i]+kfi[j-1]*h/2),2))))*cos(fi[i]+kfi[j-1]*h/2)))
+                        kazi.append(sin(azi[i]+kazi[j-1]*h/2)*tan(fi[i]+kfi[j-1]*h/2)/(a/(sqrt(1-(e2)*pow(sin(fi[i]+kfi[j-1]*h/2),2)))))
+
+                    kfi.append(cos(azi[i]+kazi[2]*h)/(a*(1-(e2))/(pow(sqrt(1-(e2)*pow(sin(fi[i]+kfi[2]*h),2)),3))))
+                    klam.append(sin(azi[i]+kazi[2]*h)/((a/(sqrt(1-(e2)*pow(sin(fi[i]+kfi[2]*h),2))))*cos(fi[i]+kfi[2]*h)))
+                    kazi.append(sin(azi[i]+kazi[2]*h)*tan(fi[i]+kfi[2]*h)/(a/(sqrt(1-(e2)*pow(sin(fi[i]+kfi[2]*h),2)))))
+
+                    fi.append(fi[i]+(h/6.0)*(kfi[0]+2*kfi[1]+2*kfi[2]+kfi[3]))
+                    lam.append(lam[i]+(h/6.0)*(klam[0]+2*klam[1]+2*klam[2]+klam[3]))
+                    azi.append(azi[i]+(h/6.0)*(kazi[0]+2*kazi[1]+2*kazi[2]+kazi[3]))
+
+                FIe1=fi[i+1]
+                LAMe1=lam[i+1]
+                h=h/2
+                fi[1:]=[]
+                lam[1:]=[]
+                azi[1:]=[]
+
+            return FIe1,LAMe1
+
         self._check()
         header=self.inputfile.readline()
         beforeLat=header.split('Lat_deg')
@@ -112,45 +152,11 @@ class Move:
                     fi=[float(line1[len(numberOfLatColumn)-1])*pi/180]
                     lam=[float(line1[len(numberOfLonColumn)-1])*pi/180]
                     azi=[aziA]
-                    FIe1=0
-                    LAMe1=0
-                    FI=100
-                    LAM=100
 
-                    # iterations
-                    while fabs(FI-FIe1)>0.0000000001 and fabs(LAM -LAMe1)>0.0000000001:
-                        FI=FIe1
-                        LAM=LAMe1
-                        for i in range(0,int(ceil(distance/h))):
-                            kfi=[]
-                            klam=[]
-                            kazi=[]
-                            kfi.append(cos(azi[i])/(a*(1-(e2))/(pow((sqrt(1-(e2)*pow(sin(fi[i]),2))),3))))
-                            klam.append(sin(azi[i])/((a/(sqrt(1-(e2)*pow(sin(fi[i]),2))))*cos(fi[i])))
-                            kazi.append(sin(azi[i])*tan(fi[i])/(a/(sqrt(1-(e2)*pow(sin(fi[i]),2)))))
-                            for j in range(1,3):
-                                kfi.append(cos(azi[i]+kazi[j-1]*h/2)/(a*(1-(e2))/(pow(sqrt(1-(e2)*pow(sin(fi[i]+kfi[j-1]*h/2),2)),3))))
-                                klam.append(sin(azi[i]+kazi[j-1]*h/2)/((a/(sqrt(1-(e2)*pow(sin(fi[i]+kfi[j-1]*h/2),2))))*cos(fi[i]+kfi[j-1]*h/2)))
-                                kazi.append(sin(azi[i]+kazi[j-1]*h/2)*tan(fi[i]+kfi[j-1]*h/2)/(a/(sqrt(1-(e2)*pow(sin(fi[i]+kfi[j-1]*h/2),2)))))
-
-                            kfi.append(cos(azi[i]+kazi[2]*h)/(a*(1-(e2))/(pow(sqrt(1-(e2)*pow(sin(fi[i]+kfi[2]*h),2)),3))))
-                            klam.append(sin(azi[i]+kazi[2]*h)/((a/(sqrt(1-(e2)*pow(sin(fi[i]+kfi[2]*h),2))))*cos(fi[i]+kfi[2]*h)))
-                            kazi.append(sin(azi[i]+kazi[2]*h)*tan(fi[i]+kfi[2]*h)/(a/(sqrt(1-(e2)*pow(sin(fi[i]+kfi[2]*h),2)))))
-
-                            fi.append(fi[i]+(h/6.0)*(kfi[0]+2*kfi[1]+2*kfi[2]+kfi[3]))
-                            lam.append(lam[i]+(h/6.0)*(klam[0]+2*klam[1]+2*klam[2]+klam[3]))
-                            azi.append(azi[i]+(h/6.0)*(kazi[0]+2*kazi[1]+2*kazi[2]+kazi[3]))
-
-                        FIe1=fi[i+1]
-                        LAMe1=lam[i+1]
-                        h=h/2
-                        fi[1:]=[]
-                        lam[1:]=[]
-                        azi[1:]=[]
-
+                    FIe1,LAMe1 = iterations(distance,h)
                     line1[len(numberOfLatColumn)-1]=str(FIe1*180/pi) # changing latitude and longitude of new point
                     line1[len(numberOfLonColumn)-1]=str(LAMe1*180/pi)
-                else:pass
+
                 line1=','.join(line1)
                 self.outputfile.write(line1)
                 line1=line2
