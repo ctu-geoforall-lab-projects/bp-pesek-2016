@@ -46,35 +46,63 @@ class Move:
 
     def by_points(self, value):
         """move by number of points"""
+
+        def mereni_values(self):
+            """reading of values in mereni"""
+
+            header=self.inputfile.readline()
+            beforeMereni=header.split('mereni')
+            numberOfMereniColumn=beforeMereni[0].split(',')
+            mereni=[]
+            a=self.inputfile.readline()
+            while a:
+                a=a.split(',')
+                mereni.append(a[len(numberOfMereniColumn)-1])
+                a=self.inputfile.readline()
+
+            self.inputfile.seek(0)
+            return mereni
+
         self._check()
 
+        mereni=mereni_values(self)
         header=self.inputfile.readline()
-        beforeRECS=header.split('RECS')
-        numberOfRECSColumn=beforeRECS[0].split(',')
         self.outputfile.write(header)
+        beforeMereni=header.split('mereni')
+        numberOfMereniColumn=beforeMereni[0].split(',')
 
-        if value>0: # bodu 1 dam hodnoty a cislo bodu 2
-            for x in range(value):
-                a=self.inputfile.readline()
+        if value>0:
+            a=self.inputfile.readline()
 
             while a:
+                a=a.split(',')
+                try:
+                    a[len(numberOfMereniColumn)-1]=mereni.pop(value)
+                except: break
+                a=','.join(a)
+                self.outputfile.write(a)
                 a=self.inputfile.readline()
-                if a:
-                    a=a.split(',',len(numberOfRECSColumn)) # changing the number of point
-                    a[len(numberOfRECSColumn)-1]=str(int(a[len(numberOfRECSColumn)-1])-value)
-                    a=','.join(a)
-                    self.outputfile.write(a)
+
+        elif value<0:
+            for x in range(abs(value)):
+                self.inputfile.readline()
+
+            beforeRECS=header.split('RECS')
+            numberOfRECSColumn=beforeRECS[0].split(',')
+            a=self.inputfile.readline()
+            while a:
+                a=a.split(',')
+                a[len(numberOfRECSColumn)-1]=str(int(a[len(numberOfRECSColumn)-1])+value)
+                a[len(numberOfMereniColumn)-1]=mereni.pop(0)
+                a=','.join(a)
+                self.outputfile.write(a)
+                a=self.inputfile.readline()
 
         else:
-            a=[1]
-
+            a=self.inputfile.readline()
             while a:
+                self.outputfile.write(a)
                 a=self.inputfile.readline()
-                if a:
-                    a=a.split(',',len(numberOfRECSColumn)) # changing the number of point
-                    a[len(numberOfRECSColumn)-1]=str(int(a[len(numberOfRECSColumn)-1])-value)
-                    a=','.join(a)
-                    self.outputfile.write(a)
 
         self._close()
 
