@@ -130,6 +130,14 @@ class SuroLevelingDockWidget(QtGui.QDockWidget, FORM_CLASS):
                 except ValueError as e:
                     QMessageBox.critical(None, "ERROR: Invalid number of values", "{0}".format(e), QMessageBox.Abort)
                     return
+
+            elif self.units.currentText() == 'seconds':
+                try:
+                    move.by_seconds(float(self.value.text()))
+                except ValueError as e:
+                    QMessageBox.critical(None, "ERROR: Invalid number of values", "{0}".format(e), QMessageBox.Abort)
+                    return
+
         except MoveError as e:
             QMessageBox.critical(None, "Error", "{0}".format(e), QMessageBox.Abort)
             return

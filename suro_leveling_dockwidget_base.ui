@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -28,7 +28,7 @@
   <property name="maximumSize">
    <size>
     <width>524287</width>
-    <height>524287</height>
+    <height>229</height>
    </size>
   </property>
   <property name="features">
@@ -39,7 +39,7 @@
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <property name="sizePolicy">
-    <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
@@ -125,22 +125,14 @@
           <string>meters</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>seconds</string>
+         </property>
+        </item>
        </widget>
       </item>
      </layout>
-    </item>
-    <item row="4" column="1">
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
     </item>
     <item row="4" column="2">
      <widget class="QPushButton" name="solve">
@@ -342,6 +334,19 @@
        </item>
       </layout>
      </widget>
+    </item>
+    <item row="4" column="1">
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
     </item>
    </layout>
   </widget>
