@@ -106,7 +106,7 @@ class SuroLevelingDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def show_input(self):
         """show input csv as layer"""
 
-        show_as_layer.show(self.input.text())
+        show_as_layer.show(self.input.text(),self.style.currentText())
 
     def move_by(self):
         """move"""
@@ -142,7 +142,7 @@ class SuroLevelingDockWidget(QtGui.QDockWidget, FORM_CLASS):
             QMessageBox.critical(None, "Error", "{0}".format(e), QMessageBox.Abort)
             return
 
-        show_as_layer.show(self.output.text())
+        show_as_layer.show(self.output.text(),self.style.currentText())
 
     def close_event(self, event): #closeEvent
         self.closingPlugin.emit()
