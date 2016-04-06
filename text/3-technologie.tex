@@ -1,28 +1,106 @@
 \chapter{Použité technologie}
 \label{3-technologie}
 
-
+Třetí kapitola se zabývá užitými technologiemi, stručně představuje jejich historii a~zaměření.
+Podrobnější informace o~jednotlivých projektech lze nalézt na oficiálních internetových stránkách. 
 
 
 \section{Python}
 \label{python}
 
- 
+  \begin{figure}[H]
+   \centering
+	\includegraphics[scale=0.5]{./pictures/python-logo-master-v3-TM.png}
+	\caption[Python logo]{Python logo 
+      (zdroj: \url{https://www.python.org/static/community_logos/python-logo-master-v3-TM.png})}
+      \label{fig:python}
+  \end{figure}
+
+Python je open-source multiplatformní programovací interpretovaný jazyk pojme\-novaný podle
+kultovního britského komediálního seriálu Monty Pythonův létající cirkus. Momentálně se
+vyvíjejí verze třetí řady (3.X). 
+
+První verzi vydanou roku 1991 navrhl nizozemský programátor Guido van~Rossum za užití kódu
+mnoha dalších programátorů. Silnou inspiraci van~Rossum našel v~jazyku ABC. Odtud také plyne
+přívětivost jazyka, pro niž je často vyučován a~doporučován jako ideální pro rychlý
+(a~přesto kvalitní) vývoj aplikací. 
+
+Zásadní byl pro vývoj rok~2001, kdy vznikla nezisková organizace Python Software
+Foundation (\zk{PSF}). \zk{PSF} zaštiťuje další vývoj Pythonu, vlastní jeho
+\textit{intelektuální jmění} a~pořádá a~podporuje konference ohledně Pythonu. Sám van~Rossum bývá
+pro svůj dohled a~svou neomezenou možnost zasahovat do vývoje nazýván \textit{benevolentní doživotní
+diktátor}, španělská inkvizice jazyka Python. 
+
+Python se na první pohled vyznačuje odsazováním kódu. Toho se ve většině jazyků používá jen jako
+pomůcky pro přehlednost, v~Pythonu je však odsazování povinné. 
+
+Mezi další specifikace jazyka patří například: 
+\begin{itemize}
+
+	\item Chování funkce: Ta se do svého zavolání uchovává jako objekt. 
+	
+	\item Proměnné: Není třeba deklarovat jejich typ. To může ušetřit značné množství práce
+	v~psaní kódu, ale je třeba si na tuto vlastnost dát pozor (celé číslo dělené celým číslem je
+	vždy celé číslo, i kdyby správným výsledkem mělo být číslo desetinné). 
+	
+	\item Proměnné uvnitř objektu: Není třeba je udávat při vytváření objektu. Lze je založit později. 
+	
+	\item Dokončení zápisu: V~interaktivním režimu provádím dokončení zápisu prázdným řádkem. 
+	
+	\item Kompilace: Python si automaticky kompiluje moduly do souborů \textit{.pyc}. Zkompilovaný
+	modul je platformně nezávislý. 
+
+\end{itemize}
 
 
 \section{QGIS}
 \label{qgis}
 
-QGIS (zkratka dříve užívaného názvu Quantum GIS) představuje na poli geografických informačních systémů (GIS) open-source alternativu ke komerčním geografickým informačním systémům typu ArcGIS. 
+  \begin{figure}[H]
+    \centering
+      \includegraphics[width=120pt]{./pictures/qgis.png}
+      \caption[QGIS logo]{QGIS logo 
+      (zdroj: \url{https://github.com/qgis/QGIS/blob/master/images/icons/qgis-icon-60x60.png})}
+      \label{fig:qgis}
+  \end{figure}
 
-Na začátku 21. století už byly geografické informační systémy běžnou praxí. Zrodila se tedy potřeba volby svobodného multiplatformního systému s širokou podporou formátů geodat. Roku 2002 začal Quantum GIS vyvíjet Gary Sherman, k němuž se později připojovalo čím dál více dobrovolníků. Časem projekt zaštítilo též roku 2006 vzniklé Open Source Geospatial Foundation (OSGeo) – organizace pro podporu a vývoj otevřených geoinformačních technologií a dat. Verze 1.0 byla uveřejněna v lednu 2009. 
-První verze systému QGIS byly pojmenovávány podle psů, později se přešlo na jména měsíců Jupiteru a Saturnu. Momentálně nesou nejnovější verze názvy měst. 
+QGIS (zkratka dříve užívaného názvu Quantum~GIS) představuje na poli geogra\-fic\-kých informačních systémů (\zk{GIS}) open-source alternativu ke komerčním geografickým informačním systémům typu~ArcGIS. 
 
-QGIS se ve svém zaměření příliš neliší od běžných GIS systémů. Uživatel v něm má možnost prohlížení, zpracování, tvorby a editace geodat, nad nimiž může provádět na příklad SQL dotazy. Data v prostředí QGIS mohou být jak rastrová, tak také vektorová. 
+Na začátku 21.~století už byly geografické informační systémy běžnou praxí. Zrodila se tedy potřeba volby svobodného multiplatformního systému s~širokou podporou formátů geodat. Roku 2002 začal Quantum~GIS vyvíjet Gary~Sherman, k~němuž se později připojovalo čím dál více dobrovolníků. Časem projekt zaštítilo též Open Source Geospatial Foundation (\zk{OSGeo})~–~organizace pro podporu a~vývoj otevřených geoinformačních technologií a dat vzniklá roku~2006. Verze~1.0 byla uveřejněna v~lednu~2009. 
 
-Síla QGIS vedle volnosti užití tkví především ve značném množství veřejně přístupných zásuvných modulů – tzv. pluginů. Ty byly zprvu psány především v jazyku C++ (stejně jako základní tělo programu), nyní se čím dál více přechází k jazyku Python, přičemž především pro grafické uživatelské rozhraní se využívá Qt knihoven. 
+První verze systému QGIS byly pojmenovávány podle psů, později se přešlo na jména měsíců Jupiteru a~Saturnu. Momentálně nesou nejnovější verze názvy měst. 
+QGIS se ve svém zaměření příliš neliší od běžných geografických informačních systémů. Uživatel v~něm má možnost prohlížení, zpracování, tvorby a~editace geodat, nad nimiž může provádět například SQL~dotazy. Data v~prostředí QGIS mohou být jak rastrová, tak také vektorová. Co se funkcionality týče, běžnému uživateli dostačuje, ale možností komerčních gigantů typu ArcGIS nedosahuje. 
+
+Síla QGIS vedle volnosti užití tkví především ve značném množství veřejně přístupných zásuvných modulů~–~tzv.~pluginů. Ty byly zprvu psány především v~jazyku C++ (stejně jako základní tělo programu), nyní se čím dál častěji přechází k~jazyku Python, přičemž především pro grafické uživatelské rozhraní se využívá Qt~knihoven. 
 
 
 
 \section{Qt Project}
 \label{qt}
+
+  \begin{figure}[H]
+    \centering
+      \includegraphics[width=120pt]{./pictures/qt.png}
+      \caption[Qt logo]{Qt logo 
+      (zdroj: \url{http://d3hp9ud7yvwzy0.cloudfront.net/wp-content/uploads/2015/02/Qt-logo-medium.png})}
+      \label{fig:qt}
+  \end{figure}
+
+Qt představuje uživatelsky přívětivé multiplatformní vývojové prostředí s~důrazem na grafické
+uživatelské rozhraní (\zk{GUI}). 
+
+Vývoj Qt započali na úsvitu devadesátých let dva programátoři - Haavard Nord a~Eirik
+Chambe-Eng. Původně dali své společnosti jméno Quasar technologies, ale brzy společnost
+přejmenovali na Trolltech. Pod touto hlavičkou působili až do roku~2008, kdy firmu odkoupila
+Nokia. V letech 2011 a~2012 pak probíhal další přesun, tentokráte pod podnik Digia. Digia
+nadále spolupracuje s~Qt~Company. 
+
+Qt není programovacím jazykem. Qt je framework psaný v~C++, umožňující ale práci i~v~dalších jazycích
+včetně jazyka python (PyQt). Qt klade zesílený důraz na \zk{GUI} a~práci s~ním. Mezi jednotlivými
+objekty se dá komunikovat a~vykonávat nad nimi operace pomocí tzv.~signálů a~slotů. \zk{GUI} se ukládá
+do souboru s~příponou \textit{.ui}. Pro náš zásuvný modul je důležitá právě tato odnož Qt poskytovaná
+samostatně jako Qt~Designer. 
+
+
+
+
