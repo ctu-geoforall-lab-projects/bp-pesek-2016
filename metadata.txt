@@ -10,7 +10,7 @@
 name=Suro Leveling
 qgisMinimumVersion=2.8
 description=Aerial Data Leveling
-version=0.1
+version=0.4
 author=Ondřej Pešek
 email=ondra.lobo@seznam.cz
 
