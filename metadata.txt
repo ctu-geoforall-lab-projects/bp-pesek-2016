@@ -8,16 +8,16 @@
 
 [general]
 name=Suro Leveling
-qgisMinimumVersion=2.0
-description=todo
+qgisMinimumVersion=2.8
+description=Aerial Data Leveling
 version=0.1
 author=Ondřej Pešek
 email=ondra.lobo@seznam.cz
 
-about=todo
+about=Aerial Data Leveling for suro.cz
 
-tracker=https://github.com/ctu-osgeorel-proj/bp-pesek-2015/issues
-repository=https://github.com/ctu-osgeorel-proj/bp-pesek-2015.git
+tracker=https://github.com/ctu-osgeorel-proj/bp-pesek-2016/issues
+repository=https://github.com/ctu-osgeorel-proj/bp-pesek-2016.git
 # End of mandatory metadata
 
 # Recommended items:
@@ -26,13 +26,13 @@ repository=https://github.com/ctu-osgeorel-proj/bp-pesek-2015.git
 # changelog=
 
 # Tags are comma separated with spaces allowed
-tags=
+tags=gps,aerial,leveling
 
-homepage=
+homepage=https://github.com/ctu-osgeorel-proj/bp-pesek-2016
 category=Plugins
 icon=icon.png
 # experimental flag
-experimental=False
+experimental=True
 
 # deprecated flag (applies to the whole plugin, not just a single version)
 deprecated=False
