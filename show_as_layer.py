@@ -32,10 +32,7 @@ def show(filePath,styleName):
     layerName = filePath.rsplit(os.path.sep,1)
     layerName = layerName[1][:-4]
     layer = QgsVectorLayer(uri, layerName, "delimitedtext")
-    if styleName == 'higher':
-        style=os.path.dirname(__file__) + os.path.sep + 'styles' + os.path.sep + 'letecka_lokalita1.qml'
-    elif styleName == 'lower':
-        style=os.path.dirname(__file__) + os.path.sep + 'styles' + os.path.sep + 'letecka_lokalita2.qml'
+    style=os.path.dirname(__file__) + os.path.sep + 'styles' + os.path.sep + styleName + '.qml'
     style = os.path.join(style).replace('\\','/')
     layer.loadNamedStyle(style)
     QgsMapLayerRegistry.instance().addMapLayer(layer)
