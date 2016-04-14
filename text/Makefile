@@ -1,4 +1,4 @@
-FILE=tereza-fiedlerova-bp-2013
+FILE=ondrej-pesek-bp-2016
 
 all:
 	pdflatex $(FILE)
