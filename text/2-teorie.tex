@@ -3,27 +3,139 @@
 
 Tato kapitola si klade za cíl seznámit čtenáře s~teoretickými základy měření radioaktivity, z~nichž
 plyne potřeba posunu. Dále pak načrtne způsoby, kterými bude možno body posouvat, a~popíše
-nejdůležitější problémy, s nimiž se při takovém posunu lze setkat. 
+nejdůležitější problémy, s~nimiž se při takovém posunu lze setkat. 
 
 \section{Scintilační spektrometrie}
 \label{spektrometrie}
 
+Ježto lidský subjekt není sám o~sobě schopen detekovat ionizující záření, je třeba si vypomoci příslušnou
+technikou, tedy přístroji, detektory ionizujícího záření. Tako\-vých přístrojů existuje velké
+a neustále se zvětšující množství. 
+
+Obecně se detektory dělí buď podle průběhu detekce v závislosti na čase (kumulativní a~kontinuální),
+nebo podle principu detekce (materiálové, fotografické a~pro nás nejdůležitější elektronické). 
+
+  \begin{figure}[H]
+   \centering
+	\includegraphics{./pictures/elektronicky-detektor.png}
+	\caption[Základní schéma elektronického detektoru záření]{Základní schéma elektronického
+	detektoru záření
+	(zdroj: \cite{spektrometrie})}
+      \label{fig:elektronicky-detektor}
+  \end{figure}
+
+Běžný elektronický detektor ionizujícího záření se skládá ze dvou hlavních bloků - z~detektorové
+a~analyzační části. V~detektoru dochází k~transformaci ionizačního záření na měřitelné
+elektronické impulsy. Takové impulsy bývají zesilovány buď už v~detektoru, nebo v~následujícím
+zesilovači; často se užívá kombinace obého. Signál zesílený na měřitelnou odezvu poté putuje do
+analyzátoru, který uživateli předává informace buď analogovou formou (například výchylka ručičky),
+nebo formou di\-gitální (číselný ukazatel, zápis do souboru v~počítači). 
+
+Následující podkapitoly představí přístroj a~metodu současně velice využívané,
+totiž scintilační spektrometry. Scintilační spektrometry patří do elektronických detektorů
+a~pro naši práci je důležité, že se objevují též v terénním měření \zk{SÚRO}. 
+
+  \begin{figure}[H]
+   \centering
+	\includegraphics[scale=0.75]{./pictures/scintilacni-detektor.png}
+	\caption[Obecné schéma scintilačního detektoru]{Obecné schéma scintilačního detektoru
+	(zdroj: \cite{spektrometrie})}
+      \label{fig:scintilacni-detektor}
+  \end{figure}
+
 \subsection{Detektorová část}
 \label{detektor}
+
+Ve scintilačních detektorech zachycuje ionizační záření takzvaná scintilační sonda.
+Ta sestává ze scintilačního krystalu a~fotonásobiče umístěných ve světlotěsném pou\-zdře.
+Pouzdro nejen že zabraňuje vniku nadbytečného světla do detekční jednotky, ale také stíní
+vnější magnetické pole, které by mohlo ovlivňovat správnou funkci fotonásobiče. 
+
+Obecná práce scintilačního detektoru spočívá v~tom, že detekuje-li nějaké ionizační záření, dochází ve
+scintilačním krystalu ke světelným zábleskům. Emise fotonů jsou přímo úměrné absorbovanému záření.
+Pomocí fotoelektrického jevu je ve vstup\-ní fotokatodě fotonásobiče převedeno fotonové kvantum na kvantum
+elektronové, načež uvnitř fotonásobiče dojde k zněkolikanásobení elektronů. 
 
 \subsubsection{Scintilační krystal}
 \label{krystal}
 
+Existují látky, takzvané scintilátory, které na pohlcení kvant ionizujícího záření reagují
+scintilacemi (z~latinského scintilla~-~jiskra\footnote{zdroj: FÜRST, Kamil a MEISSNER, Josef:
+\textit{Slovník latinsko-český a česko-latinský}, Praha: Nakladatelé Kvasnička a Hampl, 1941}, scintilace
+tedy představují světel\-né záblesky).
+Byť se mohou objevovat i~scintilátory kapalné či plynné, zde se budeme zabývat scintilátory
+nejběžněji užívanými - krystaly. 
+
+Krystaly bývají planárního válcového tvaru, případně pro speciálnější účely (vy\-soko\-energetická záření,
+detekce měkkého záření gama) velkoobjemové, studnové či tenké. V~současné době jsou krystaly
+nejčastěji vyráběny z~jodidu sodného aktivovaného thaliem (\textit{NaI(Tl)}), dříve se též
+používal sirník zinečnatý aktivovaný stříbrem nebo kyanid platino-barnatý. 
+
+Pokud bychom scintilátor jen přivařili ke vstupnímu okénku fotonásobiče, dochá\-zelo by
+ve vzduchové vrstvě mezi výstupním okén\-kem scintilátoru a vstupním okén\-kem fotonásobiče k~nechtěné
+ztrátě fotonů. Tento prostor tedy bývá zaplňován látkou s~vysokou světelnou vodivostí, například
+silikonovou vazelínou. V~případě většího průzvu bývají oba elementy spojeny světlovodičem či
+optickými vlákny. 
+
 \subsubsection{Fotonásobič}
 \label{fotonasobic}
+
+Fotonásobič představuje optoelektronickou součástku, která na základě fotoelektrického jevu
+převádí světelný tok na elektrické signály. Jeho výhoda tkví ve vysoké citlivosti způsobené
+několikanásobným zvětšením počtu elektronů pomocí dynod, pročež lze i~z~jediného fotonu
+vyprodukovat dobře detekovatelný elektronický impuls. Fotonásobič tak navzdory svému názvu nenásobí
+fotony, nýbrž elektrony vyvolané prvotním dopadem fotonů na fotokatodu. 
+
+Vstupním elementem fotonásobiče je tedy fotokatoda. Jedná se o~tenkou vrstvu napařenou na
+vstupním okénku, tvořenou zejména antimonidy alkalických prvků (nejčastěji cesia a antimonu),
+ana převádí dopadající fotony fotoelektrickým jevem na elektrony.
+Tenkost tvoří důležitou součást její výroby; v~opačném případě by mohlo docházet k~pohlcování
+emitovaných elektronů v~materiálu fotokatody. 
+
+Za fotokatodou (mezi fotokatodou a~první dynodou) se může nacházet kladně nabitá mřížka.
+Její kladné napětí udává emitovaným elektronům vyšší rychlost a~usměrňuje je na první z~dynod. 
+
+Následně tyto vyloučené elektrony násobí sekundární emise na dynodách. Dy\-nody představují soustavu
+zvláštních elektrod, kde se na každou následující přivádí vyšší (zpravidla o~100~V nebo
+dvojnásobné) kladné napětí, pročež přitahují emitované elektrony. Tento systém funguje
+jako elektronový zesilovač. Každá z~dynod pracuje tím způsobem, že po nárazu jednoho elektronu emituje
+další elektrony. Mezi počtem vyražených elektronů a~kinetickou energií dopadajícího elektronu
+platí přímá úměra. Obvykle se počet elektronů na každé dynodě zdvojnásobí. Několikerým
+mrdáním elektronů dojde k~jejich množení geometrickou řadou. Dynody mívají zpravidla
+zakřivený tvar (vhodnější pro fokusaci elektronů na další dynodu). 
+
+Posledním prvkem pak jest anoda - sběrná elektroda s~nejvyšším napětím, z~níž už přes pracovní
+odpor \textit{R} pokračuje výstupní signál do zesilovače, případně přímo do analyzační části. 
+
+  \begin{figure}[H]
+   \centering
+	\includegraphics[scale=0.5]{./pictures/fotonasobice.png}
+	\caption[Různá uspořádání fotonásobičů]{Různá uspořádání fotonásobičů
+	(zdroj: \cite{spektrometrie})}
+      \label{fig:fotonasobice}
+  \end{figure}
 
 \subsection{Analyzační část}
 \label{analyzator}
 
+Zesílené elektrické signály je třeba dále analyzovat. Existují dva druhy analyzátorů,
+které prezentují v~obrázku \ref{fig:scintilacni-detektor} dvě paralelní větve. 
+
+V~případě amplitudového analyzátoru se měří počet impulsů s~amplitudou mezi nastavenými
+diskriminačními hladinami. Diskriminační hodnoty představují amplitudové infimum a~supremum.
+Amplitudy ležící mimo toto rozmezí nebudou k~čítači propuštěny. Tím se částečně
+eliminují chyby a~temný proud - proud protékající fotonásobičem i~bez ozáření fotokatody.
+Územ bývá nastavit toto rozmezí tak, aby obsahovalo fotopík (pík totální absorpce) záření
+měřeného radionuklidu. Impulsy zkrácené o~přebytečné hodnoty následně vstoupí již do čítače impulsů. 
+
+Spektrometrická analýza vyžaduje transformaci impulsů na bitové informace; k~té dochází
+v~analogově-digitálním převodníku. V~paměti počítače se každé amplitudě záření gama
+střádacím algoritmem přidělí buňka. Při detekci takového kvanta se její hodnota zvyšuje o~1.
+Takovým postupem získáme scintilační spektrum, jehož grafické
+znázornění je na obrázku \ref{fig:scintilacni-detektor}. 
 
 \section{Sběr souřadnic a potřeba posunu}
 \label{potreba posunu}
-
 
 \section{Posun}
 \label{posun}
@@ -35,8 +147,7 @@ nejdůležitější problémy, s nimiž se při takovém posunu lze setkat.
 \subsection{Elipsoid}
 \label{elipsoid}
 
-
-
+a
 
 \subsection{První geodetická úloha}
 \label{prvnigu}
@@ -65,7 +176,7 @@ atributy koncového bodu křivky ve dvou po sobě jdoucích iteracích liší o~
 
   \begin{figure}[H]
    \centering
-	\includegraphics[scale=0.5]{./pictures/prvnigu-integrace.png}
+	\includegraphics[scale=0.4]{./pictures/prvnigu-integrace.png}
 	\caption[Integrační kroky v první geodetické úloze]{Integrační kroky v první geodetické úloze
 	(zdroj: \cite{vyssigeodezie})}
       \label{fig:prvnigu-integrace}
