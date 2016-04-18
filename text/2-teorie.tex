@@ -137,17 +137,91 @@ znázornění je na obrázku \ref{fig:scintilacni-detektor}.
 \section{Sběr souřadnic a potřeba posunu}
 \label{potreba posunu}
 
+Sběr měření probíhá letecky. Scintilační spektrometr je uložen ve vrtulníku, který přelétá nad zkoumaným
+územím; při přeletu se v~spektrometru registrují hodnoty záření. Tato data jsou registrována v~podstatě
+neustále, ale zapisují se až po jistém časovém úseku (běžně po vteřině) jako průměr hodnot za onen
+časový úsek měřených. V~okamžiku zápisu hodnot radionuklidů se rovněž tak zapisují zeměpisné souřadnice
+(a~další parametry). Ty se však nijak neprůměrují, zapisují se momentální hodnoty. 
+
+Z~popsaného plyne, že se registrované zeměpisné souřadnice od souřadnic geometrického průměru snímaného
+pole liší; jedná se o~souřadnice začátku nebo konce měření v~dané epoše (záleží na použitém přístroji).
+Vzniká tedy potřeba korekce zpoždění/předbíhání záznamu souřadnic oproti měřeným hodnotám. 
+
 \section{Posun}
 \label{posun}
 
+Bohužel není k~dispozici záznam výšek vrtulníku během letu, ani přesný záznam jeho rychlosti, tudíž
+není možnost dokonalé souřadnicové korekce, různými algoritmy se ale ideální hodnotě můžeme alespoň
+přiblížit. Zásuvný modul umožňuje tři základní posuny měřených dat. 
+
+Nejjednodušším způsobem je posun o~hodnoty. Hodnotě každého bodu přiřadíme souřadnice bodu
+předcházejícího či následujícího (s~libovolným krokem). Takový posun ovšem nijak neposouvá jednotlivé
+body, alebrž jen vzájemně vyměňuje jejich souřadnice. Před vývojem zásuvného modulu byl však tento
+\textit{posun} tím zdaleka nejvyužívanějším, téměř bezkonkurenčně, pro svou jednoduchost - stačilo
+posunout sloupce s potřebnými daty o~zamýšlený počet hodnot. 
+
+  \begin{figure}[H]
+   \centering
+	\includegraphics[scale=0.2]{./pictures/posun.png}
+	\caption[Posun dat o 1 hodnotu]{Posun dat o 1 hodnotu
+	
+	(zdroj: HELEBRANT, Jan a GRYC, Lubomír: \textit{GPS position lag correction} [interní dokument
+	SÚRO, v.v.i.])}
+      \label{fig:posun}
+  \end{figure}
+
+Nápaditěji působí posun o~konstantní vzdálenost. Uživatel dostane možnost posunout všechny body
+po trajektorii letu o~jím volenou vzdálenost. Tento princip představuje již skutečný, realitu lépe
+vystihující posun. V~ideálním případě popsaném na následujících obrázcích by posun o~14 metrů přesunul
+body na jejich náležité místo. 
+
+  \begin{figure}[H]
+   \centering
+	\includegraphics[scale=0.4]{./pictures/snimani.png}
+	\caption[Princip měření]{Princip měření
+	
+	(zdroj: HELEBRANT, Jan a GRYC, Lubomír: \textit{GPS position lag correction} [interní dokument
+	SÚRO, v.v.i.])}
+      \label{fig:mereni}
+  \end{figure}
+  
+  \begin{figure}[H]
+   \centering
+	\includegraphics[scale=0.3]{./pictures/snimani-detail.png}
+	\caption[Profilové schéma měření]{Profilové schéma měření
+	
+	(zdroj: HELEBRANT, Jan a GRYC, Lubomír: \textit{GPS position lag correction} [interní dokument
+	SÚRO, v.v.i.])}
+      \label{fig:mereni-profil}
+  \end{figure}
+  
+Skutečnosti nejvěrněji odpovídá posun o~sekundy. V~dřeni se jedná o~posun o~vzdálenost, ale tentokráte
+nikoli konstantní. 
+
+Ze známých zeměpisných souřadnic se mezi každou dvojicí bodů vypočte vzdále\-nost. Neboť známe pro každý
+z~bodů časovou značku, lehce (rozdíl dvou hodnot) vypočteme dobu, za niž vrtulník tuto vzdálenost urazil.
+Tím získáme veškeré potřebné veličiny pro výpočet rychlosti mezi dvěma body. Následuje postup opačný:
+Na zá\-kladě uživatelem zadané doby, o~niž se mají body posunout, se vypočte vzdálenost, kterou by
+vrtulník za danou dobu urazil. Vztáhneme-li tuto vzdálenost opět na trajektorii pohybu, obdržíme
+souřadnice posunutého bodu. 
 
 \section{Problémy}
 \label{problemy}
 
+Při tvorbě zásuvného modulu, který by jmenované operace umožňoval, může dojít k~mnoha nepříjemnostem
+a~mnoha problémům, s~nimiž je třeba se vypořádat. Jmenujme alespoň dva nejdůležitější: 
+
 \subsection{Elipsoid}
 \label{elipsoid}
 
-a
+Ačkoli různé typy spektrometrů produkují odlišné výstupy a~některé mohou obsahovat i~zeměpisné souřadnice
+na jiném referenčním tělese, zpravidla obsahují (také) souřadnice na elipsoidu \zk{WGS84}. 
+
+Přítomnost elipsoidických souřadnic namísto rovinných vnáší do výpočtu záludnou diafragmu, na niž musí
+tvůrce algoritmu dbát zvýšeného zřetele. Od výpočtů na referenční kouli (nerci v~rovině) se
+zásadně liší nejen délka, ale také azimut. Nejkratší spojnice (takzvaná geodetická křivka) pak samozřejmě
+nepředstavuje v~rovinném zobrazení úsečku. Majoritu těchto problémů vyřešíme užitím první základní
+geodetické úlohy na elipsoidu. 
 
 \subsection{První geodetická úloha}
 \label{prvnigu}
