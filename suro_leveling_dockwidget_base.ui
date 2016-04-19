@@ -266,7 +266,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Show input?</string>
+            <string>Show</string>
            </property>
           </widget>
          </item>
