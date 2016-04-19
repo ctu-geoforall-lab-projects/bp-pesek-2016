@@ -63,7 +63,7 @@ class SuroLeveling:
 
         # Declare instance attributes
         self.actions = []
-        self.menu = self.tr(u'&Suro Leveling')
+        self.menu = self.tr(u'&GPS position lag correction')
 
         #print "** INITIALIZING SuroLeveling"
 
@@ -84,7 +84,7 @@ class SuroLeveling:
         :rtype: QString
         """
         # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
-        return QCoreApplication.translate('SuroLeveling', message)
+        return QCoreApplication.translate('GPS position lag correction', message)
 
 
     def add_action(
@@ -160,7 +160,7 @@ class SuroLeveling:
         icon_path = ':/plugins/SuroLeveling/icon.png'
         self.add_action(
             icon_path,
-            text=self.tr(u'Suro Leveling'),
+            text=self.tr(u'GPS position lag correction'),
             callback=self.run,
             parent=self.iface.mainWindow())
 
@@ -190,7 +190,7 @@ class SuroLeveling:
 
         for action in self.actions:
             self.iface.removePluginMenu(
-                self.tr(u'&Suro Leveling'),
+                self.tr(u'&GPS position lag correction'),
                 action)
             self.iface.removeToolBarIcon(action)
 
