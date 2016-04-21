@@ -27,7 +27,7 @@ from math import sqrt,pi,pow,fabs,sin,cos,tan,ceil
 class MoveError(StandardError):
     pass
 
-class Move:
+class MoveBase:
     def __init__(self, inputfile, outputfile):
         self.inputfile = open(inputfile,'rb')
         self.outputfile = open(outputfile,'wb')
@@ -194,6 +194,20 @@ class Move:
         self._close()
 
     def by_seconds(self, seconds):
+        raise NotImplementedError()
+
+class MovePyProj(MoveBase):
+    def __init__(self, inputfile, outputfile):
+        MoveBase.__init__(self, inputfile, outputfile)
+
+    def by_seconds(self, seconds):
+        raise NotImplementedError()
+
+class Move(MoveBase):
+    def __init__(self, inputfile, outputfile):
+        MoveBase.__init__(self, inputfile, outputfile)
+    
+    def by_seconds(self, seconds):
         """move by variable distance"""
 
         def iterations(distance,h):
@@ -283,6 +297,5 @@ class Move:
             else: break
 
         self._close()
-
 
 
