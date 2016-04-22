@@ -164,32 +164,37 @@ class MoveBase:
         a = 6378137.0 # WGS84 ellipsoid parametres
         e2 = 0.081819190842622
         line1=self.inputfile.readline()
-        line1=line1.split(',')
 
-        while line1:
-            line2=self.inputfile.readline()
-            if line2:
-                line2=line2.split(',')
-                p1=QgsPoint(float(line1[len(numberOfLonColumn)-1]),float(line1[len(numberOfLatColumn)-1]))
-                p2=QgsPoint(float(line2[len(numberOfLonColumn)-1]),float(line2[len(numberOfLatColumn)-1]))
+        if distance!=0:
+            line1=line1.split(',')
+            while line1:
+                line2=self.inputfile.readline()
+                if line2:
+                    line2=line2.split(',')
+                    p1=QgsPoint(float(line1[len(numberOfLonColumn)-1]),float(line1[len(numberOfLatColumn)-1]))
+                    p2=QgsPoint(float(line2[len(numberOfLonColumn)-1]),float(line2[len(numberOfLatColumn)-1]))
 
-                if p1!=p2:
-                    aziA = d.bearing(p1,p2)
+                    if p1!=p2:
+                        aziA = d.bearing(p1,p2)
 
-                    h=distance/2.0
-                    fi=[float(line1[len(numberOfLatColumn)-1])*pi/180]
-                    lam=[float(line1[len(numberOfLonColumn)-1])*pi/180]
-                    azi=[aziA]
+                        h=distance/2.0
+                        fi=[float(line1[len(numberOfLatColumn)-1])*pi/180]
+                        lam=[float(line1[len(numberOfLonColumn)-1])*pi/180]
+                        azi=[aziA]
 
-                    FIe1,LAMe1 = iterations(distance,h)
-                    line1[len(numberOfLatColumn)-1]=str(FIe1*180/pi) # changing latitude and longitude of new point
-                    line1[len(numberOfLonColumn)-1]=str(LAMe1*180/pi)
+                        FIe1,LAMe1 = iterations(distance,h)
+                        line1[len(numberOfLatColumn)-1]=str(FIe1*180/pi) # changing latitude and longitude of new point
+                        line1[len(numberOfLonColumn)-1]=str(LAMe1*180/pi)
 
-                line1=','.join(line1)
+                    line1=','.join(line1)
+                    self.outputfile.write(line1)
+                    line1=line2
+
+                else: break
+        else:
+            while line1:
                 self.outputfile.write(line1)
-                line1=line2
-
-            else: break
+                line1=self.inputfile.readline()
 
         self._close()
 
@@ -267,34 +272,39 @@ class Move(MoveBase):
         a = 6378137.0 # WGS84 ellipsoid parametres
         e2 = 0.081819190842622
         line1=self.inputfile.readline()
-        line1=line1.split(',')
 
-        while line1:
-            line2=self.inputfile.readline()
-            if line2:
-                line2=line2.split(',')
-                p1=QgsPoint(float(line1[len(numberOfLonColumn)-1]),float(line1[len(numberOfLatColumn)-1]))
-                p2=QgsPoint(float(line2[len(numberOfLonColumn)-1]),float(line2[len(numberOfLatColumn)-1]))
+        if seconds!=0:
+            line1=line1.split(',')
+            while line1:
+                line2=self.inputfile.readline()
+                if line2:
+                    line2=line2.split(',')
+                    p1=QgsPoint(float(line1[len(numberOfLonColumn)-1]),float(line1[len(numberOfLatColumn)-1]))
+                    p2=QgsPoint(float(line2[len(numberOfLonColumn)-1]),float(line2[len(numberOfLatColumn)-1]))
 
-                if p1!=p2:
-                    aziA = d.bearing(p1,p2)
-                    l = d.computeDistanceBearing(p1,p2)[0]
-                    distance=l/(float(line2[len(numberOfSecColumn)-1])-float(line1[len(numberOfSecColumn)-1]))*seconds
+                    if p1!=p2:
+                        aziA = d.bearing(p1,p2)
+                        l = d.computeDistanceBearing(p1,p2)[0]
+                        distance=l/(float(line2[len(numberOfSecColumn)-1])-float(line1[len(numberOfSecColumn)-1]))*seconds
 
-                    h=distance/2.0
-                    fi=[float(line1[len(numberOfLatColumn)-1])*pi/180]
-                    lam=[float(line1[len(numberOfLonColumn)-1])*pi/180]
-                    azi=[aziA]
+                        h=distance/2.0
+                        fi=[float(line1[len(numberOfLatColumn)-1])*pi/180]
+                        lam=[float(line1[len(numberOfLonColumn)-1])*pi/180]
+                        azi=[aziA]
 
-                    FIe1,LAMe1 = iterations(distance,h)
-                    line1[len(numberOfLatColumn)-1]=str(FIe1*180/pi) # changing latitude and longitude of new point
-                    line1[len(numberOfLonColumn)-1]=str(LAMe1*180/pi)
+                        FIe1,LAMe1 = iterations(distance,h)
+                        line1[len(numberOfLatColumn)-1]=str(FIe1*180/pi) # changing latitude and longitude of new point
+                        line1[len(numberOfLonColumn)-1]=str(LAMe1*180/pi)
 
-                line1=','.join(line1)
+                    line1=','.join(line1)
+                    self.outputfile.write(line1)
+                    line1=line2
+
+                else: break
+        else:
+            while line1:
                 self.outputfile.write(line1)
-                line1=line2
-
-            else: break
+                line1=self.inputfile.readline()
 
         self._close()
 
