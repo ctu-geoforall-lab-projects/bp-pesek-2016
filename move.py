@@ -24,6 +24,8 @@
 from qgis.core import QgsDistanceArea, QgsPoint
 from math import sqrt,pi,pow,fabs,sin,cos,tan,ceil
 
+import time
+
 class MoveError(StandardError):
     pass
 
@@ -301,65 +303,110 @@ class Move(MoveBase):
         a = 6378137.0 # WGS84 ellipsoid parametres
         e2 = 0.081819190842622
         line1=self.inputfile.readline()
-        i=1
 
         if seconds>0:
+            linePos=self.inputfile.tell()
             line1=line1.split(',')
             while line1:
+                self.inputfile.seek(linePos)
                 line2=self.inputfile.readline()
+                linePos=self.inputfile.tell()
+                moveTime=1*seconds
+                outline=1*line1
+                inline=line2.split(',')
+
                 if line2:
-                    line2=line2.split(',')
-                    p1=QgsPoint(float(line1[len(numberOfLonColumn)-1]),float(line1[len(numberOfLatColumn)-1]))
-                    p2=QgsPoint(float(line2[len(numberOfLonColumn)-1]),float(line2[len(numberOfLatColumn)-1]))
+                    for i in range(int(seconds)+1): # for case of more than 1 second
+                        if line2:
+                            line2=line2.split(',')
+                            p1=QgsPoint(float(line1[len(numberOfLonColumn)-1]),float(line1[len(numberOfLatColumn)-1]))
+                            p2=QgsPoint(float(line2[len(numberOfLonColumn)-1]),float(line2[len(numberOfLatColumn)-1]))
 
-                    if p1!=p2:
-                        aziA = d.bearing(p1,p2)
-                        l = d.computeDistanceBearing(p1,p2)[0]
-                        distance=l/(float(line2[len(numberOfSecColumn)-1])-float(line1[len(numberOfSecColumn)-1]))*seconds
+                            if p1!=p2:
+                                aziA = d.bearing(p1,p2)
+                                l = d.computeDistanceBearing(p1,p2)[0]
 
-                        h=distance/2.0
-                        fi=[float(line1[len(numberOfLatColumn)-1])*pi/180]
-                        lam=[float(line1[len(numberOfLonColumn)-1])*pi/180]
-                        azi=[aziA]
+                                if moveTime>1:
+                                    moveTime=moveTime-1
+                                elif moveTime!=0 and moveTime!=1: #first geodetic problem
+                                    distance=l/(float(line2[len(numberOfSecColumn)-1])-float(line1[len(numberOfSecColumn)-1]))*moveTime
+                                    h=distance/2.0
+                                    fi=[float(line1[len(numberOfLatColumn)-1])*pi/180]
+                                    lam=[float(line1[len(numberOfLonColumn)-1])*pi/180]
+                                    azi=[aziA]
 
-                        FIe1,LAMe1 = iterations(distance,h)
-                        line1[len(numberOfLatColumn)-1]=str(FIe1*180/pi) # changing latitude and longitude of new point
-                        line1[len(numberOfLonColumn)-1]=str(LAMe1*180/pi)
+                                    FIe1,LAMe1 = iterations(distance,h)
+                                    moveTime=0
 
-                    line1=','.join(line1)
-                    self.outputfile.write(line1)
-                    line1=1*line2
+                                else:
+                                    FIe1=float(line2[len(numberOfLatColumn)-1])*pi/180
+                                    LAMe1=float(line2[len(numberOfLonColumn)-1])*pi/180
+                                    moveTime=0
+                                    break
 
-                else: break
-        elif seconds<0:
-            line1=line1.split(',')
-            while line1:
-                line2 = self.inputfile.readline()
-                if line2:
-                    line2=line2.split(',')
-                    p1=QgsPoint(float(line1[len(numberOfLonColumn)-1]),float(line1[len(numberOfLatColumn)-1]))
-                    p2=QgsPoint(float(line2[len(numberOfLonColumn)-1]),float(line2[len(numberOfLatColumn)-1]))
-
-                    if p1!=p2:
-                        aziA = d.bearing(p2,p1)
-                        l = d.computeDistanceBearing(p1,p2)[0]
-                        distance=l/(float(line2[len(numberOfSecColumn)-1])-float(line1[len(numberOfSecColumn)-1]))*fabs(seconds)
-
-                        h=distance/2.0
-                        fi=[float(line2[len(numberOfLatColumn)-1])*pi/180]
-                        lam=[float(line2[len(numberOfLonColumn)-1])*pi/180]
-                        azi=[aziA]
-
-                        FIe1,LAMe1 = iterations(distance,h)
+                        else:break
                         line1=1*line2
-                        line1[len(numberOfLatColumn)-1]=str(FIe1*180/pi) # changing latitude and longitude of new point
-                        line1[len(numberOfLonColumn)-1]=str(LAMe1*180/pi)
-
-                    line1=','.join(line1)
-                    self.outputfile.write(line1)
-                    line1=1*line2
+                        line2=self.inputfile.readline()
 
                 else: break
+                line1=1*inline
+                if moveTime==0:
+                    outline[len(numberOfLatColumn)-1]=str(FIe1*180/pi) # changing latitude and longitude of new point
+                    outline[len(numberOfLonColumn)-1]=str(LAMe1*180/pi)
+                    outline=','.join(outline)
+                    self.outputfile.write(outline)
+
+        elif seconds<0:
+            line=[]
+            line.append(line1)
+            line[0]=line[0].split(',')
+            if line:
+                if int(seconds)!=seconds:
+                    for x in range(1,int(fabs(seconds))+2):
+                        line.append(self.inputfile.readline())
+                        line[x]=line[x].split(',')
+                else:
+                    for x in range(1,int(fabs(seconds)+1)):
+                        line.append(self.inputfile.readline())
+                        line[x]=line[x].split(',')
+
+                while line[x]!=['']:
+                    moveTime=1*seconds
+                    for i in reversed(range(x+1)):
+                        p1=QgsPoint(float(line[i-1][len(numberOfLonColumn)-1]),float(line[i-1][len(numberOfLatColumn)-1]))
+                        p2=QgsPoint(float(line[i][len(numberOfLonColumn)-1]),float(line[i][len(numberOfLatColumn)-1]))
+
+                        if p1!=p2:
+                            aziA = d.bearing(p2,p1)
+                            l = d.computeDistanceBearing(p1,p2)[0]
+
+                            if moveTime<-1:
+                                moveTime=moveTime+1
+                            elif moveTime!=0 and moveTime!=-1: #first geodetic problem
+                                distance=l/(float(line[i][len(numberOfSecColumn)-1])-float(line[i-1][len(numberOfSecColumn)-1]))*fabs(moveTime)
+                                h=distance/2.0
+                                fi=[float(line[i][len(numberOfLatColumn)-1])*pi/180]
+                                lam=[float(line[i][len(numberOfLonColumn)-1])*pi/180]
+                                azi=[aziA]
+
+                                FIe1,LAMe1 = iterations(distance,h)
+                                break
+
+                            else:
+                                FIe1=float(line[i-1][len(numberOfLatColumn)-1])*pi/180
+                                LAMe1=float(line[i-1][len(numberOfLonColumn)-1])*pi/180
+                                break
+
+                    outline=1*line[x]
+                    outline[len(numberOfLatColumn)-1]=str(FIe1*180/pi) # changing latitude and longitude of new point
+                    outline[len(numberOfLonColumn)-1]=str(LAMe1*180/pi)
+                    outline=','.join(outline)
+                    self.outputfile.write(outline)
+
+                    del line[0]
+                    line.append(self.inputfile.readline())
+                    line[x]=line[x].split(',')
+
         else:
             while line1:
                 self.outputfile.write(line1)
