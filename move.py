@@ -396,6 +396,9 @@ class Move(MoveBase):
                                 FIe1=float(line[i-1][len(numberOfLatColumn)-1])*pi/180
                                 LAMe1=float(line[i-1][len(numberOfLonColumn)-1])*pi/180
                                 break
+                        else:
+                            FIe1=float(line[i-1][len(numberOfLatColumn)-1])*pi/180
+                            LAMe1=float(line[i-1][len(numberOfLonColumn)-1])*pi/180
 
                     outline=1*line[x]
                     outline[len(numberOfLatColumn)-1]=str(FIe1*180/pi) # changing latitude and longitude of new point
