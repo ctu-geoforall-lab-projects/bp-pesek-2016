@@ -168,29 +168,60 @@ class MoveBase:
         line1=self.inputfile.readline()
 
         if distance>0:
+            linePos=self.inputfile.tell()
             line1=line1.split(',')
             while line1:
+                self.inputfile.seek(linePos)
                 line2=self.inputfile.readline()
+                linePos=self.inputfile.tell()
+                moveDistance=1*distance
+                outline=1*line1
+                inline=line2.split(',')
+
                 if line2:
                     line2=line2.split(',')
                     p1=QgsPoint(float(line1[len(numberOfLonColumn)-1]),float(line1[len(numberOfLatColumn)-1]))
                     p2=QgsPoint(float(line2[len(numberOfLonColumn)-1]),float(line2[len(numberOfLatColumn)-1]))
+                    l=d.computeDistanceBearing(p1,p2)[0]
 
-                    if p1!=p2:
-                        aziA = d.bearing(p1,p2)
+                    while moveDistance>l:
+                        if line2:
+                            moveDistance = moveDistance-l
+                            line1=1*line2
+                            line2=self.inputfile.readline()
+                            if line2:
+                                line2=line2.split(',')
+                                p1=QgsPoint(float(line1[len(numberOfLonColumn)-1]),float(line1[len(numberOfLatColumn)-1]))
+                                p2=QgsPoint(float(line2[len(numberOfLonColumn)-1]),float(line2[len(numberOfLatColumn)-1]))
+                                l=d.computeDistanceBearing(p1,p2)[0]
+                        else:break
 
-                        h=distance/2.0
-                        fi=[float(line1[len(numberOfLatColumn)-1])*pi/180]
-                        lam=[float(line1[len(numberOfLonColumn)-1])*pi/180]
-                        azi=[aziA]
+                    if line2:
+                        if moveDistance!=l:
+                            if p1!=p2:
+                                aziA = d.bearing(p1,p2)
 
-                        FIe1,LAMe1 = iterations(distance,h)
-                        line1[len(numberOfLatColumn)-1]=str(FIe1*180/pi) # changing latitude and longitude of new point
-                        line1[len(numberOfLonColumn)-1]=str(LAMe1*180/pi)
+                                h=moveDistance/2.0
+                                fi=[float(line1[len(numberOfLatColumn)-1])*pi/180]
+                                lam=[float(line1[len(numberOfLonColumn)-1])*pi/180]
+                                azi=[aziA]
 
-                    line1=','.join(line1)
-                    self.outputfile.write(line1)
-                    line1=1*line2
+                                FIe1,LAMe1 = iterations(moveDistance,h)
+                                print FIe1,LAMe1
+                            else:
+                                FIe1=float(line2[len(numberOfLatColumn)-1])*pi/180
+                                LAMe1=float(line2[len(numberOfLonColumn)-1])*pi/180
+
+                        else:
+                            FIe1=float(line2[len(numberOfLatColumn)-1])*pi/180
+                            LAMe1=float(line2[len(numberOfLonColumn)-1])*pi/180
+
+                        outline[len(numberOfLatColumn)-1]=str(FIe1*180/pi) # changing latitude and longitude of new point
+                        outline[len(numberOfLonColumn)-1]=str(LAMe1*180/pi)
+                        outline=','.join(outline)
+                        self.outputfile.write(outline)
+                        line1=inline
+                    else:break
 
                 else: break
         elif distance<0:
