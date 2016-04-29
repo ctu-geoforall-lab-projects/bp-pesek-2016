@@ -67,38 +67,49 @@ class MoveBase:
 
         self._check()
 
-        mereni=mereni_values(self)
+        #mereni=mereni_values(self)
         header=self.inputfile.readline()
         self.outputfile.write(header)
-        beforeMereni=header.split('mereni')
-        numberOfMereniColumn=beforeMereni[0].split(',')
+        beforeLat_deg=header.split('Lat_deg')
+        beforeLon_deg=header.split('Lon_deg')
+        numberOfLat_degColumn=beforeLat_deg[0].split(',')
+        numberOfLon_degColumn=beforeLon_deg[0].split(',')
 
         if value>0:
-            a=self.inputfile.readline()
+            outline=self.inputfile.readline()
 
-            while a:
-                a=a.split(',')
+            while outline:
+                linePos=self.inputfile.tell()
+                for i in range(value):
+                    line=self.inputfile.readline()
+
+                outline=outline.split(',')
+                line=line.split(',')
                 try:
-                    a[len(numberOfMereniColumn)-1]=mereni.pop(value)
-                except: break
-                a=','.join(a)
-                self.outputfile.write(a)
-                a=self.inputfile.readline()
+                    outline[len(numberOfLat_degColumn)-1]=line[len(numberOfLat_degColumn)-1]
+                    outline[len(numberOfLon_degColumn)-1]=line[len(numberOfLon_degColumn)-1]
+                except:break
+                outline=','.join(outline)
+                self.outputfile.write(outline)
+                self.inputfile.seek(linePos)
+                outline=self.inputfile.readline()
 
         elif value<0:
-            for x in range(abs(value)):
-                self.inputfile.readline()
+            line=[]
+            for i in range(abs(value)+1):
+                line.append(self.inputfile.readline())
+                line[i]=line[i].split(',')
 
-            beforeRECS=header.split('RECS')
-            numberOfRECSColumn=beforeRECS[0].split(',')
-            a=self.inputfile.readline()
-            while a:
-                a=a.split(',')
-                a[len(numberOfRECSColumn)-1]=str(int(a[len(numberOfRECSColumn)-1])+value)
-                a[len(numberOfMereniColumn)-1]=mereni.pop(0)
-                a=','.join(a)
-                self.outputfile.write(a)
-                a=self.inputfile.readline()
+            while line[i]!=['']:
+                outline=1*line[i]
+                outline[len(numberOfLat_degColumn)-1]=line[0][len(numberOfLat_degColumn)-1]
+                outline[len(numberOfLon_degColumn)-1]=line[0][len(numberOfLon_degColumn)-1]
+
+                outline=','.join(outline)
+                self.outputfile.write(outline)
+                del line[0]
+                line.append(self.inputfile.readline())
+                line[i]=line[i].split(',')
 
         else:
             a=self.inputfile.readline()
