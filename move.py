@@ -357,46 +357,53 @@ class Move(MoveBase):
                 outline=1*line1
                 inline=line2.split(',')
 
-                if line2:
-                    for i in range(int(seconds)+1): # for case of more than 1 second
-                        if line2:
-                            line2=line2.split(',')
-                            p1=QgsPoint(float(line1[len(numberOfLonColumn)-1]),float(line1[len(numberOfLatColumn)-1]))
-                            p2=QgsPoint(float(line2[len(numberOfLonColumn)-1]),float(line2[len(numberOfLatColumn)-1]))
+                while moveTime>0: # for case of more than 1 second
+                    if line2:
+                        line2=line2.split(',')
+                        p1=QgsPoint(float(line1[len(numberOfLonColumn)-1]),float(line1[len(numberOfLatColumn)-1]))
+                        p2=QgsPoint(float(line2[len(numberOfLonColumn)-1]),float(line2[len(numberOfLatColumn)-1]))
 
-                            if p1!=p2:
-                                aziA = d.bearing(p1,p2)
-                                l = d.computeDistanceBearing(p1,p2)[0]
+                        if p1!=p2:
+                            aziA = d.bearing(p1,p2)
+                            l = d.computeDistanceBearing(p1,p2)[0]
 
-                                if moveTime>1:
-                                    moveTime=moveTime-1
-                                elif moveTime!=0 and moveTime!=1: #first geodetic problem
-                                    distance=l/(float(line2[len(numberOfSecColumn)-1])-float(line1[len(numberOfSecColumn)-1]))*moveTime
-                                    h=distance/2.0
-                                    fi=[float(line1[len(numberOfLatColumn)-1])*pi/180]
-                                    lam=[float(line1[len(numberOfLonColumn)-1])*pi/180]
-                                    azi=[aziA]
+                            if moveTime>(float(line2[len(numberOfSecColumn)-1])-float(line1[len(numberOfSecColumn)-1])):
+                                moveTime=moveTime-(float(line2[len(numberOfSecColumn)-1])-float(line1[len(numberOfSecColumn)-1]))
+                            elif moveTime!=0 and moveTime!=(float(line2[len(numberOfSecColumn)-1])-float(line1[len(numberOfSecColumn)-1])): #first geodetic problem
+                                distance=l/(float(line2[len(numberOfSecColumn)-1])-float(line1[len(numberOfSecColumn)-1]))*moveTime
+                                h=distance/2.0
+                                fi=[float(line1[len(numberOfLatColumn)-1])*pi/180]
+                                lam=[float(line1[len(numberOfLonColumn)-1])*pi/180]
+                                azi=[aziA]
 
-                                    FIe1,LAMe1 = iterations(distance,h)
-                                    moveTime=0
+                                FIe1,LAMe1 = iterations(distance,h)
+                                moveTime=0
 
-                                else:
-                                    FIe1=float(line2[len(numberOfLatColumn)-1])*pi/180
-                                    LAMe1=float(line2[len(numberOfLonColumn)-1])*pi/180
-                                    moveTime=0
-                                    break
+                            else:
+                                FIe1=float(line2[len(numberOfLatColumn)-1])*pi/180
+                                LAMe1=float(line2[len(numberOfLonColumn)-1])*pi/180
+                                moveTime=0
+                                break
+                        else:
+                            if moveTime>(float(line2[len(numberOfSecColumn)-1])-float(line1[len(numberOfSecColumn)-1])):
+                                moveTime=moveTime-(float(line2[len(numberOfSecColumn)-1])-float(line1[len(numberOfSecColumn)-1]))
+                            else:
+                                FIe1=float(line2[len(numberOfLatColumn)-1])*pi/180
+                                LAMe1=float(line2[len(numberOfLonColumn)-1])*pi/180
+                                moveTime=0
+                                break
 
-                        else:break
-                        line1=1*line2
-                        line2=self.inputfile.readline()
+                    else:break
+                    line1=1*line2
+                    line2=self.inputfile.readline()
 
-                else: break
                 line1=1*inline
                 if moveTime==0:
                     outline[len(numberOfLatColumn)-1]=str(FIe1*180/pi) # changing latitude and longitude of new point
                     outline[len(numberOfLonColumn)-1]=str(LAMe1*180/pi)
                     outline=','.join(outline)
                     self.outputfile.write(outline)
+                else:break
 
         elif seconds<0:
             line=[]
