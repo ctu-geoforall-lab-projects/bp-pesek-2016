@@ -409,55 +409,68 @@ class Move(MoveBase):
             line=[]
             line.append(line1)
             line[0]=line[0].split(',')
-            if line:
-                if int(seconds)!=seconds:
-                    for x in range(1,int(fabs(seconds))+2):
-                        line.append(self.inputfile.readline())
-                        line[x]=line[x].split(',')
-                else:
-                    for x in range(1,int(fabs(seconds)+1)):
-                        line.append(self.inputfile.readline())
-                        line[x]=line[x].split(',')
+            line.append(self.inputfile.readline()) #
+            line[1]=line[1].split(',') #
+            allSecs=(float(line[1][len(numberOfSecColumn)-1])-float(line[0][len(numberOfSecColumn)-1]))
+            i=1
+            moveTime=1*seconds
+            while fabs(moveTime)>allSecs:
+                line.append(self.inputfile.readline().split(','))
+                i=i+1
+                if line[len(line)-1]==['']:
+                    break
+                allSecs=allSecs+(float(line[i][len(numberOfSecColumn)-1])-float(line[i-1][len(numberOfSecColumn)-1]))
 
-                while line[x]!=['']:
-                    moveTime=1*seconds
-                    for i in reversed(range(x+1)):
-                        p1=QgsPoint(float(line[i-1][len(numberOfLonColumn)-1]),float(line[i-1][len(numberOfLatColumn)-1]))
-                        p2=QgsPoint(float(line[i][len(numberOfLonColumn)-1]),float(line[i][len(numberOfLatColumn)-1]))
+            while line[len(line)-1]!=['']:
+                allSecs=0
+                for i in reversed(range(1,len(line))):
+                    allSecs=allSecs+(float(line[i][len(numberOfSecColumn)-1])-float(line[i-1][len(numberOfSecColumn)-1]))
+                    if fabs(moveTime)<=allSecs:
+                        for x in range(i-1):
+                            del line[0]
+                        break
 
-                        if p1!=p2:
-                            aziA = d.bearing(p2,p1)
-                            l = d.computeDistanceBearing(p1,p2)[0]
+                for i in reversed(range(len(line))):
+                    p1=QgsPoint(float(line[i-1][len(numberOfLonColumn)-1]),float(line[i-1][len(numberOfLatColumn)-1]))
+                    p2=QgsPoint(float(line[i][len(numberOfLonColumn)-1]),float(line[i][len(numberOfLatColumn)-1]))
 
-                            if moveTime<-1:
-                                moveTime=moveTime+1
-                            elif moveTime!=0 and moveTime!=-1: #first geodetic problem
-                                distance=l/(float(line[i][len(numberOfSecColumn)-1])-float(line[i-1][len(numberOfSecColumn)-1]))*fabs(moveTime)
-                                h=distance/2.0
-                                fi=[float(line[i][len(numberOfLatColumn)-1])*pi/180]
-                                lam=[float(line[i][len(numberOfLonColumn)-1])*pi/180]
-                                azi=[aziA]
+                    if p1!=p2:
+                        aziA = d.bearing(p2,p1)
+                        l = d.computeDistanceBearing(p1,p2)[0]
 
-                                FIe1,LAMe1 = iterations(distance,h)
-                                break
+                        if moveTime<-(float(line[i][len(numberOfSecColumn)-1])-float(line[i-1][len(numberOfSecColumn)-1])):
+                            moveTime=moveTime+(float(line[i][len(numberOfSecColumn)-1])-float(line[i-1][len(numberOfSecColumn)-1]))
+                        elif moveTime!=0 and moveTime!=-(float(line[i][len(numberOfSecColumn)-1])-float(line[i-1][len(numberOfSecColumn)-1])): #first geodetic problem
+                            distance=l/(float(line[i][len(numberOfSecColumn)-1])-float(line[i-1][len(numberOfSecColumn)-1]))*fabs(moveTime)
+                            h=distance/2.0
+                            fi=[float(line[i][len(numberOfLatColumn)-1])*pi/180]
+                            lam=[float(line[i][len(numberOfLonColumn)-1])*pi/180]
+                            azi=[aziA]
 
-                            else:
-                                FIe1=float(line[i-1][len(numberOfLatColumn)-1])*pi/180
-                                LAMe1=float(line[i-1][len(numberOfLonColumn)-1])*pi/180
-                                break
+                            FIe1,LAMe1 = iterations(distance,h)
+                            break
+
                         else:
                             FIe1=float(line[i-1][len(numberOfLatColumn)-1])*pi/180
                             LAMe1=float(line[i-1][len(numberOfLonColumn)-1])*pi/180
+                            break
+                    else:
+                        if moveTime<-(float(line[i][len(numberOfSecColumn)-1])-float(line[i-1][len(numberOfSecColumn)-1])):
+                            moveTime=moveTime+(float(line[i][len(numberOfSecColumn)-1])-float(line[i-1][len(numberOfSecColumn)-1]))
+                        else:
+                            FIe1=float(line[i-1][len(numberOfLatColumn)-1])*pi/180
+                            LAMe1=float(line[i-1][len(numberOfLonColumn)-1])*pi/180
+                            break
 
-                    outline=1*line[x]
-                    outline[len(numberOfLatColumn)-1]=str(FIe1*180/pi) # changing latitude and longitude of new point
-                    outline[len(numberOfLonColumn)-1]=str(LAMe1*180/pi)
-                    outline=','.join(outline)
-                    self.outputfile.write(outline)
+                outline=1*line[len(line)-1]
+                outline[len(numberOfLatColumn)-1]=str(FIe1*180/pi) # changing latitude and longitude of new point
+                outline[len(numberOfLonColumn)-1]=str(LAMe1*180/pi)
+                outline=','.join(outline)
+                self.outputfile.write(outline)
 
-                    del line[0]
-                    line.append(self.inputfile.readline())
-                    line[x]=line[x].split(',')
+                line.append(self.inputfile.readline())
+                line[len(line)-1]=line[len(line)-1].split(',')
+                moveTime=1*seconds
 
         else:
             while line1:
