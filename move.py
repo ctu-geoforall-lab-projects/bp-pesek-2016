@@ -49,25 +49,8 @@ class MoveBase:
     def by_points(self, value):
         """move by number of points"""
 
-        def mereni_values(self):
-            """reading values in mereni"""
-
-            header=self.inputfile.readline()
-            beforeMereni=header.split('mereni')
-            numberOfMereniColumn=beforeMereni[0].split(',')
-            mereni=[]
-            a=self.inputfile.readline()
-            while a:
-                a=a.split(',')
-                mereni.append(a[len(numberOfMereniColumn)-1])
-                a=self.inputfile.readline()
-
-            self.inputfile.seek(0)
-            return mereni
-
         self._check()
 
-        #mereni=mereni_values(self)
         header=self.inputfile.readline()
         self.outputfile.write(header)
         beforeLat_deg=header.split('Lat_deg')
@@ -218,7 +201,6 @@ class MoveBase:
                                 azi=[aziA]
 
                                 FIe1,LAMe1 = iterations(moveDistance,h)
-                                print FIe1,LAMe1
                             else:
                                 FIe1=float(line2[len(numberOfLatColumn)-1])*pi/180
                                 LAMe1=float(line2[len(numberOfLonColumn)-1])*pi/180
@@ -236,34 +218,77 @@ class MoveBase:
 
                 else: break
         elif distance<0:
+            line=[]
+            line.append(line1)
+            line[0]=line[0].split(',')
+            line.append(self.inputfile.readline())
+            line[1]=line[1].split(',')
+            i=1
             distance=fabs(distance)
-            line1=line1.split(',')
-            while line1:
-                line2=self.inputfile.readline()
+            moveDistance=fabs(distance)
+            p1=QgsPoint(float(line[0][len(numberOfLonColumn)-1]),float(line[0][len(numberOfLatColumn)-1]))
+            p2=QgsPoint(float(line[1][len(numberOfLonColumn)-1]),float(line[1][len(numberOfLatColumn)-1]))
+            allDist=d.computeDistanceBearing(p1,p2)[0]
+            while moveDistance>allDist:
+                line.append(self.inputfile.readline().split(','))
+                i=i+1
+                if line[len(line)-1]==['']:
+                    break
+                p1=QgsPoint(float(line[i-1][len(numberOfLonColumn)-1]),float(line[i-1][len(numberOfLatColumn)-1]))
+                p2=QgsPoint(float(line[i][len(numberOfLonColumn)-1]),float(line[i][len(numberOfLatColumn)-1]))
+                allDist=allDist+d.computeDistanceBearing(p1,p2)[0]
 
-                if line2:
-                    line2=line2.split(',')
-                    p1=QgsPoint(float(line1[len(numberOfLonColumn)-1]),float(line1[len(numberOfLatColumn)-1]))
-                    p2=QgsPoint(float(line2[len(numberOfLonColumn)-1]),float(line2[len(numberOfLatColumn)-1]))
+            while line[len(line)-1]!=['']:
+                allDist=0
+                for i in reversed(range(1,len(line))):
+                    p1=QgsPoint(float(line[i-1][len(numberOfLonColumn)-1]),float(line[i-1][len(numberOfLatColumn)-1]))
+                    p2=QgsPoint(float(line[i][len(numberOfLonColumn)-1]),float(line[i][len(numberOfLatColumn)-1]))
+                    allDist=allDist+d.computeDistanceBearing(p1,p2)[0]
+                    if fabs(moveDistance)<=allDist:
+                        for x in range(i-1):
+                            del line[0]
+                        break
+
+                for i in reversed(range(len(line))):
+                    p1=QgsPoint(float(line[i-1][len(numberOfLonColumn)-1]),float(line[i-1][len(numberOfLatColumn)-1]))
+                    p2=QgsPoint(float(line[i][len(numberOfLonColumn)-1]),float(line[i][len(numberOfLatColumn)-1]))
 
                     if p1!=p2:
                         aziA = d.bearing(p2,p1)
+                        l = d.computeDistanceBearing(p1,p2)[0]
 
-                        h=distance/2.0
-                        fi=[float(line2[len(numberOfLatColumn)-1])*pi/180]
-                        lam=[float(line2[len(numberOfLonColumn)-1])*pi/180]
-                        azi=[aziA]
+                        if moveDistance>l:
+                            moveDistance=moveDistance-l
+                        elif moveDistance!=0 and moveDistance!=l: #first geodetic problem
+                            h=moveDistance/2.0
+                            fi=[float(line[i][len(numberOfLatColumn)-1])*pi/180]
+                            lam=[float(line[i][len(numberOfLonColumn)-1])*pi/180]
+                            azi=[aziA]
 
-                        FIe1,LAMe1 = iterations(distance,h)
-                        line1=1*line2
-                        line1[len(numberOfLatColumn)-1]=str(FIe1*180/pi) # changing latitude and longitude of new point
-                        line1[len(numberOfLonColumn)-1]=str(LAMe1*180/pi)
+                            FIe1,LAMe1 = iterations(moveDistance,h)
+                            break
 
-                    line1=','.join(line1)
-                    self.outputfile.write(line1)
-                    line1=1*line2
+                        else:
+                            FIe1=float(line[i-1][len(numberOfLatColumn)-1])*pi/180
+                            LAMe1=float(line[i-1][len(numberOfLonColumn)-1])*pi/180
+                            break
+                    else:
+                        if moveDistance>l:
+                            moveDistance=moveDistance-l
+                        else:
+                            FIe1=float(line[i-1][len(numberOfLatColumn)-1])*pi/180
+                            LAMe1=float(line[i-1][len(numberOfLonColumn)-1])*pi/180
+                            break
 
-                else: break
+                outline=1*line[len(line)-1]
+                outline[len(numberOfLatColumn)-1]=str(FIe1*180/pi) # changing latitude and longitude of new point
+                outline[len(numberOfLonColumn)-1]=str(LAMe1*180/pi)
+                outline=','.join(outline)
+                self.outputfile.write(outline)
+
+                line.append(self.inputfile.readline())
+                line[len(line)-1]=line[len(line)-1].split(',')
+                moveDistance=fabs(distance)
         else:
             while line1:
                 self.outputfile.write(line1)
@@ -409,8 +434,8 @@ class Move(MoveBase):
             line=[]
             line.append(line1)
             line[0]=line[0].split(',')
-            line.append(self.inputfile.readline()) #
-            line[1]=line[1].split(',') #
+            line.append(self.inputfile.readline())
+            line[1]=line[1].split(',')
             allSecs=(float(line[1][len(numberOfSecColumn)-1])-float(line[0][len(numberOfSecColumn)-1]))
             i=1
             moveTime=1*seconds
