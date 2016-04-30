@@ -32,9 +32,7 @@ def show(filePath,stylePath):
     layerName = filePath.rsplit(os.path.sep,1)
     layerName = layerName[1][:-4]
     layer = QgsVectorLayer(uri, layerName, "delimitedtext")
-    if stylePath==0:
-        pass
-    else:
+    if stylePath:
         stylePath = os.path.join(stylePath).replace('\\','/')
         layer.loadNamedStyle(stylePath)
     QgsMapLayerRegistry.instance().addMapLayer(layer)

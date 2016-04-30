@@ -53,7 +53,7 @@ class SuroLevelingDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # http://qt-project.org/doc/qt-4.8/designer-using-a-ui-file.html
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
-        self.stylePath=0
+        self.stylePath=None
 
         self.inputButton.clicked.connect(self.select_input)
         self.outputButton.clicked.connect(self.select_output)
@@ -93,7 +93,7 @@ class SuroLevelingDockWidget(QtGui.QDockWidget, FORM_CLASS):
             styleName=styleName[len(styleName)-1][0:5]
             self.style.setText(styleName)
         else:
-            self.stylePath=0
+            self.stylePath=None
             self.style.setText('No style')
 
     def select_output(self):
