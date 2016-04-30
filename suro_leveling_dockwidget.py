@@ -53,9 +53,11 @@ class SuroLevelingDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # http://qt-project.org/doc/qt-4.8/designer-using-a-ui-file.html
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
+        self.stylePath=0
 
         self.inputButton.clicked.connect(self.select_input)
         self.outputButton.clicked.connect(self.select_output)
+        self.style.clicked.connect(self.select_style)
         self.showInput.clicked.connect(self.show_input)
 
         self.input.textChanged.connect(self.able_solve) # enable solve button
@@ -77,6 +79,22 @@ class SuroLevelingDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
         self.input.setText(self.filePath)
         self.output.setText(self.filePath[:-4]+u'_leveled.csv')
+
+    def select_style(self):
+        """select qml style file"""
+
+        self.stylePath = QFileDialog.getOpenFileName(self, 'Load file (Cancel causes "No style")',
+                                                     os.path.join(os.path.dirname(__file__), 'styles'),
+                                                     'Qt Meta Language (*.qml)')
+
+        if self.stylePath:
+            self.stylePath=os.path.normpath(self.stylePath)
+            styleName=self.stylePath.split(os.path.sep)
+            styleName=styleName[len(styleName)-1][0:5]
+            self.style.setText(styleName)
+        else:
+            self.stylePath=0
+            self.style.setText('No style')
 
     def select_output(self):
         """choose directory to save returned data"""
@@ -106,7 +124,7 @@ class SuroLevelingDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def show_input(self):
         """show input csv as layer"""
 
-        show_as_layer.show(self.input.text(),self.style.currentText())
+        show_as_layer.show(self.input.text(),self.stylePath)
 
     def move_by(self):
         """move"""
@@ -142,7 +160,7 @@ class SuroLevelingDockWidget(QtGui.QDockWidget, FORM_CLASS):
             QMessageBox.critical(None, "Error", "{0}".format(e), QMessageBox.Abort)
             return
 
-        show_as_layer.show(self.output.text(),self.style.currentText())
+        show_as_layer.show(self.output.text(),self.stylePath)
 
     def close_event(self, event): #closeEvent
         self.closingPlugin.emit()

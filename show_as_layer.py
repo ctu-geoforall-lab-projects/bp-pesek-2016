@@ -24,7 +24,7 @@
 import os
 from qgis.core import QgsVectorLayer, QgsMapLayerRegistry
 
-def show(filePath,styleName):
+def show(filePath,stylePath):
     """show csv as layer"""
 
     uri = "file:" + 3*os.path.sep + filePath + "?crs=%s&delimiter=%s&xField=%s&yField=%s&decimal=%s" % ("EPSG:4326",",", "Lon_deg", "Lat_deg", ".")
@@ -32,7 +32,9 @@ def show(filePath,styleName):
     layerName = filePath.rsplit(os.path.sep,1)
     layerName = layerName[1][:-4]
     layer = QgsVectorLayer(uri, layerName, "delimitedtext")
-    style=os.path.dirname(__file__) + os.path.sep + 'styles' + os.path.sep + styleName + '.qml'
-    style = os.path.join(style).replace('\\','/')
-    layer.loadNamedStyle(style)
+    if stylePath==0:
+        pass
+    else:
+        stylePath = os.path.join(stylePath).replace('\\','/')
+        layer.loadNamedStyle(stylePath)
     QgsMapLayerRegistry.instance().addMapLayer(layer)
