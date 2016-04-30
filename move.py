@@ -154,7 +154,6 @@ class MoveBase:
 
         d = QgsDistanceArea()
         d.setEllipsoid('WGS84')
-        #d.ellipsoidalEnabled()
         d.setEllipsoidalMode(True)
         d.ellipsoid()
         a = 6378137.0 # WGS84 ellipsoid parametres
@@ -364,7 +363,6 @@ class Move(MoveBase):
 
         d = QgsDistanceArea()
         d.setEllipsoid('WGS84')
-        #d.ellipsoidalEnabled()
         d.setEllipsoidalMode(True)
         d.ellipsoid()
         a = 6378137.0 # WGS84 ellipsoid parametres
