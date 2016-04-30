@@ -36,17 +36,17 @@ import show_as_layer
 #from PyQt4.QtCore import *
 
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'suro_leveling_dockwidget_base.ui'))
+    os.path.dirname(__file__), 'position_correction_dockwidget_base.ui'))
 
 
-class SuroLevelingDockWidget(QtGui.QDockWidget, FORM_CLASS):
+class PositionCorrectionDockWidget(QtGui.QDockWidget, FORM_CLASS):#SuroLevelingDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     closingPlugin = pyqtSignal()
 
     def __init__(self, parent=None):
         """Constructor."""
 
-        super(SuroLevelingDockWidget, self).__init__(parent)
+        super(PositionCorrectionDockWidget, self).__init__(parent)#SuroLevelingDockWidget, self).__init__(parent)
         # Set up the user interface from Designer.
         # After setupUI you can access any designer object by doing
         # self.<objectname>, and you can use autoconnect slots - see

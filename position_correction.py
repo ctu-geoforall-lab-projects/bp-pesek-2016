@@ -26,11 +26,12 @@ from PyQt4.QtGui import QAction, QIcon
 import resources
 
 # Import the code for the DockWidget
-from suro_leveling_dockwidget import SuroLevelingDockWidget
+#from suro_leveling_dockwidget import PositionCorrectionDockWidget#SuroLevelingDockWidget
+from position_correction_dockwidget import PositionCorrectionDockWidget
 import os.path
 
 
-class SuroLeveling:
+class PositionCorrection:#SuroLeveling:
     """QGIS Plugin Implementation."""
 
     def __init__(self, iface):
@@ -209,7 +210,7 @@ class SuroLeveling:
             #    removed on close (see self.onClosePlugin method)
             if self.dockwidget == None:
                 # Create the dockwidget (after translation) and keep reference
-                self.dockwidget = SuroLevelingDockWidget()
+                self.dockwidget = PositionCorrectionDockWidget()#SuroLevelingDockWidget()
 
             # connect to provide cleanup on closing of dockwidget
         #    self.dockwidget.closingPlugin.connect(self.onClosePlugin) CAUSE OF ENABLE SECOND OPENING

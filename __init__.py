@@ -31,5 +31,5 @@ def classFactory(iface):  # pylint: disable=invalid-name
     :type iface: QgsInterface
     """
     #
-    from .suro_leveling import SuroLeveling
-    return SuroLeveling(iface)
+    from .position_correction import PositionCorrection#SuroLeveling
+    return PositionCorrection(iface)#SuroLeveling(iface)
