@@ -90,7 +90,7 @@ class SuroLevelingDockWidget(QtGui.QDockWidget, FORM_CLASS):
         if self.stylePath:
             self.stylePath=os.path.normpath(self.stylePath)
             styleName=self.stylePath.split(os.path.sep)
-            styleName=styleName[len(styleName)-1][0:5]
+            styleName=styleName[len(styleName)-1][:-4]
             self.style.setText(styleName)
         else:
             self.stylePath=None
