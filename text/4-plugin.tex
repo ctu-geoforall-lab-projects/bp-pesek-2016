@@ -14,10 +14,6 @@ atributů nezáleží.
 
 Povinné části a~jejich označení v~hlavičce souboru: 
 \begin{itemize}
-
-	\item RECS: Pod označením RECS se skrývá číslo bodu. Tato položka je nezbytná pouze
-	v~případě \textit{posunu o~hodnoty} (kvůli přepisu označení bodu z~důvodu zachování úzu číslování
-	od čísla~0). Avšak číslování bodů zajišťuje čitelnost dat, pročež je silně doporučováno vždy. 
 	
 	\item Lat\_deg: Lat\_deg označuje sloupec obsahující zeměpisnou šířku snímaného bodu na elipsoidu.
 	Za referenční elipsoid, na němž se úloha vypočítává, byl zvolen nejběžněji užívaný
@@ -27,12 +23,16 @@ Povinné části a~jejich označení v~hlavičce souboru:
 	Za referenční elipsoid, na němž se úloha vypočítává, byl zvolen nejběžněji užívaný
 	elipsoid~\zk{WGS84}. 
 	
-	\item mereni: mereni obsahuje měřenou hodnotu (v~prezentovaném případě hodnotu radioaktivity, ale
-	sloupec by mohl obsahovat jakoukoli jinou, i~nečíselnou hodnotu). 
-	
 	\item Gtm\_sec: Čas měření ve vteřinách. Není důležité, jaký typ udávání času daný soubor
 	podporuje (zda například počítá vteřiny od nějakého roku, nebo od začátku měření), počítá
 	se s~rozestupy mezi jednotlivými údaji. 
+	
+	\item mereni: mereni obsahuje měřenou hodnotu (v~prezentovaném případě hodnotu radioaktivity, ale
+	sloupec by mohl obsahovat jakoukoli jinou, i~nečíselnou hodnotu). Zásuvný modul posune body
+	i~bez těchto hodnot, ale v~primárním určení, měření radioaktivity, by bez této hodnoty postrádal smysl.
+	
+	\item RECS: Pod označením RECS se skrývá číslo bodu. Tato položka nezbytná není, avšak
+	číslování bodů zajišťuje lepší čitelnost dat, pročež je silně doporučováno vždy. 
 
 \end{itemize}
 
@@ -53,7 +53,7 @@ Kosmogonický základ zásuvného modulu byl vytvořen ve volně šiřitelném m
 Builder\footnote{Dostupný na \textit{https://plugins.qgis.org/plugins/pluginbuilder/}}. Jedná se
 o~zásuvný modul vytvořený pro QGIS především (ale nikoli pouze) suitou kolem GeoApt LLC (například Gary
 Sherman), skupi\-ny zaměřující se na volný \zk{GIS}. Plugin Builder na
-základě uživatelem zadaných parametrů vytvoří základní skelet zásuvného modulu - tlačítko, holobyt
+základě uživatelem zadaných parametrů vytvoří základní skelet zásuvného modulu - ikonku, holobyt
 grafického rozhraní, metadata, základní funkce (zapnout, vypnout) a~vazby zásuvného modulu. 
 
 Fundamentální tělo zajišťující základní funkcionalitu zásuvného modulu je ulože\-no v~několika vzájemně
@@ -64,15 +64,15 @@ provázaných souborech:
 
 	\item plugin\_upload.py: Zajišťuje všeobecnou dostupnost zásuvného modulu. 	
 
-	\item suro\_leveling.py: Implementuje zásuvný modul do prostředí QGIS. Načítá jeho ikonu,
-	jmenuje a~aktivuje jej a~v~případě vypínání se stará o~jeho destrukci. Funkce \textit{run} jej váže se
-	suro\_leveling\_dockwidget.py. 
+	\item position\_correction.py: Implementuje zásuvný modul do prostředí QGIS. Načítá jeho ikonu,
+	jmenuje a~aktivuje jej a~v~případě vypínání se stará o~jeho destrukci. Funkce \textit{run} jej váže
+	s~position\_correction\_dockwidget.py. 
 	
-	\item suro\_leveling\_dockwidget.py: Nejdůležitější ze základních souborů. Zde se přes volání
-	\textit{.ui} souboru suro\_leveling\_dockwidget\_base.ui vytvořeného v~prostředí Qt Designer
-	vyvolává grafické uživatelské rozhraní. Zajišťuje také funkčnost ve\-škerých jeho částí, od načítání
-	cest vstupních a~výstupních dat přes jejich zobrazování (volá show\_as\_layer.py) až po samotné volání
-	posunu (move.py). Na pozadí dochází ke kontrole vstupujících údajů, v~případě nesrovnalostí
+	\item position\_correction\_dockwidget.py: Nejdůležitější ze základních souborů. Zde se přes volání
+	\textit{.ui} souboru position\_correction\_dockwidget\_base.ui vytvořeného v~prostředí Qt Designer
+	vyvolává grafické uživatelské rozhraní. Zajišťuje také funkčnost ve\-škerých jeho částí a~celkové
+	dodržování interní maat, od načítání cest vstupních a~výstupních dat přes jejich zobrazování (volá
+	show\_as\_layer.py) až po samotné volání posunu (move.py). Na pozadí dochází ke kontrole vstupujících údajů, v~případě nesrovnalostí
 	bude uživatel upozorněn chybovým hlášením. Aby se zamezilo zbrklým nehodám, byl ke zpřístupnění
 	tlačítek zabudován hlídací pes - ke zpřístupnění tlačítka na zobrazení vstupního souboru musí být
 	k~tomuto souboru definována cesta, taktéž k samotnému posunu je třeba mít vyplněny všechny potřebné
@@ -93,43 +93,278 @@ soubory související se zkoumanou pro\-blematikou, tedy obsah move.py.
 \label{by_points}
 
 Posun o~hodnoty se skrývá pod funkcí move.by\_points. Zde nejprve proběhne analýza vstupních dat.
-Analýza spočívá v~prohledání hlavičky souboru, je třeba zjistit polohu hledaných hodnot - sloupec
-\textit{mereni}. Veškeré hodnoty z~tohoto sloupce uloží jako seznam měření. 
+Analýza spočívá v~prohledání hlavičky souboru, je třeba zjistit polohu hledaných hodnot - sloupce
+\textit{Lat\_deg} a~\textit{Lon\_deg}. 
 
 Následně se čte vstupní soubor řádek po řádku a~postup posunu se liší na základě vstupní hodnoty posunu. 
 
-Jedná-li se o~číslo kladné, v~každé smyčce cyklu se ze seznamu měření odejme hodnota na pozici
-voleného posunu a~uloží (cyklus probíhá do té doby, dokud na dané pozici existuje nějaký prvek). Do paměti
-počítače se přečte řádek vstupního souboru a~hodnota ve sloupci \textit{mereni} se přepíše vyňatým prvkem. 
-Následně se modifikovaný řádek zapíše do výstupního souboru. 
+\subsection{Posun o kladný počet hodnot}
+\label{kladnehodnoty}
 
-Jedná-li se o~číslo záporné, ještě před cyklem se provede odečtení X~řádků bez zápisu, kde X je hodnota
-posunu. Následně probíhá syžet tímtéž způsobem s~tím rozdílem, že se navíc k~hodnotě ve sloupci
-\textit{RECS}, tedy číslu bodu, přičítá hodnota posunu (záporná hodnota, tudíž se číslo bodu
-zmenšuje). Tento krok není pro posun nikterak zásadní, alebrž slouží pouze k~dodržení úzu - body
-se číslují od numera~0. 
+Jedná-li se o~číslo kladné, připojujeme k~informacím bodu \textit{n} souřadnice bodu
+\textit{n+x}, kde \textit{x} představuje hodnotu, o~niž body posouváme. Toho dosáhneme tím, že
+v~každé smyčce cyklu postupně načteme \textit{x} řádků, přičemž první z~těchto řádků vložíme do proměnné;
+v~paměti tedy zbude první a~poslední z~čtených řádků. Hodnoty ze sloupců souřadnic posledního
+načteného řádku vložíme do příslušných sloupců prvního čteného řádku. Modifikovaný první
+řádek se zapíše do výstupního souboru. Načte se poloha konce prvního řádku a~cyklus se může opakovat. 
 
-Ve speciálním případě, kdy vstupuje do posunu o~hodnoty číslice~0, dochází k~pouhému kopírování vstupního
+\subsection{Posun o záporný počet hodnot}
+\label{zapornehodnoty}
+
+Jedná-li se o~číslo záporné, ještě před cyklem se provede odečtení \textit{x}~řádků,
+kde \textit{x} je hodnota posunu; tyto řádky jsou zapsány do seznamu hodnot.
+
+Syžet cyklu následně probíhá
+tím způsobem, že se z~tohoto seznamu odebírá první hodnota. Z~té jsou odečteny informace ze
+sloupců příslušejících zeměpisným souřadnicím. Do dočasné proměnné je vložena poslední
+hodnota seznamu a~její souřadnice jsou pře\-psány souřadnicemi výše zmiňovanými. Modifikovaný řádek
+se zapíše do výstupního souboru. Nyní je třeba doplnit seznam opět na \textit{x} hodnot, toho
+se dosáhne čtením dalšího řádku ze vstupního souboru a~jeho vložením na konec seznamu. Cyklus
+se může opakovat. 
+
+\subsection{Posun o nulový počet hodnot}
+\label{nulovehodnoty}
+
+Ve speciálním případě, kdy vstupuje do posunu o~hodnoty číslice~0, dochází k~pouhé\-mu kopírování vstupního
 souboru do souboru výstupního. Ovšem na žádný pád nemá v~takovém případě použití zásuvného modulu
 odůvodnění. 
 
 \section{Posun o konstantní vzdálenost}
 \label{by_distance}
 
-\subsection{Výpočet azimutu}
-\label{azimut}
+Posun o~konstantní vzdálenost je obsažen v~move.by\_distance. 
+
+Na začátek funkce je třeba opět základní analýza vstupujícího souboru; její průběh je shodný
+s~analýzou při posunu o~hodnoty. 
+
+Následně je třeba připravit si pole pro výpočty na elipsoidu. Redundance kódu není v~ničím
+zájmu, pro potřeby elipsoidických operací tedy užíváme knihovnu prostředí QGIS QgsDistanceArea. Zde nastavíme
+užitý referenční elipsoid \zk{WGS84}. 
+
+Výpočet se opět liší dle povahy vstupující hodnoty posunu (kladná vzdálenost,
+záporná, 0). Posledním krokem před rozlišením, kterou větev výpočtu volání funkce vyvolá, je nastavení
+parametrů elipsoidu pro výpočet první geodetické úlohy (ta v~QgsDistanceArea implemetována
+není, a~je třeba ji řešit v~samotném kódu). 
+
+\subsection{Posun o kladnou vzdálenost}
+\label{kladnavzdalenost}
+
+Posunujeme-li body o~kladnou vzdálenost, na první pohled se nezdá, že by se v~algoritmu skrývaly
+nějaké záludnosti. Na pohled druhý ano. 
+
+Nejzásadnější problém se vynoří, snaží-li se uživatel posunout body o~vzdálenost větší, než
+jaká se rozpíná mezi dvěma body. V~takovém případě je třeba v~momentě překročení zmiňované
+vzdálenosti přepočítat trajektorii na novou dvojici bodů a~o~tuto hodnotu požadovanou
+délku posunu snížit. 
+
+Z~tohoto důvodu proběhne v~každém cyklu čtení \textit{x} řádků ve vnořeném cyklu \textit{while}.
+Tentokrát není \textit{x} daná hodnota, její velikost závisí na rozestupy mezi jednotlivými body.
+V~každé smyčce vnitřního \textit{while} cyklu dojde k~výpočtu vzdálenosti mezi dvěma momentálně
+načtenými body. Je-li vypočtená vzdálenost větší než délka posunu, cyklus skončí. 
+Avšak není-li, délka posunu se zkrátí o~vzdálenost mezi těmito body a~bodem~2 se nahradí bod~1.
+Vzápětí se čte další řádek představující nový bod~2 a~cyklus se opakuje. V~momentě, kdy
+skončí, máme tedy novou dvojici bodů a~zbytek z posunu náležející na tento úsek.
+První geodetická úloha tedy probíhá až na tomto poli. 
+
+Kromě zeměpisných souřadnic je ale třeba veškeré ostatní informace převzít z~prvního
+čteného řádku (jediný, který kromě momentálního páru bodů zůstává v~paměti). Takto vytvořený
+řádek se zapíše do výstupního souboru. Načte se poloha konce prvního čteného řádku
+a~vnější cyklus se může opakovat. 
+
+\subsection{Posun o zápornou vzdálenost}
+\label{zapornavzdalenost}
+
+Vstupuje-li do posunu o~konstantní vzdálenost záporná hodnota, nabízí se možnost
+využití kódu pro kladnou hodnotu, pouze s~inversně vyměněnými body. Opět bychom ale narazili
+ve chvíli, kdy posun překračuje vzdálenost mezi dvěma body. 
+
+Zde je zapotřebí jiného způsobu řešení problému. Tento úkol ztěžuje ještě fakt, že nechceme
+zahltit paměť načítáním celého vstupního souboru, snažíme se tedy pracovat jen s~nutně
+potřebnou dávkou řádků. 
+
+Opět si vypomůžeme seznamem hodnot (řádků). Ponejprve byl vytvořen vstup\-ní seznam
+na stejném principu, jako v~předchozím případě (porovnávání \textit{uražené} vzdálenosti se
+vzdáleností mezi body), s~tím rozdílem, že tentokráte již použité body vkládáme do seznamu hodnot.
+
+Základní cyklus, jenž by se poznovu dal nazvat cyklem vnějším, se skládá ze dvou na sebe
+navazujících cyklů vnitřních. 
+
+První vnitřní cyklus slouží k revizi, zda není seznam vstupující do výpočtu zbytečně obsáhlý.
+Zjistí-li, že posun nepřekročí více než \textit{x} prvků, smaže redundantní prvky z~počátku seznamu (posouváme bod
+z~konce seznamu). Na každý pád vstupuje do výpočtu seznam o~rozsahu právě onoho \textit{x}. 
+
+Po dobrozdání výpočet vstupuje do cyklu spočívajícího ve výpočtu první geode\-tické úlohy.
+Nadto do tohoto cyklu vstupují hodnoty kvůli posunu zpět v~reversním pořádku. Měl-li by
+posun překročit vzdálenost mezi dvěma body, kvůli úspoře se výpočet přeskočí a~do pomocných
+proměnných se zapíšou přímo souřadnice druhého z~bodů. 
+
+Po smyčce, při kteréž již dojde k~výpočtu první geodetické úlohy, je proveden zápis do výstupního
+souboru - zapíše se poslední řádek ze seznamu se zeměpisnými souřadnicemi přepsanými
+souřadnicemi vypočtenými. 
+
+\subsection{Posun o nulovou vzdálenost}
+\label{nulovavzdalenost}
+
+Ježto by měl zásuvný modul fungovat i~při operacích, které kterakkolivěk postrádají důvod k~jeho využití, byl do jeho
+vnitřností implementován i~posun o~nulovou vzdálenost. V~takovém případě se však vážně nejedná o~posun, nýbrž o~pouhé přepsání
+neupravených hodnot ze vstupního souboru do souboru výstupního. 
 
 \subsection{První geodetická úloha}
 \label{prvniguplugin}
 
+Velký problém při výpočtech na elipsoidu představuje první geodetická úloha. Ta byla popsána
+již výše v~kapitole \ref{prvnigu}, nyní tedy pouze několiko poznámek k~jejímu kódovému zpracování. 
+
+Samotný kód posunů se pro své značné množství nutných podmínek a~cyklů nevyznačuje
+elegantní přehledností, pročež byl alespoň výpočet první geodetické úlohy vytržen jako zvláštní funkce.
+
+Výpočet probíhá na základě iterací. Anžto byl jejich postup již výše popsán, jen zdůrazníme
+některé části. Každá z~iterací zpřesňuje výpočet a~tyto iterace jsou prováděny do doby,
+kdy přesnost dosáhne 0.0000000001~radiánu. 
+
+Důležitým prvkem, který by neměl zůstat opomenut, jest vstupující azimut. Zde se musí pamatovat
+na to, že azimut na elipsoidu se od azimutu na kouli či v~ro\-vině liší. Z~tohoto
+důvodu byla využita funkce \textit{computeDistanceBearing} knihovny QgsDistanceArea.
+
+Nyní by bylo vhodné zdůvodnit právě tento druh výpočtu první geodetické úlohy a~nepoužití
+složitější, arciť přesnější metody interpolace. 
+
+Chtěli-li bychom vytvořit kód, který vykresluje trajektorii pravděpodobněji, mu\-sel by do
+výpočtu vstupovat kompletní vstupní soubor; a~vzhledem k~tomu, že není ničím neobvyklým
+soubor čítající mnoho přes 10000 záznamů o více než desítce sloupců, rozdíl v~systémové zátěži
+by byl obrovský. 
+
+Přesto byl tento návrh zpraco\-vá\-ní na poradě se Státním ústavem radiační ochra\-ny
+vznesen. Po projednání bylo ze strany \zk{SÚRO} uvedeno, že vyhovuje námi momentálně
+používaný způsob výpočtu; a~to nikolivěk pouze z~důvodu úspory systémových nároků, nýbrž především
+z~toho důvodu, že výsledné zpřesnění souřadnic už by mělo na výsledky jejich práce
+prakticky nulový vliv. 
+
 \section{Posun o konstantní čas (proměnnou vzdálenost)}
 \label{by_seconds}
+
+Velká část popisu kódu v~kapitole \ref{by_distance} se týká též posunu o~konstantní
+čas - o~vzdále\-nost s~uvážením rychlosti. Odkazujeme se zde na základní přípravu hrací plochy,
+analýzu, parametry elipsoidu a~vyvolání knihovny QgsDistanceArea. Též výpočet první geodetické
+úlohy se shoduje s výše popsanými postupy. Co se problémů jednotlivých
+segmentů týče, dá se říci, že se dědí problémy posunu o~konstantní vzdálenost, pouze se k~nim
+přidávají některé nové. 
+
+Též základní fungování částí funkce se od těch popsaných výše příliš neliší; po\-psány tedy
+budou pouze případné zásadnější odlišnosti. 
+
+Nejočividnější rozdíl je pro veškeré posuny o~čas stejný - výpočet vzdálenosti,
+o~niž se bod posouvá. Nejdříve je zapotřebí funkcí \textit{computeDistanceBearing}
+vypočítat vzdálenost mezi dvojicí bodů. Vydělíme-li ji časovým úsekem, za který tuto vzdálenost
+měřicí zařízení urazilo, získáme momentální rychlost. K~požadované délce posunu
+se dostaneme již pouhým vynásobením této rychlosti uživatelem zadaným časovým úsekem. 
+
+Z~uvedeného vyplývá, že je mezi dvojicí bodů předpokládán lineární pohyb. Taková idea vzešla
+již od Státního ústavu radiační ochrany na základě toho, že vrtulník začíná měřit
+až po jisté uražené vzdálenosti. V~tomto momentě již nabyl rychlost, kterou se snaží během
+celého procesu měření konstantně udržovat. 
+
+Zásadním problémem, který se při zpracování vynořil, je nejednotnost měření.
+Ačkolivěk bývá zvykem měřit data po jedné sekundě, nedá se na takový postup spoléhat.
+Používal-li by zásuvný modul cizinec, není vyloučené, že by v~jeho zemi bylo územ měřit
+data po vteřinách třech nebo pěti. Je tedy třeba pracovat s~časovými značkami ze sloupce
+\textit{Gtm\_sec} a~jejich rozdíly. Tím dochází k~zesložitění kódu, ale rovněž k~potřebnému
+podchycení případných nesrovnalostí. 
+
+Též je třeba ověřovat body vstupující do výpočtu první geodetické úlohy. Má-li měřicí zařízení
+omezenou přesnost, může se stát, že budou mít dva po sobě měřené body zapsány stejné souřadnice.
+Pokud by k~takové situaci došlo, je třeba se vyhnout výpočtu geodetické úlohy. Problém ani
+tak nespočívá v~azimutu, jenž by mohl nabývat jakékoli hodnoty, nýbrž ve vzdálenosti.
+Dělení nulou by vyvolávalo ve výpočtech chybu. Anžto vzdálenost mezi body jest nulová,
+nastane zápis souřadnic jednoho z~bodů. 
+
+\subsection{Posun o kladný časový úsek}
+\label{kladnycas}
+
+Při posunu o~kladný časový úsek je třeba vytvořit si pomocnou proměnnou, nazvěme ji zde \textit{x},
+představující čas, o~který momentální bod posouváme. Ve chvíli vytvoření tedy bude \textit{x}
+rovno uživatelem zadané hodnotě posunu. 
+
+Před základním cyklem dojde k~odečtení a~uložení prvního řádku. Ten představuje posouvaný bod.
+V~základním cyklu pak algoritmus čte další řádek. Ten představuje bod, k~němuž směřuje
+trajektorie, po níž prvý bod posouváme. 
+
+V~tomto vnějším cyklu opět pracuje cyklus vnitřní, v~kterémžto dochází k~porov\-ná\-vá\-ní našeho
+\textit{x} s~dobou, za kterou měřicí zařízení urazilo vzdálenost mezi právě načtenou dvojicí bodů. 
+
+Je-li \textit{x} menší než tato doba, proběhne výpočet první geodetické úlohy na trajektorii
+a~s~uvážením rychlosti mezi těmito dvěma body. 
+
+Pokud se tyto hodnoty rovnají, jedná se o~podmínky pro výpočet ještě příznivější. Dojde k~pouhému
+zápisu souřadnic druhého bodu do příslušných proměnných. V~ta\-ko\-vém
+případě by se posun dal označit za posun o~hodnoty. 
+
+Zákeřněji působí možnost, při níž je hodnota \textit{x} větší než doba mezi měřením dvou
+bodů v~momentální paměti. Pak je zapotřebí dobu posunu \textit{x} zmenšit o~dobu, kterou
+vrtulník mezi dvěma body urazil, druhý bod vložit do bodu prvního a~načíst nový druhý bod. Následně
+se vnitřní cyklus zabývající se dobrozdáním ohledně hodnoty \textit{x} a~hodnoty
+rozdílu časových značek mezi dvěma body v~paměti může opakovat. 
+
+Poté, co jednou z~možných cest skončí vnitřní cyklus, dojde k~vložení nových souřadnic
+(ať už vypočtených, nebo jen vyjmutých) do odpovídajících sloupců první\-ho čteného řádku.
+Ten se zapíše do výstupního souboru, do proměnné \textit{x} se opět načte uživatelem volená
+hodnota posunu, ve čtení se vyvolá pozice před započetím vnitřního cyklu, a~vnější cyklus se
+opakuje s~řádky o~jeden posunutými. 
+
+\subsection{Posun o záporný časový úsek}
+\label{zapornycas}
+
+Pro posun o~záporný časový úsek se jako ideální řešení opět zdálo využití seznamu řádků.
+Tento seznam byl načten před samotným započetím vnějšího cyklu a~hodnoty do něj byly
+přidávány do té doby, dokud součet rozdílů časových značek mezi jednotlivými body
+nepřekročí uživatelem požadovanou hodnotu posunu (lépe řečeno její absolutní hodnotu,
+poněvadž uživatel volí hodnotu zápornou). 
+
+Seznam již vstupuje do vnějšího cyklu, jehož cílem je postupně projít celý vstupní
+soubor a~posunout veškeré body. Tento cyklus se skládá ze dvou cyklů vnitřních. 
+
+První vnitřní cyklus reviduje vstupující seznam hodnot. Zjišťuje, zda není přes\-příliš obsáhlý.
+Kontrolu provádí na základě porovnávání součtu rozdílů časových značek s~uživatelem
+voleným časovým posunem. Narazí-li algoritmus na hodnoty, jež by nebyly při výpočtu využity,
+ze seznamu je kvůli úspoře paměti umaže (protože se nové hodnoty - posouvající se body - přidávají
+na konec seznamu, nadbytečné hodnoty se nachází na jeho začátku). Tyto řádky totiž nebudou
+třeba ani k~žádné z~následujících smyček. 
+
+Druhý z~vnitřních cyklů se příliš neliší od toho popsaného v~kapitole \ref{zapornavzdalenost}.
+Čte v~reversním pořadí seznam hodnot a~spočívá v~analýze vstupujících dat. Analýza
+probíhá s~pomocnou proměnnou (ze zvyku si ji označme \textit{x}), která představuje čas posunu od momentálního bodu. 
+
+Pokud \textit{x} převyšuje dobu, za niž měřicí zařízení urazilo vzdálenost mezi dvěma načtenými
+body, pouze se posuneme v~seznamu o úroveň níže (bod~1 se stane bodem 2 a~do nového
+bodu 1 se vloží další řádek seznamu); \textit{x} se zmenší o~velikost zmiňovaného časového úseku. 
+
+Rovnají-li se tyto dvě hodnoty, do paměti se uloží souřadnice bodu 1 (bodu, k~němuž se počítá trajektorie). 
+
+V~případě, že je absolutní hodnota \textit{x} menší než rozdíl časových značek, dochází
+k~výpočtu první geodetické úlohy. 
+
+Následuje chvíle pro již typickou koncovku vnějšího cyklu. Souřadnice z~paměti se vloží
+do odpovídajících sloupců řádku s~posunovaným bodem a~ten se zapíše do výstupního souboru.
+Následně se na konec seznamu hodnot načte další řádek (nový posunovaný bod) a~\textit{x}
+se nastaví na uživatelem volenou hodnotu posunu. Cyklus pokračuje další smyčkou. 
+
+\subsection{Posun o nulový časový úsek}
+\label{nulovycas}
+
+Byť živou věcí neexistuje důvod k~použití zásuvného modulu za účelem takové ope\-race,
+dovede si zásuvný modul poradit i~s~případem posunu o~0~sekund. Abychom se vyhnuli
+naprosto zbytečné zátěži ve formě počítání nulových posunů, poznovu tato část kódu
+funguje jen jako kopírování vstupního souboru do souboru výstupního. 
 
 \section{Licence}
 \label{licence}
 
 Nebtě byl zásuvný modul vytvořen pro QGIS a~využívá jeho knihoven, dědí jeho licenci: GNU General Public
-License (\zk{GPL}). 
+License~(\zk{GPL}). 
+
+Jde o~\textit{copyleftovou} (odvozené dílo musí být dostupné pod stejnou licencí)
+licenci. Ve své podstatě zde nejde o~omezování svobody, alebrž právě o~její dodržování - zajišťuje,
+aby prvotně svobodný software tuto svobodu modifikacemi či přidáváním neztratil. 
 
 
 
