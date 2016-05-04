@@ -29,7 +29,7 @@ import time
 class MoveError(StandardError):
     pass
 
-class MoveBase:
+class Move:
     def __init__(self, inputfile, outputfile):
         self.inputfile = open(inputfile,'rb')
         self.outputfile = open(outputfile,'wb')
@@ -295,20 +295,6 @@ class MoveBase:
 
         self._close()
 
-    def by_seconds(self, seconds):
-        raise NotImplementedError()
-
-class MovePyProj(MoveBase):
-    def __init__(self, inputfile, outputfile):
-        MoveBase.__init__(self, inputfile, outputfile)
-
-    def by_seconds(self, seconds):
-        raise NotImplementedError()
-
-class Move(MoveBase):
-    def __init__(self, inputfile, outputfile):
-        MoveBase.__init__(self, inputfile, outputfile)
-    
     def by_seconds(self, seconds):
         """move by variable distance"""
 
