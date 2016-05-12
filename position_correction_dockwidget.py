@@ -78,7 +78,7 @@ class PositionCorrectionDockWidget(QtGui.QDockWidget, FORM_CLASS):#SuroLevelingD
             return
 
         self.input.setText(self.filePath)
-        self.output.setText(self.filePath[:-4]+u'_leveled.csv')
+        self.output.setText(self.filePath[:-4]+u'_moved.csv')
 
     def select_style(self):
         """select qml style file"""
@@ -102,7 +102,7 @@ class PositionCorrectionDockWidget(QtGui.QDockWidget, FORM_CLASS):#SuroLevelingD
         if not self.outputDir:
             return
 
-        self.directory = os.path.normpath(self.outputDir) + os.path.sep + u'leveled_data.csv'
+        self.directory = os.path.normpath(self.outputDir) + os.path.sep + u'moved_data.csv'
         self.output.setText(self.directory)
 
     def able_solve(self):
