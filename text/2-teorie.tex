@@ -1,9 +1,12 @@
 \chapter{Teoretický základ}
 \label{2-teorie}
 
+%%% ML: vyplynuti posunu, v dalsi vete "body"
 Tato kapitola si klade za cíl seznámit čtenáře s~teoretickými základy měření radioaktivity, z~nichž
 plyne potřeba posunu. Dále pak načrtne způsoby, kterými bude možno body posouvat, a~popíše
 nejdůležitější problémy, s~nimiž se při takovém posunu lze setkat. 
+
+%%% ML: pridat poznamku o zdroji 
 
 \section{Scintilační spektrometrie}
 \label{spektrometrie}
@@ -47,6 +50,7 @@ a~pro naši práci je důležité, že se objevují též v terénním měření
 \label{detektor}
 
 Ve scintilačních detektorech zachycuje ionizační záření takzvaná scintilační sonda.
+%%% ML: Ta *se* sestava?
 Ta sestává ze scintilačního krystalu a~fotonásobiče umístěných ve světlotěsném pou\-zdře.
 Pouzdro nejen že zabraňuje vniku nadbytečného světla do detekční jednotky, ale také stíní
 vnější magnetické pole, které by mohlo ovlivňovat správnou funkci fotonásobiče. 
@@ -88,6 +92,7 @@ fotony, nýbrž elektrony vyvolané prvotním dopadem fotonů na fotokatodu.
 
 Vstupním elementem fotonásobiče je tedy fotokatoda. Jedná se o~tenkou vrstvu napařenou na
 vstupním okénku, tvořenou zejména antimonidy alkalických prvků (nejčastěji cesia a antimonu),
+%%% ML: ana?
 ana převádí dopadající fotony fotoelektrickým jevem na elektrony.
 Tenkost tvoří důležitou součást její výroby; v~opačném případě by mohlo docházet k~pohlcování
 emitovaných elektronů v~materiálu fotokatody. 
@@ -97,10 +102,12 @@ Její kladné napětí udává emitovaným elektronům vyšší rychlost a~usmě
 
 Následně tyto vyloučené elektrony násobí sekundární emise na dynodách. Dy\-nody představují soustavu
 zvláštních elektrod, kde se na každou následující přivádí vyšší (zpravidla o~100~V nebo
+%%% Na tomto principu funcuje i ?
 dvojnásobné) kladné napětí, pročež přitahují emitované elektrony. Tento systém funguje
 jako elektronový zesilovač. Každá z~dynod pracuje tím způsobem, že po nárazu jednoho elektronu emituje
 další elektrony. Mezi počtem vyražených elektronů a~kinetickou energií dopadajícího elektronu
 platí přímá úměra. Obvykle se počet elektronů na každé dynodě zdvojnásobí. Několikerým
+%%% ML: mrdani - poznamka pod carou ;-)
 mrdáním elektronů dojde k~jejich množení geometrickou řadou. Dynody mívají zpravidla
 zakřivený tvar (vhodnější pro fokusaci elektronů na další dynodu). 
 
@@ -125,6 +132,7 @@ V~případě amplitudového analyzátoru se měří počet impulsů s~amplitudou
 diskriminačními hladinami. Diskriminační hodnoty představují amplitudové infimum a~supremum.
 Amplitudy ležící mimo toto rozmezí nebudou k~čítači propuštěny. Tím se částečně
 eliminují chyby a~temný proud - proud protékající fotonásobičem i~bez ozáření fotokatody.
+%%% ML: pik (tzv.)
 Územ bývá nastavit toto rozmezí tak, aby obsahovalo fotopík (pík totální absorpce) záření
 měřeného radionuklidu. Impulsy zkrácené o~přebytečné hodnoty následně vstoupí již do čítače impulsů. 
 
@@ -137,6 +145,7 @@ znázornění je na obrázku \ref{fig:scintilacni-detektor}.
 \section{Sběr souřadnic a potřeba posunu}
 \label{potreba posunu}
 
+%%% ML: sber mereni
 Sběr měření probíhá letecky. Scintilační spektrometr je uložen ve vrtulníku, který přelétá nad zkoumaným
 územím; při přeletu se v~spektrometru registrují hodnoty záření. Tato data jsou registrována v~podstatě
 neustále, ale zapisují se až po jistém časovém úseku (běžně po vteřině) jako průměr hodnot za onen
@@ -164,7 +173,6 @@ posunout sloupce s potřebnými daty o~zamýšlený počet hodnot.
    \centering
 	\includegraphics[scale=0.2]{./pictures/posun.png}
 	\caption[Posun dat o 1 bod]{Posun dat o 1 bod
-	
 	(zdroj: HELEBRANT, Jan a GRYC, Lubomír: \textit{GPS position lag correction} [interní dokument
 	SÚRO, v.v.i.])}
       \label{fig:posun}
@@ -179,7 +187,6 @@ body na jejich náležité místo.
    \centering
 	\includegraphics[scale=0.4]{./pictures/snimani.png}
 	\caption[Princip měření]{Princip měření
-	
 	(zdroj: HELEBRANT, Jan a GRYC, Lubomír: \textit{GPS position lag correction} [interní dokument
 	SÚRO, v.v.i.])}
       \label{fig:mereni}
@@ -189,7 +196,6 @@ body na jejich náležité místo.
    \centering
 	\includegraphics[scale=0.3]{./pictures/snimani-detail.png}
 	\caption[Profilové schéma měření]{Profilové schéma měření
-	
 	(zdroj: HELEBRANT, Jan a GRYC, Lubomír: \textit{GPS position lag correction} [interní dokument
 	SÚRO, v.v.i.])}
       \label{fig:mereni-profil}
@@ -208,6 +214,8 @@ souřadnice posunutého bodu.
 \section{Problémy}
 \label{problemy}
 
+%%% ML: softwaroveho nastroje
+%%% ML: dvakrat slovo "mhoho" v jedne vete
 Při tvorbě zásuvného modulu, který by jmenované operace umožňoval, může dojít k~mnoha nepříjemnostem
 a~mnoha problémům, s~nimiž je třeba se vypořádat. Jmenujme alespoň dva nejdůležitější: 
 
@@ -217,6 +225,7 @@ a~mnoha problémům, s~nimiž je třeba se vypořádat. Jmenujme alespoň dva ne
 Ačkoli různé typy spektrometrů produkují odlišné výstupy a~některé mohou obsahovat i~zeměpisné souřadnice
 na jiném referenčním tělese, zpravidla obsahují (také) souřadnice na elipsoidu \zk{WGS84}. 
 
+%%% ML: diafragma (...)
 Přítomnost elipsoidických souřadnic namísto rovinných vnáší do výpočtu záludnou diafragmu, na niž musí
 tvůrce algoritmu dbát zvýšeného zřetele. Od výpočtů na referenční kouli (nerci v~rovině) se
 zásadně liší nejen délka, ale také azimut. Nejkratší spojnice (takzvaná geodetická křivka), která
@@ -228,6 +237,7 @@ geodetické úlohy na elipsoidu.
 \label{prvnigu}
 
 První geodetická úloha představuje hledání (výpočet) parametrů bodu na konci křivky, v~případě
+%%% ML: softwarove / programoveho nastroje
 představovaného zásuvného modulu na referenčním elipsoid. Zná\-mými parametry jsou souřadnice počátečního
 bodu křivky a~její azimut v~tomto bodě. Hledanými parametry zeměpisné souřadnice koncového bodu.
 Zkoumaná křivka reprezentuje geodetickou křivku. 
