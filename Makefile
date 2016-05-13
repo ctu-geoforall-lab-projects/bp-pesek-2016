@@ -38,15 +38,15 @@ LOCALES =
 # translation
 SOURCES = \
 	__init__.py \
-	suro_leveling.py suro_leveling_dockwidget.py
+	position_correction.py position_correction_dockwidget.py
 
 PLUGINNAME = SuroLeveling
 
 PY_FILES = \
 	__init__.py \
-	suro_leveling.py suro_leveling_dockwidget.py
+	position_correction.py position_correction_dockwidget.py
 
-UI_FILES = suro_leveling_dockwidget_base.ui
+UI_FILES = position_correction_dockwidget_base.ui
 
 EXTRAS = metadata.txt icon.png
 
