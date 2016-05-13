@@ -7,14 +7,14 @@
 # This file should be included when you package your plugin.# Mandatory items:
 
 [general]
-name=Suro Leveling
+name=GPS Position Correction
 qgisMinimumVersion=2.8
-description=Aerial Data Leveling
+description=Aerial Data Shift
 version=0.4
 author=Ondřej Pešek
 email=ondra.lobo@seznam.cz
 
-about=Aerial Data Leveling for suro.cz
+about=Aerial Data Shift for suro.cz
 
 tracker=https://github.com/ctu-osgeorel-proj/bp-pesek-2016/issues
 repository=https://github.com/ctu-osgeorel-proj/bp-pesek-2016.git
@@ -36,4 +36,3 @@ experimental=True
 
 # deprecated flag (applies to the whole plugin, not just a single version)
 deprecated=False
-
