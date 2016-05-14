@@ -9,12 +9,15 @@
 Vstupní soubor s~měřenými daty musí být tzv.~\zk{CSV}~(\textit{comma-separated values} - hodnoty oddělené
 čárkami) soubor. Oddělování čárkami představuje pro čtení souboru zásuvným modulem zásadní podmínku.
 Software v~měření radioaktivity (a~mnohdy i~jiných atributů) běžně používaný k~zápisu obvykle
+%%% ML: vynechat "a" ?
 produkuje právě soubory s~koncovkou~.\zk{CSV} a~s~nezbytnými i~doplňujícími atributy. Na pořadí
 atributů nezáleží. 
 
 Povinné části a~jejich označení v~hlavičce souboru: 
 \begin{itemize}
 	
+%%% ML: {\tt Lat\_deg} ?
+%%% ML: {\tt Lat\_deg}: Označuje ... ?
 	\item Lat\_deg: Lat\_deg označuje sloupec obsahující zeměpisnou šířku snímaného bodu na elipsoidu.
 	Za referenční elipsoid, na němž se úloha vypočítává, byl zvolen nejběžněji užívaný
 	elipsoid~\zk{WGS84}. 
@@ -31,6 +34,7 @@ Povinné části a~jejich označení v~hlavičce souboru:
 	sloupec by mohl obsahovat jakoukoli jinou, i~nečíselnou hodnotu). Zásuvný modul posune body
 	i~bez těchto hodnot, ale v~primárním určení, měření radioaktivity, by bez této hodnoty postrádal smysl.
 	
+%%% ML: je vzdy silne ?
 	\item RECS: Pod označením RECS se skrývá číslo bodu. Tato položka nezbytná není, avšak
 	číslování bodů zajišťuje lepší čitelnost dat, pročež je silně doporučováno vždy. 
 
@@ -49,9 +53,12 @@ referenčním tělese, nadmořskou výšku, jiný systém času nebo datace.
 \section{Tělo zásuvného modulu}
 \label{telo}
 
+%%% ML: je opravdu Kosmogicky vhodne slovo s ohledem na vyznam teto vety?
 Kosmogonický základ zásuvného modulu byl vytvořen ve volně šiřitelném mo\-dulu nazvaném Plugin
 Builder\footnote{Dostupný na \textit{https://plugins.qgis.org/plugins/pluginbuilder/}}. Jedná se
+%%% ML: napriklad ?
 o~zásuvný modul vytvořený pro QGIS především (ale nikoli pouze) suitou kolem GeoApt LLC (například Gary
+%%% ML: volne siritelny ?
 Sherman), skupi\-ny zaměřující se na volný \zk{GIS}. Plugin Builder na
 základě uživatelem zadaných parametrů vytvoří základní skelet zásuvného modulu - ikonku, holobyt
 grafického rozhraní, metadata, základní funkce (zapnout, vypnout) a~vazby zásuvného modulu. 
@@ -60,6 +67,7 @@ Fundamentální tělo zajišťující základní funkcionalitu zásuvného modul
 provázaných souborech: 
 \begin{itemize}
 
+%%% ML: {\tt \_\_init\_\_.py} ?
 	\item \_\_init\_\_.py: Základní inicializace zásuvného modulu. 
 
 	\item plugin\_upload.py: Zajišťuje všeobecnou dostupnost zásuvného modulu. 	
@@ -71,14 +79,18 @@ provázaných souborech:
 	\item position\_correction\_dockwidget.py: Nejdůležitější ze základních souborů. Zde se přes volání
 	\textit{.ui} souboru position\_correction\_dockwidget\_base.ui vytvořeného v~prostředí Qt Designer
 	vyvolává grafické uživatelské rozhraní. Zajišťuje také funkčnost ve\-škerých jeho částí a~celkové
+%%% ML: maat?
 	dodržování interní maat, od načítání cest vstupních a~výstupních dat přes jejich zobrazování (volá
+%%% ML: provedeni posunu ?
 	show\_as\_layer.py) až po samotné volání posunu (move.py). Na pozadí dochází ke kontrole vstupujících údajů, v~případě nesrovnalostí
+%%% ML: veta o nehodach a psovi mi prijde prilis sroubovana...
 	bude uživatel upozorněn chybovým hlášením. Aby se zamezilo zbrklým nehodám, byl ke zpřístupnění
 	tlačítek zabudován hlídací pes - ke zpřístupnění tlačítka na zobrazení vstupního souboru musí být
 	k~tomuto souboru definována cesta, taktéž k samotnému posunu je třeba mít vyplněny všechny potřebné
 	parametry. 
 	
 	\item show\_as\_layer.py: Zobrazí soubor, an je předán jako jeden ze vstupních parame\-trů. Druhým
+%%% ML: jako ze bych ty tridy implementoval sam od sebe, to nedava smysl
 	vstupním parametrem je styl, jenž bude při zobrazování použit. Aby se zamezilo graviditě kódu
 	a~obecné duplicitě kódu v~podhoubí prostředí QGIS, byly k~zobrazení využity interní objekty
 	QgsVectorLayer a~QgsMapLayerRegistry. 
@@ -89,9 +101,13 @@ Toliko k~hrubému náčrtu fungování zásuvného modulu. Některé dílčí sl
 zane\-dbány, poněvadž nejsou k~pochopení fungování mo\-dulu nezbytné. Nyní se zvlášť podívejme na
 soubory související se zkoumanou pro\-blematikou, tedy obsah move.py. 
 
+%%% ML: krome pseudokodu (tam kde to pujde) doplnit obrazky
+%%% zobrazujici danou situaci
+
 \section{Posun o hodnoty}
 \label{by_points}
 
+%%% ML: by_points() je metoda tridy Move. + dalsi vyskyty
 Posun o~hodnoty se skrývá pod funkcí move.by\_points. Zde nejprve proběhne analýza vstupních dat.
 Analýza spočívá v~prohledání hlavičky souboru, je třeba zjistit polohu hledaných hodnot - sloupce
 \textit{Lat\_deg} a~\textit{Lon\_deg}. 
@@ -101,13 +117,16 @@ Následně se čte vstupní soubor řádek po řádku a~postup posunu se liší 
 \subsection{Posun o kladný počet hodnot}
 \label{kladnehodnoty}
 
+%%% ML: doplnit pseudokod nebo diagram
 Jedná-li se o~číslo kladné, připojujeme k~informacím bodu \textit{n} souřadnice bodu
 \textit{n+x}, kde \textit{x} představuje hodnotu, o~niž body posouváme. Toho dosáhneme tím, že
+%%% ML: preformulovat
 v~každé smyčce cyklu postupně načteme \textit{x} řádků, přičemž první z~těchto řádků vložíme do proměnné;
 v~paměti tedy zbude první a~poslední z~čtených řádků. Hodnoty ze sloupců souřadnic posledního
 načteného řádku vložíme do příslušných sloupců prvního čteného řádku. Modifikovaný první
 řádek se zapíše do výstupního souboru. Načte se poloha konce prvního řádku a~cyklus se může opakovat. 
 
+%%% ML: uvazit pridani pseudokodu i pro ostatni algoritmu
 \subsection{Posun o záporný počet hodnot}
 \label{zapornehodnoty}
 
@@ -143,6 +162,7 @@ užitý referenční elipsoid \zk{WGS84}.
 
 Výpočet se opět liší dle povahy vstupující hodnoty posunu (kladná vzdálenost,
 záporná, 0). Posledním krokem před rozlišením, kterou větev výpočtu volání funkce vyvolá, je nastavení
+%%% ML: chybi obecne provazanost v textu, zde napr. viz kapitola 2.y
 parametrů elipsoidu pro výpočet první geodetické úlohy (ta v~QgsDistanceArea implemetována
 není, a~je třeba ji řešit v~samotném kódu). 
 
@@ -164,6 +184,7 @@ načtenými body. Je-li vypočtená vzdálenost větší než délka posunu, cyk
 Avšak není-li, délka posunu se zkrátí o~vzdálenost mezi těmito body a~bodem~2 se nahradí bod~1.
 Vzápětí se čte další řádek představující nový bod~2 a~cyklus se opakuje. V~momentě, kdy
 skončí, máme tedy novou dvojici bodů a~zbytek z posunu náležející na tento úsek.
+%%% ML: probiha? poli?
 První geodetická úloha tedy probíhá až na tomto poli. 
 
 Kromě zeměpisných souřadnic je ale třeba veškeré ostatní informace převzít z~prvního
@@ -212,6 +233,7 @@ neupravených hodnot ze vstupního souboru do souboru výstupního.
 \subsection{První geodetická úloha}
 \label{prvniguplugin}
 
+%%% ML: tady uz odkaz na teoretickou cast je, to je v poradku, v dalsim textu casto chybi
 Velký problém při výpočtech na elipsoidu představuje první geodetická úloha. Ta byla popsána
 již výše v~kapitole \ref{prvnigu}, nyní tedy pouze několiko poznámek k~jejímu kódovému zpracování. 
 
