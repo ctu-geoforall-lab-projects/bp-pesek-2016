@@ -137,6 +137,22 @@ v~paměti tedy zbude první a~poslední z~čtených řádků. Hodnoty ze sloupc�
 načteného řádku vložíme do příslušných sloupců prvního čteného řádku. Modifikovaný první
 řádek se zapíše do výstupního souboru. Načte se poloha konce prvního řádku a~cyklus se může opakovat. 
 
+    \begin{figure}
+    \centering
+    \begin{algorithmic}[1]
+    \STATE{posunovanyradek=přečti první řádek}
+    \WHILE{existuje posunovanyradek}
+    \STATE{pozice=ulož pozici ve vstupním souboru}
+    \STATE{přečti \textit{x} řádků}
+    \STATE{vlož souřadnice posledního čteného řádku do posunovanyradek}
+    \STATE{seek(pozice)}
+    \STATE{posunovanyradek=přečti řádek}
+    \ENDWHILE
+    \end{algorithmic}
+    \caption{Pseudokód - Posun o kladné hodnoty}
+    \label{fig:pseudokladnehodnoty}
+    \end{figure}
+
 %%% ML: uvazit pridani pseudokodu i pro ostatni algoritmu
 \subsection{Posun o záporný počet hodnot}
 \label{zapornehodnoty}
@@ -151,6 +167,22 @@ hodnota seznamu a~její souřadnice jsou pře\-psány souřadnicemi výše zmiň
 se zapíše do výstupního souboru. Nyní je třeba doplnit seznam opět na \textit{x} hodnot, toho
 se dosáhne čtením dalšího řádku ze vstupního souboru a~jeho vložením na konec seznamu. Cyklus
 se může opakovat. 
+
+    \begin{figure}
+    \centering
+    \begin{algorithmic}[1]
+    \STATE{seznam=přečti \textit{x} řádků}
+    \WHILE{existuje hodnota seznam[x]}
+    \STATE{posunovanyradek=seznam[x]}
+    \STATE{vlož souřadnice seznam[0] do posunovanyradek}
+    \STATE{vymaž seznam[0]}
+    \STATE{seek(pozice)}
+    \STATE{načti do seznamu další řádek}
+    \ENDWHILE
+    \end{algorithmic}
+    \caption{Pseudokód - Posun o záporné hodnoty}
+    \label{fig:pseudozapornehodnoty}
+    \end{figure}
 
 \subsection{Posun o nulový počet hodnot}
 \label{nulovehodnoty}
