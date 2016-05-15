@@ -3,13 +3,15 @@
 
 %%% ML: vyplynuti posunu, v dalsi vete "body"
 Tato kapitola si klade za cíl seznámit čtenáře s~teoretickými základy měření radioaktivity, z~nichž
-plyne potřeba posunu. Dále pak načrtne způsoby, kterými bude možno body posouvat, a~popíše
+plyne potřeba posunu měřených bodů. Dále pak načrtne způsoby, kterými bude možno body posouvat, a~popíše
 nejdůležitější problémy, s~nimiž se při takovém posunu lze setkat. 
 
 %%% ML: pridat poznamku o zdroji 
 
 \section{Scintilační spektrometrie}
 \label{spektrometrie}
+
+V~kapitole o~scintilační spektrometrii bylo vycházeno z~\citep{spektrometrie}. 
 
 Ježto lidský subjekt není sám o~sobě schopen detekovat ionizující záření, je třeba si vypomoci příslušnou
 technikou, tedy přístroji, detektory ionizujícího záření. Tako\-vých přístrojů existuje velké
@@ -51,7 +53,7 @@ a~pro naši práci je důležité, že se objevují též v terénním měření
 
 Ve scintilačních detektorech zachycuje ionizační záření takzvaná scintilační sonda.
 %%% ML: Ta *se* sestava?
-Ta sestává ze scintilačního krystalu a~fotonásobiče umístěných ve světlotěsném pou\-zdře.
+Ta se skládá ze scintilačního krystalu a~fotonásobiče umístěných ve světlotěsném pou\-zdře.
 Pouzdro nejen že zabraňuje vniku nadbytečného světla do detekční jednotky, ale také stíní
 vnější magnetické pole, které by mohlo ovlivňovat správnou funkci fotonásobiče. 
 
@@ -103,12 +105,20 @@ Její kladné napětí udává emitovaným elektronům vyšší rychlost a~usmě
 Následně tyto vyloučené elektrony násobí sekundární emise na dynodách. Dy\-nody představují soustavu
 zvláštních elektrod, kde se na každou následující přivádí vyšší (zpravidla o~100~V nebo
 %%% Na tomto principu funcuje i ?
+%%%%%% OP: Na tomto principu fungují veškeré fotonásobiče; nevím tedy, 
+%%%%%%     zda mám dohledávat i jiná zařízení, jsou-li
 dvojnásobné) kladné napětí, pročež přitahují emitované elektrony. Tento systém funguje
 jako elektronový zesilovač. Každá z~dynod pracuje tím způsobem, že po nárazu jednoho elektronu emituje
 další elektrony. Mezi počtem vyražených elektronů a~kinetickou energií dopadajícího elektronu
 platí přímá úměra. Obvykle se počet elektronů na každé dynodě zdvojnásobí. Několikerým
 %%% ML: mrdani - poznamka pod carou ;-)
-mrdáním elektronů dojde k~jejich množení geometrickou řadou. Dynody mívají zpravidla
+mrdáním\footnote{Slovo \textit{mrdati} zde není užito v~dnešním zdevalvovaném usu, alebrž ve svém prvotním
+významu - tedy rychle se pohybovati, vrtěti, kroutiti. Označuje ale také rychlý pohyb na základě cizího
+přičinění či pohyb a~odrážení vrženého tělesa. Takovýto význam zůstal zřetelný i~ve slovenském
+\textit{mrdnúť}. Současná čeština nemá výstižnějšího výrazu. Viz příklad \textit{Byť jí prstem
+po ústech mrdl, uzřel by...} \newline zdroj: KOTT, František Štěpán: \textit{Česko-německý slovník zvláště
+grammaticko-fraseologický}, Praha: Nákladem J. Kolář/František Šimáček, 1878} elektronů dojde k~jejich
+množení geometrickou řadou. Dynody mívají zpravidla
 zakřivený tvar (vhodnější pro fokusaci elektronů na další dynodu). 
 
 Posledním prvkem pak jest anoda - sběrná elektroda s~nejvyšším napětím, z~níž už přes pracovní
@@ -133,8 +143,9 @@ diskriminačními hladinami. Diskriminační hodnoty představují amplitudové 
 Amplitudy ležící mimo toto rozmezí nebudou k~čítači propuštěny. Tím se částečně
 eliminují chyby a~temný proud - proud protékající fotonásobičem i~bez ozáření fotokatody.
 %%% ML: pik (tzv.)
-Územ bývá nastavit toto rozmezí tak, aby obsahovalo fotopík (pík totální absorpce) záření
-měřeného radionuklidu. Impulsy zkrácené o~přebytečné hodnoty následně vstoupí již do čítače impulsů. 
+Územ bývá nastavit toto rozmezí tak, aby obsahovalo takzvaný fotopík (\textit{pík totální absorpce})
+záření měřeného radionuklidu. Impulsy zkrácené o~přebytečné hodnoty následně vstoupí již do čítače
+impulsů. 
 
 Spektrometrická analýza vyžaduje transformaci impulsů na bitové informace; k~té dochází
 v~analogově-digitálním převodníku. V~paměti počítače se každé amplitudě záření gama
@@ -146,7 +157,7 @@ znázornění je na obrázku \ref{fig:scintilacni-detektor}.
 \label{potreba posunu}
 
 %%% ML: sber mereni
-Sběr měření probíhá letecky. Scintilační spektrometr je uložen ve vrtulníku, který přelétá nad zkoumaným
+Sběr dat probíhá letecky. Scintilační spektrometr je uložen ve vrtulníku, který přelétá nad zkoumaným
 územím; při přeletu se v~spektrometru registrují hodnoty záření. Tato data jsou registrována v~podstatě
 neustále, ale zapisují se až po jistém časovém úseku (běžně po vteřině) jako průměr hodnot za onen
 časový úsek měřených. V~okamžiku zápisu hodnot radionuklidů se rovněž tak zapisují zeměpisné souřadnice
@@ -185,7 +196,7 @@ body na jejich náležité místo.
 
   \begin{figure}[H]
    \centering
-	\includegraphics[scale=0.4]{./pictures/snimani.png}
+	\includegraphics[scale=0.3]{./pictures/snimani.png}
 	\caption[Princip měření]{Princip měření
 	(zdroj: HELEBRANT, Jan a GRYC, Lubomír: \textit{GPS position lag correction} [interní dokument
 	SÚRO, v.v.i.])}
@@ -194,7 +205,7 @@ body na jejich náležité místo.
   
   \begin{figure}[H]
    \centering
-	\includegraphics[scale=0.3]{./pictures/snimani-detail.png}
+	\includegraphics[scale=0.25]{./pictures/snimani-detail.png}
 	\caption[Profilové schéma měření]{Profilové schéma měření
 	(zdroj: HELEBRANT, Jan a GRYC, Lubomír: \textit{GPS position lag correction} [interní dokument
 	SÚRO, v.v.i.])}
@@ -216,8 +227,8 @@ souřadnice posunutého bodu.
 
 %%% ML: softwaroveho nastroje
 %%% ML: dvakrat slovo "mhoho" v jedne vete
-Při tvorbě zásuvného modulu, který by jmenované operace umožňoval, může dojít k~mnoha nepříjemnostem
-a~mnoha problémům, s~nimiž je třeba se vypořádat. Jmenujme alespoň dva nejdůležitější: 
+Při tvorbě softwarového nástroje, který by jmenované operace umožňoval, může dojít k~mnoha nepříjemnostem
+a~problémům, s~nimiž je třeba se vypořádat. Jmenujme alespoň dva nejdůležitější: 
 
 \subsection{Elipsoid}
 \label{elipsoid}
@@ -226,7 +237,7 @@ Ačkoli různé typy spektrometrů produkují odlišné výstupy a~některé moh
 na jiném referenčním tělese, zpravidla obsahují (také) souřadnice na elipsoidu \zk{WGS84}. 
 
 %%% ML: diafragma (...)
-Přítomnost elipsoidických souřadnic namísto rovinných vnáší do výpočtu záludnou diafragmu, na niž musí
+Přítomnost elipsoidických souřadnic namísto rovinných vnáší do výpočtu záludnou překážku, na niž musí
 tvůrce algoritmu dbát zvýšeného zřetele. Od výpočtů na referenční kouli (nerci v~rovině) se
 zásadně liší nejen délka, ale také azimut. Nejkratší spojnice (takzvaná geodetická křivka), která
 reprezentuje také trajektorii mezi sousedními body, pak samozřejmě
@@ -238,9 +249,9 @@ geodetické úlohy na elipsoidu.
 
 První geodetická úloha představuje hledání (výpočet) parametrů bodu na konci křivky, v~případě
 %%% ML: softwarove / programoveho nastroje
-představovaného zásuvného modulu na referenčním elipsoid. Zná\-mými parametry jsou souřadnice počátečního
-bodu křivky a~její azimut v~tomto bodě. Hledanými parametry zeměpisné souřadnice koncového bodu.
-Zkoumaná křivka reprezentuje geodetickou křivku. 
+představovaného softwarového nástroje na referenčním elipsoidu. Zná\-mými parametry jsou souřadnice
+počátečního bodu křivky a~její azimut v~tomto bodě. Hledanými parametry zeměpisné souřadnice koncového
+bodu. Zkoumaná křivka reprezentuje geodetickou křivku. 
 
 Základní geodetické úlohy se dají řešit nejedním způsobem a~v~minulosti vždy znamenaly mnohé potíže
 a~dlouhé výpočty. S~rozvojem informačních technologií došlo k~značnému urychlení výpočtu.

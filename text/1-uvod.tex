@@ -5,10 +5,11 @@ Scintilační spektrometry měří radioaktivitu, ale nikoli zeměpisné souřad
 náleží. To zajišťují další přístroje. Tyto přístroje však většinou zapisují souřadnice
 v~momentu, kdy začíná měření dalších dat, nebo v~momentu jeho skončení. Pro zpracování takových dat
 %%% ML: v teto casti bych nepouzival termin zasuvny modul, ale pouze softwarovy nastroj
-by tedy bylo záhodno mít možnost využití zásuvného modulu, který by tyto posuny alespoň částečně korigoval. 
+by tedy bylo záhodno mít možnost využití softwarového nástroje, který by tyto posuny alespoň
+částečně korigoval. 
 
 %%% ML: viz poznamka vyse
-Zájem o~vývoj takového zásuvného modulu pochází od Státního ústavu radiační ochrany (\zk{SÚRO}).
+Zájem o~vývoj takového nástroje pochází od Státního ústavu radiační ochrany (\zk{SÚRO}).
 \zk{SÚRO} se zabývá mimo jiné vyhledáváním lokalit se zvýšenou koncentrací radonu a~vedením centrální
 databáze takových míst, poskytováním konzultací, prováděním laboratorních expertíz a~hodnocením
 radiační ochrany v~oblasti lékařského ozáření. 
@@ -25,6 +26,22 @@ hromadného měření radiojódu ve štítné žláze po havárii jaderně energ
 %%% treba (2) suro pouziva QGIS (3) vysledek uvahy - navrhnout
 %%% rozsirujici nastroj do QGIS pro tuto ulohu (tj. zasuvny modul)
 Velkou část činností \zk{SÚRO} tvoří též terénní měření a~následné zpracování
-těchto dat v~prostředí QGIS, jehož přesnost by měl zlepšit zásuvný modul, který bude výstupem této práce.
+těchto dat v~prostředí QGIS. Zpracovávaná data jsou však zatížena zmiňovaným zpožděním zápisu. 
+
+Optimální by se zdála modifikace zařízení zapisujícího souřadnice. Takovému kroku
+ale brání nejen nemožnost dostat se k~podobným právům u~výrobce, nýbrž také empirické zkušenosti
+\zk{SÚRO}. Zpracovatelé Ústavu došli ke zjištění, že mnohdy nestačí užít posun, který by se na první
+pohled zdál ideální (posouvat body o~polo\-vinu dráhy k~dalšímu bodu); zápis je totiž zatížen dalšími
+chybami. Zpracovatel pak potřebuje vyzkoušet několik posunů a~dle rozložení hodnot usoudit, který
+z~nich vyhovuje skutečnosti nejvíce. Měřená hodnota by neměla mít skokovitý charakter, ale měla by
+v~okolí kritických hodnot nabývat přibližně lineárního rozložení. 
+
+Vzhledem k~tomu, že \zk{SÚRO} zpracovává data v~prostředí QGIS, nabízí se vývoj rozšiřujícího
+nástroje právě pro toto prostředí. Zde by měl být implementován jako takzvaný zásuvný modul. S~tím
+by souvisela též veřejná dostupnost zásuvného modulu - v~případě potřeby by jej posléze mohla využívat
+například i~Armáda České republiky, sahající při některých úkonech též po softwaru QGIS. 
+
+Pro pokročilejší verzi zásuvného modulu by byla vhodná implementace několika variant posunu
+a~možností stylovat vstupující data a~porovnávat posunutá data s~daty původními. 
 
 
