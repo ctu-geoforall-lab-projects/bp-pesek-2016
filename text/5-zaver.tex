@@ -1,3 +1,39 @@
 \chapter{Závěr}
 \label{zaver}
 
+Cílem této bakalářské práce byla tvorba
+softwarového nástroje umožňujícího posun letecky
+měřených bodů po trajektorii a~jeho implementace
+do prostředí QGIS jako tzv.~zásuvného modulu. 
+
+Celý projekt se zakládal na pracích Státního
+ústavu radiační ochrany (\zk{SÚRO}). Ten dosud prováděl posun
+tak, že každému bodu pouze přiřadil souřadnice bodu
+předcházejícího či následujícího (s~libovolným
+krokem). Přihlédneme-li k~bouchoři, kterým podobný posun
+o~hodnoty jest, můžeme říci, že bylo zadání
+nejen splněno, ale na základě návrhů \zk{SÚRO}
+dovedeno ještě dále. 
+
+V~současnosti zásuvný modul umožňuje posun dat
+nikoli jen o~hodnoty, nýbrž také o~konstantní
+vzdálenost či o~čas (tj.~o~vzdálenost
+s~uvážením rychlosti). V~grafic\-kém
+rozhraní si může uživatel též zvolit styl,
+který by chtěl pro zobrazení vstupních
+a~výstupních dat použít. 
+
+V~čase budoucím se nabízejí některá rozšíření
+stávající funkcionality. Počítá se s~implementací
+více stylů běžně užívaných při zpracování. Bylo by
+rovněž vhodné dát uživateli možnost zvolit
+referenční elipsoid ad libitum; momentálně
+probíhají veš\-keré výpočty na elipsoidu \zk{WGS84}.
+Veškerá dostupná data sice obsahují zeměpisné souřadnice
+právě na tomto elipsoidu, nelze ale vyloučit, že
+se v~cizině vyskytují i~nějaké adventivní případy.
+
+Zásuvný modul byl pod hlavičkou \textit{experimentální}
+uveřejněn a~v~\zk{SÚRO} již od dubna~2016 probíhají testy.
+
+

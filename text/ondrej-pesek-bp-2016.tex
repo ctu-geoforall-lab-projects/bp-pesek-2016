@@ -16,6 +16,8 @@
 ]{report}       			% Dokument třídy 'zpráva'
 %
 
+\newcommand{\Fbox}[1]{\fbox{\strut#1}}
+
 \usepackage[czech, english]{babel}	% použití češtiny, angličtiny
 \usepackage[utf8]{inputenc}		% Kódování zdrojových souborů je UTF8
 
@@ -88,7 +90,7 @@
 
 %% Název práce
 \nazev{Posun letecky měřených bodů po trajektorii v~prostředí~QGIS}
-{Aerial data move on a~trajectory in QGIS software}
+{Aerial data shift on a~trajectory in QGIS software}
 
 %% Jméno a příjmení autora
 \autor{Ondřej}{Pešek}
@@ -118,11 +120,16 @@
 trajektorii. Takový nástroj je třeba z~toho důvodu, že přístroj při
 leteckých měřeních zapisuje souřadnice s~určitým zpožděním. V~praktické části práce se objevuje jeho
 implementace jako tzv.~zásuvného modulu do prostředí open source projektu QGIS s~využitím grafického
-frameworku Qt. }%
+frameworku Qt. Při vyvíjení zásuvného modulu bude přihlíženo
+k~požadavkům a~připomínkám Státního ústavu radiační ochrany, který tento projekt inicioval.
+Z~důvodu zachování úzu prostředí QGIS bude zásuvný modul vytvářen v jazyku Python.}%
 {The object of bachelor thesis is creation of software tool for shifting aerial data by their trajectory
 (GPS position lag correction). The reason for this tool is that the instrument for
 aerial data surveying is recording data with some delay. In practical part of bachelor thesis is
-implementation of this tool as plugin into open source project QGIS using graphical framework Qt. 
+implementation of this tool as plugin into open source project QGIS using graphical framework Qt.
+While developing the~plugin, comments and requests by National Radiation Protection Institute
+(initiators of the~project) will be taken into consideration. Due to recent habit of QGIS software
+the~plugin will be created in language Python. 
  }
 
 %% Klíčová slova
@@ -216,7 +223,7 @@ implementation of this tool as plugin into open source project QGIS using graphi
 \prilohy
 
 % Vysázení seznamu příloh
-\seznampriloh
+% \seznampriloh
 
 % Vložení souboru s přílohami
 \include{prilohy}

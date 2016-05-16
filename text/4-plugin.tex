@@ -58,9 +58,9 @@ referenčním tělese, nadmořskou výšku, jiný systém času nebo datace.
 Základ zásuvného modulu byl vytvořen ve volně šiřitelném mo\-dulu nazvaném Plugin
 Builder\footnote{Dostupný na \textit{https://plugins.qgis.org/plugins/pluginbuilder/}}. Jedná se
 %%% ML: napriklad ?
-o~zásuvný modul vytvořený pro QGIS především (ale nikoli pouze) suitou kolem GeoApt LLC (například Gary
+o~zásuvný modul vytvořený pro QGIS především (ale nikoli pouze) suitou kolem GeoApt LLC,
 %%% ML: volne siritelny ?
-Sherman), skupi\-ny zaměřující se na volně šiřitelný \zk{GIS}. Plugin Builder na
+skupi\-ny zaměřující se na volně šiřitelný \zk{GIS}. Plugin Builder na
 základě uživatelem zadaných parametrů vytvoří základní skelet zásuvného modulu - ikonku, holobyt
 grafického rozhraní, metadata, základní funkce (zapnout, vypnout) a~vazby zásuvného modulu. 
 
@@ -98,17 +98,20 @@ provázaných souborech:
 	k~tomuto souboru definována cesta, taktéž k~samotnému posunu je třeba mít vyplněny všechny potřebné
 	parametry. 
 	
-	\item show\_as\_layer.py: Zobrazí soubor, an je předán jako jeden ze vstupních parame\-trů. Druhým
+	\item {\tt show\_as\_layer.py}: Zobrazí soubor, an
+	je předán jako jeden ze vstupních parame\-trů. Druhým
 %%% ML: jako ze bych ty tridy implementoval sam od sebe, to nedava smysl
 	vstupním parametrem je styl, jenž bude při zobrazování použit. Aby se zamezilo graviditě kódu
-	a~obecné duplicitě kódu v~podhoubí prostředí QGIS, byly k~zobrazení využity interní objekty
-	QgsVectorLayer a~QgsMapLayerRegistry. 
+	a~obecné duplicitě kódu v~podhoubí prostředí QGIS, byly k~zobrazení užity interní objekty
+	{\tt QgsVectorLayer} a~{\tt QgsMapLayerRegistry}. 
 
 \end{itemize}
 
 Toliko k~hrubému náčrtu fungování zásuvného modulu. Některé dílčí složky byly při představování
 zane\-dbány, poněvadž nejsou k~pochopení fungování mo\-dulu nezbytné. Nyní se zvlášť podívejme na
 soubory související se zkoumanou pro\-blematikou, tedy obsah move.py. 
+
+Při samotné práci bylo vycházeno z~příručky \citep{cookbook}
 
 %%% ML: krome pseudokodu (tam kde to pujde) doplnit obrazky
 %%% zobrazujici danou situaci
@@ -200,7 +203,7 @@ odůvodnění.
 Posun o~konstantní vzdálenost je obsažen v~{\tt Move.by\_distance}. 
 
 Na začátek funkce je třeba opět základní analýza vstupujícího souboru; její průběh je shodný
-s~analýzou při posunu o~hodnoty. 
+s~analýzou při posunu o~hodnoty (viz \ref{by_points}). 
 
 Následně je třeba připravit si pole pro výpočty na elipsoidu. Redundance kódu není v~ničím
 zájmu, pro potřeby elipsoidických operací tedy užíváme knihovnu
@@ -240,6 +243,47 @@ Kromě zeměpisných souřadnic je ale třeba veškeré ostatní informace přev
 řádek se zapíše do výstupního souboru. Načte se poloha konce prvního čteného řádku
 a~vnější cyklus se může opakovat. 
 
+    \begin{figure}[h]
+    \centering
+    \begin{algorithmic}[1]
+    \STATE{posunovanyradek=přečti řádek}
+    \STATE{pozice=ulož pozici ve vstupním souboru}
+    \WHILE{existuje posunovanyradek}
+    \STATE{seek(pozice)}
+    \STATE{radek=přečti řádek}
+    \STATE{pozice=ulož pozici ve vstupním souboru}
+    \IF{existuje radek}
+    \STATE{vnitřní cyklus, viz obr. \ref{fig:pseudokladnavzd-vnitrni}}
+    \STATE{výpočet první geodetické úlohy}
+	\STATE{vlož vypočtené souřadnice do posunovanyradek}
+    \STATE{zapiš posunovanyradek}
+    \STATE{posunovanyradek=radek}
+    \ENDIF
+    \ENDWHILE
+    \end{algorithmic}
+    \caption{Pseudokód - Posun o kladnou vzdálenost, vnější cyklus}
+    \label{fig:pseudokladnavzd-vnejsi}
+    \end{figure}
+    
+    \begin{figure}[h]
+    \centering
+    \begin{algorithmic}[1]
+    \STATE{radek2=radek}
+    \STATE{vzdalenost=vzdálenost mezi posunovanyradek a radek}
+    \STATE{delkaposunu=uživatelem volená hodnota posunu}
+    \WHILE{delkaposunu>vzdalenost}
+    \STATE{delkaposunu=delkaposunu-vzdalenost}
+    \STATE{radek1=radek2}
+    \STATE{radek2=přečti řádek}
+    \IF{existuje radek2}
+    \STATE{vzdalenost=vzdálenost mezi radek1 a radek2}
+    \ENDIF
+    \ENDWHILE
+    \end{algorithmic}
+    \caption{Pseudokód - Posun o kladnou vzdálenost, vnitřní cyklus}
+    \label{fig:pseudokladnavzd-vnitrni}
+    \end{figure}
+
 \subsection{Posun o zápornou vzdálenost}
 \label{zapornavzdalenost}
 
@@ -255,6 +299,23 @@ Opět si vypomůžeme seznamem hodnot (řádků). Ponejprve byl vytvořen vstup\
 na stejném principu, jako v~předchozím případě (porovnávání \textit{uražené} vzdálenosti se
 vzdáleností mezi body), s~tím rozdílem, že tentokráte již použité body vkládáme do seznamu hodnot.
 
+    \begin{figure}[h]
+    \centering
+    \begin{algorithmic}[1]
+    \STATE{seznam=přečti 2 řádky}
+    \STATE{x=1}
+    \STATE{delkaposunu=absolutní hodnota uživatelem volené hodnoty posunu}
+    \STATE{urazenavzdalenost=vzdálenost mezi seznam[0] a seznam[1]}
+    \WHILE{delkaposunu>urazenavzdalenost}
+    \STATE{načti do seznamu další řádek}
+    \STATE{x=x+1}
+    \STATE{urazenavzdalenost=urazenavzdalenost+délka mezi seznam[x-1] a seznam[x]}
+    \ENDWHILE
+    \end{algorithmic}
+    \caption{Pseudokód - Posun o zápornou vzdálenost, vytvoření vstupního seznamu}
+    \label{fig:pseudozapornavzd-vstup}
+    \end{figure}
+
 Základní cyklus, jenž by se poznovu dal nazvat cyklem vnějším, se skládá ze dvou na sebe
 navazujících cyklů vnitřních. 
 
@@ -267,9 +328,31 @@ Nadto do tohoto cyklu vstupují hodnoty kvůli posunu zpět v~reversním pořád
 posun překročit vzdálenost mezi dvěma body, kvůli úspoře se výpočet přeskočí a~do pomocných
 proměnných se zapíšou přímo souřadnice druhého z~bodů. 
 
-Po smyčce, při kteréž již dojde k~výpočtu první geodetické úlohy, je proveden zápis do výstupního
+Po smyčce, při kteréž již dojde k~výpočtu první geodetické úlohy
+(dojde k~ní mezi prvními dvěma body seznamu), je proveden zápis do výstupního
 souboru - zapíše se poslední řádek ze seznamu se zeměpisnými souřadnicemi přepsanými
 souřadnicemi vypočtenými. 
+
+    \begin{figure}[h]
+    \centering
+    \begin{algorithmic}[1]
+    \WHILE{poslední hodnota seznamu není prázdný řádek}
+    \STATE{urazenavzdalenost=0}
+    \FOR{i=obrácená řada od 1 do [velikost seznam]}
+    \STATE{urazenavzdalenost=urazenavzdalenost+délka mezi seznam[i-1] a seznam[i]}
+    \IF{delkaposunu<=urazenavzdalenost}
+    \STATE{smaž body na pozici menší než i}
+    \ENDIF
+    \ENDFOR
+    \STATE{posun=delkaposunu-(součet vzdáleností mezi body seznamu[1 až i])}
+    \STATE{první geodetická úloha mezi seznam[1] a seznam[0], vzdálenost=posun}
+    \STATE{vložíme vypočtené hodnoty do seznam[i] a zapíšeme jej}
+    \STATE{načteme na konec seznamu další řádek}
+    \ENDWHILE
+    \end{algorithmic}
+    \caption{Pseudokód - Posun o zápornou vzdálenost, hlavní cyklus}
+    \label{fig:pseudozapornavzd-hlavnicyklus}
+    \end{figure}
 
 \subsection{Posun o nulovou vzdálenost}
 \label{nulovavzdalenost}
@@ -383,6 +466,29 @@ Ten se zapíše do výstupního souboru, do proměnné \textit{x} se opět načt
 hodnota posunu, ve čtení se vyvolá pozice před započetím vnitřního cyklu, a~vnější cyklus se
 opakuje s~řádky o~jeden posunutými. 
 
+    \begin{figure}[h]
+    \centering
+    \begin{algorithmic}[1]
+    \STATE{posunovanyradek, radek1=přečti řádek}
+    \STATE{pozice=ulož pozici ve vstupním souboru}
+    \WHILE{existuje posunovanyradek}
+    \STATE{seek(pozice)}
+    \STATE{nasledujiciradek, radek2=přečti řádek}
+    \STATE{pozice=ulož pozici ve vstupním souboru}
+    \WHILE{x>0}
+     \STATE{vypočti první úlohu mezi radek1 a radek2}
+     \STATE{x=x-(doba uplynulá mezi měřeními radek1 a radek2)}
+     \STATE{radek1=radek2}
+     \STATE{radek2=přečti řádek}
+    \ENDWHILE
+    \STATE{vlož vypočtené souřadnice do posunovanyradek a zapiš jej}
+    \STATE{posunovanyradek, radek1=nasledujiciradek}
+    \ENDWHILE
+    \end{algorithmic}
+    \caption{Pseudokód - Posun o kladný čas}
+    \label{fig:pseudokladnycas}
+    \end{figure}
+
 \subsection{Posun o záporný časový úsek}
 \label{zapornycas}
 
@@ -391,6 +497,23 @@ Tento seznam byl načten před samotným započetím vnějšího cyklu a~hodnoty
 přidávány do té doby, dokud součet rozdílů časových značek mezi jednotlivými body
 nepřekročí uživatelem požadovanou hodnotu posunu (lépe řečeno její absolutní hodnotu,
 poněvadž uživatel volí hodnotu zápornou). 
+
+    \begin{figure}[h]
+    \centering
+    \begin{algorithmic}[1]
+    \STATE{seznam=přečti 2 řádky}
+    \STATE{x=1}
+    \STATE{casuzivatel=absolutní hodnota uživatelem volené hodnoty posunu}
+    \STATE{ubehlycas=rozdíl časových značek seznam[0] a seznam[1]}
+    \WHILE{casuzivatel>ubehlycas}
+    \STATE{načti do seznamu další řádek}
+    \STATE{x=x+1}
+    \STATE{ubehlycas=ubehlycas+rozdíl časových značek seznam[x] a seznam[x-1]}
+    \ENDWHILE
+    \end{algorithmic}
+    \caption{Pseudokód - Posun o záporný čas, vytvoření vstupního seznamu}
+    \label{fig:pseudozapornycas-vstup}
+    \end{figure}
 
 Seznam již vstupuje do vnějšího cyklu, jehož cílem je postupně projít celý vstupní
 soubor a~posunout veškeré body. Tento cyklus se skládá ze dvou cyklů vnitřních. 
@@ -421,6 +544,27 @@ Následuje chvíle pro již typickou koncovku vnějšího cyklu. Souřadnice z~p
 do odpovídajících sloupců řádku s~posunovaným bodem a~ten se zapíše do výstupního souboru.
 Následně se na konec seznamu hodnot načte další řádek (nový posunovaný bod) a~\textit{x}
 se nastaví na uživatelem volenou hodnotu posunu. Cyklus pokračuje další smyčkou. 
+
+    \begin{figure}[h]
+    \centering
+    \begin{algorithmic}[1]
+    \WHILE{poslední hodnota seznamu není prázdný řádek}
+    \STATE{ubehlycas=0}
+    \FOR{i=obrácená řada od 1 do [velikost seznam]}
+    \STATE{ubehlycas=rozdíl časových značek seznam[0] a seznam[1]}
+    \IF{casuzivatel<=ubehlycas}
+    \STATE{smaž body na pozici menší než i}
+    \ENDIF
+    \ENDFOR
+    \STATE{casposunu=casuzivatel-(rozdíl časových značek seznam[i] a seznam[1])}
+    \STATE{první geodetická úloha mezi seznam[1] a seznam[0], vzdálenost vypočtená z casposunu}
+    \STATE{vložíme vypočtené hodnoty do seznam[i] a zapíšeme jej}
+    \STATE{načteme na konec seznamu další řádek}
+    \ENDWHILE
+    \end{algorithmic}
+    \caption{Pseudokód - Posun o záporný čas, hlavní cyklus}
+    \label{fig:pseudozapornycas-hlavnicyklus}
+    \end{figure}
 
 \subsection{Posun o nulový časový úsek}
 \label{nulovycas}

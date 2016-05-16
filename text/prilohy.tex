@@ -7,28 +7,46 @@
 \label{user-guide}
 
 %%% ML: works with -> usage of the plugin can change accross...
-This user guide is written for plugin using in QGIS 2.12. There is a~possibility that works with plugin
-will be different in other versions of QGIS. 
+This user guide is written for plugin using in QGIS 2.12. There is a~possibility that usage of the plugin
+can change across other versions of QGIS. 
 
 \section{Loading of plugin}
 \label{plugin-load}
 
-* 
-* 
+There are many ways to install the~plugin.
+The~easiest method is to install it from
+the~QGIS Plugin repository. 
 
-* 
-* TUHLE ČÁST JEŠTĚ MUSÍM DOPSAT - NEJDŘÍV JE POTŘEBA PLUGIN ZE SLOŽKY SUROLEVELING FUNKČNĚ PŘESUNOUT DO GPS POSITION LAG CORRECTION, ABYCH VĚDĚL, JAK SE BUDE V NABÍDCE PLUGIN JMENOVAT
-*
+Firstly, you have to open the~plugins dialog – select
+\textit{Manage and install plugins} from
+\textit{Plugins} tab. Plugin is now registered as
+experimental, to see it select \textit{Settings}
+tab and tick the~checkbox \textit{Show also experimental plugins}. 
 
-* 
-*
+%  \begin{figure}[H]
+%   \centering
+%	\includegraphics[scale=0.1]{./pictures/plugin-tab.png}
+%	\caption[GUI]{Plugins tab}
+%      \label{fig:plugins-tab}
+%  \end{figure}
+
+Search for \textit{GPS Position Lag Correction} plugin in
+the~list on the~\textit{All} or \textit{Not installed} tab.
+Select it and press the~\textit{Install} button. 
+
+  \begin{figure}[H]
+   \centering
+	\includegraphics[scale=0.52]{./pictures/plugin-dialog.png}
+	\caption[GUI]{Plugins dialog}
+      \label{fig:plugins-dialog}
+  \end{figure}
 
 \section{Work with plugin}
 \label{work}
 
 %%% ML: preformulovat In this section will be described graphical user
 %%% interface and primary functionality of the plugin
-In this section will be described primary functions and working of graphical user interface of plugin. 
+In this section will be described graphical user interface and primary functionality of the plugin. 
 
   \begin{figure}[H]
    \centering
@@ -40,12 +58,14 @@ In this section will be described primary functions and working of graphical use
 \subsection{Input and output defining}
 \label{input-output}
 
-The basic elements are of course input and output. 
-
-In input, you have to define the~file you want to work with. You can write the~path to this file or
-there is the~button with {\tt ...}. If you click on this button, you will get the~interface where
-you can choose the~path to your file. Click on OK will insert this path to lineedit in basic GUI. Click
-on Cancel will interrupt the~interface for choose, and the~content of lineedit will not be changed. 
+As input, you have to define the~file you want to work
+with. You can write the~path to this file manually or
+there is the~button with \Fbox{ ... }. By clicking
+on this button, you will get the~dialog intended to
+choose your file. Click on OK will insert this path
+to the~basic interface. Click
+on Cancel will interrupt the~choosing dialog,
+and the~input path will not be changed. 
 
   \begin{figure}[H]
    \centering
@@ -54,27 +74,37 @@ on Cancel will interrupt the~interface for choose, and the~content of lineedit w
       \label{fig:input}
   \end{figure}
 
-The~same work is with output, but there you define the~path where the~new file will be created.
-You can manually define the~path or use the~browse button. You will again get a~new interface, this
-time created for choosing folder. 
+The~same procedure is with output, but there you define
+the~path where the~new file will be created.
+The~choosing dialog for output is intended to
+choose folder, not file. 
 
-  \begin{figure}[H]
+ \begin{figure}[H]
    \centering
 	\includegraphics[scale=0.75]{./pictures/output.png}
 	\caption[Choosing output directory]{Choosing output directory}
-      \label{fig:output}
+     \label{fig:output}
   \end{figure}
 
 \subsection{Styling}
 \label{styling}
 
-There is also additional possibility of styling your points for better visualisation. 
+There is also optional possibility of styling your points for better visualisation. 
 
-In the~default GUI is the~button \textit{No style}. It means that you have not defined any style
-and points will be created in default QGIS style. If you want your own style, you have to click on
-this button. You will get the~browsing interface. You are automatically directed to folder
-\textit{styles} in the~plugin folder; you have to choose qml file and click OK. Click on Cancel will
-interrupt the interface and set again \textit{No style}. 
+By default, you have not defined any style
+and points will be created in default QGIS style
+(on Style button is written \textit{No style})
+If you want your own style, you have to click on
+this button. You will get the~browsing dialog.
+You are automatically directed to folder
+\textit{styles} in the~plugin folder; here you can
+choose qml file and click OK. Click on Cancel
+interrupts the~dialog and set again \textit{No style}. 
+
+If you choose your own style, you will see its name on the~style button. 
+
+In the~default version of plugin there are two presetted styles. Styling in those styles is based on
+column {\tt mereni} – one style for higher and one style for lower values. 
 
   \begin{figure}[H]
    \centering
@@ -83,8 +113,6 @@ interrupt the interface and set again \textit{No style}.
       \label{fig:style}
   \end{figure}
 
-If you have chosen your own style, you would see its name on the~style button. 
-
   \begin{figure}[H]
    \centering
 	\includegraphics[scale=0.75]{./pictures/style-defined.png}
@@ -92,47 +120,49 @@ If you have chosen your own style, you would see its name on the~style button.
       \label{fig:used-style}
   \end{figure}
 
-In the~default version of plugin there are two default styles. Styling in those styles is based on
-column mereni – one style for higher and one style for lower values. 
-
 \subsection{Showing input}
 \label{show}
 
-Next to input is the button \textit{Show}. 
+Next to input is the~button \textit{Show}. 
 
-Show button is just to visualise the input file as layer in QGIS. It has no effect on the run of plugin
-and it is not necessary for the~run, but it allows you to visualise the~input file in the same style as
-the~output file. It gives you also the~opportunity to compare the~moved values with the~original ones. 
+Show button is just to visualise the~input file as layer in QGIS. It has no effect on the~run of plugin
+and it is not necessary for it, but it allows you to visualise the~input file in the~same style as
+the~output file. It gives you also the~opportunity to compare the~shifted values with the~original ones. 
 
-This button was created on request by users who prefer to visualise both the~input and the~output in
-the~same interface. 
+This button was created on request by users who prefer to visualise both the~input and the~output from
+one dialog. 
 
-If input file does not exists, plugin will raise the~error message. 
+If input file does not exist, the~plugin raises the~error message. 
 
 %%% ML: Shift
-\subsection{Move}
-\label{move}
+\subsection{Shift}
+\label{shift}
 
-Move will be done by clicking on button \textit{Solve}. Before moving you have to define few more things. 
+Shift will be done by clicking on button \textit{Solve}.
+Before shifting you have to define some proprieties. 
 
-In combobox you can choose the~units of move – each presents other type of move; values mean move
-by values, meters mean move by constant distance and seconds mean move by constant time/variable
+In combo box (drop-down list) you can choose the~units of
+shift – each presents other type of shift; values mean shift
+by values, meters mean shift by constant distance and seconds
+mean shift by constant time/variable
 distance considering current velocity. 
 
 %%% ML: nepouzivat lineedit v textu
-In the~appropriate lineedit you have to insert value of move. For values it should be integer (it
-does not make sense to move point by 1.5 values because nothing like 1.5 value does not exist), for
-other moves it should be integer or float. 
+In the~appropriate line text editor you have to insert
+value of move. For shift by values it should be integer (it
+does not make sense to shift point by 1.5 values because
+nothing like 1.5 value does not exist), for
+other shifts it should be integer or float. 
 
-For wrong input, plugin will raise the~error message. 
+For wrong input, plugin raise the~error message. 
 
 \subsection{Dependencies}
 \label{dependencies}
 
-To avoid some unnecessary errors, there are some dependencies in the~plugin GUI. 
+To avoid some unnecessary errors, there are some dependencies in the~plugin graphical nterface. 
 
 The~first is \textit{Show} button. This button is
-disabled until you have wrote anything into input lineedit. 
+disabled until you have wrote anything into input. 
 
   \begin{figure}[H]
    \centering
@@ -142,7 +172,7 @@ disabled until you have wrote anything into input lineedit.
   \end{figure}
 
 The~second is button \textit{Solve}. You can’t solve anything until you have defined input, output and
-value of move.
+value of shift.
 
   \begin{figure}[H]
    \centering
@@ -151,6 +181,9 @@ value of move.
       \label{fig:solve}
   \end{figure}
 
-There is also implemented shortcut for defining output directory. Many users wants to save output file to
-the~directory from which was read the~input file, so when you choose input file, the~directory will
-be automatically copied into output lineedit, just with added \textit{\_moved} into filename. 
+There is also implemented a~shortcut for defining output
+directory. Many users want to save output file to
+the~directory from which was read the~input file;
+so when you choose input file, the~directory will
+be automatically copied into output,
+just with added \textit{\_shifted} into filename. 
