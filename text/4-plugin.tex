@@ -1,7 +1,11 @@
 \chapter{Zásuvný modul}
 \label{4-plugin}
 
-Čtvrtá kapitola popisuje vývoj zásuvného modulu a~rozebírá důležité části kódu. 
+Čtvrtá kapitola popisuje vývoj zásuvného modulu a~rozebírá důležité části kódu.
+Pro názornější popis jsou texty doplněny takzvanými pseudokódy,
+schematickými přehledy nejdůležitějších částí kódového zpracování;
+v~textové části se na takové části odkazuje označením příslušného pseudokódu a~řádku v~závorkách.  
+Při samotné tvorbě kódu bylo vycházeno z~příručky \citep{cookbook}.
 
 \section{Obsah CSV}
 \label{obsah}
@@ -111,8 +115,6 @@ Toliko k~hrubému náčrtu fungování zásuvného modulu. Některé dílčí sl
 zane\-dbány, poněvadž nejsou k~pochopení fungování mo\-dulu nezbytné. Nyní se zvlášť podívejme na
 soubory související se zkoumanou pro\-blematikou, tedy obsah move.py. 
 
-Při samotné práci bylo vycházeno z~příručky \citep{cookbook}
-
 %%% ML: krome pseudokodu (tam kde to pujde) doplnit obrazky
 %%% zobrazujici danou situaci
 
@@ -136,15 +138,18 @@ Jedná-li se o~číslo kladné, připojujeme k~informacím bodu \textit{n} souř
 %%% ML: preformulovat
 v~každé smyčce cyklu postupně načteme \textit{x} řádků, přičemž první z~těchto řádků vložíme do proměnné
 (zbylé se nikam neukládají a~v~paměti tak nezůstávají - zůstává vždy pouze poslední čtený);
-v~paměti tedy zbude první a~poslední z~čtených řádků. Hodnoty ze sloupců souřadnic posledního
-načteného řádku vložíme do příslušných sloupců prvního čteného řádku. Modifikovaný první
-řádek se zapíše do výstupního souboru. Načte se poloha konce prvního řádku a~cyklus se může opakovat. 
+v~paměti tedy zbude první a~poslední z~čtených řádků
+(pseudokód~\ref{alg:pseudokladnehodnoty}-1,~4). Hodnoty ze sloupců souřadnic posledního
+načteného řádku vložíme do příslušných sloupců prvního čteného řádku
+(pseudokód~\ref{alg:pseudokladnehodnoty}-5). Modifikovaný první
+řádek se zapíše do výstupního souboru (pseudokód~\ref{alg:pseudokladnehodnoty}-6).
+Načte se poloha konce prvního řádku (pseudokód~\ref{alg:pseudokladnehodnoty}-7) a~cyklus se může opakovat. 
 
 %    \begin{figure}[h]
 %    \centering
 \begin{algorithm}
-\label{fig:pseudokladnehodnoty}
     \caption{Posun o kladné hodnoty}
+    \label{alg:pseudokladnehodnoty}
     \begin{algorithmic}[1]
 
     \STATE{posunovanyradek=přečti první řádek}
@@ -167,27 +172,38 @@ načteného řádku vložíme do příslušných sloupců prvního čteného ř�
 \label{zapornehodnoty}
 
 Jedná-li se o~číslo záporné, ještě před cyklem se provede odečtení \textit{x}~řádků,
-kde \textit{x} je hodnota posunu; tyto řádky jsou zapsány do seznamu hodnot.
+kde \textit{x} je hodnota posunu; tyto řádky jsou zapsány do seznamu hodnot
+(pseudokód~\ref{alg:pseudozapornehodnoty}-1).
 
 Syžet cyklu následně probíhá
 tím způsobem, že se z~tohoto seznamu odebírá první hodnota. Z~té jsou odečteny informace ze
 sloupců příslušejících zeměpisným souřadnicím. Do dočasné proměnné je vložena poslední
-hodnota seznamu a~její souřadnice jsou pře\-psány souřadnicemi výše zmiňovanými. Modifikovaný řádek
+hodnota seznamu (pseudokód~\ref{alg:pseudozapornehodnoty}-3)
+a~její souřadnice jsou pře\-psány souřadnicemi výše zmiňovanými
+(pseudokód~\ref{alg:pseudozapornehodnoty}-4). Modifikovaný řádek
 se zapíše do výstupního souboru. Nyní je třeba doplnit seznam opět na \textit{x} hodnot, toho
-se dosáhne čtením dalšího řádku ze vstupního souboru a~jeho vložením na konec seznamu. Cyklus
+se dosáhne čtením dalšího řádku ze vstupního souboru a~jeho vložením na konec seznamu
+(pseudokód~\ref{alg:pseudozapornehodnoty}-8). Cyklus
 se může opakovat. 
 
 %    \begin{figure}[h]
  %   \centering
 \begin{algorithm}
-\label{fig:pseudozapornehodnoty}
 \caption{Posun o záporné hodnoty}
+\label{alg:pseudozapornehodnoty}
     \begin{algorithmic}[1]
     \STATE{seznam=přečti \textit{x} řádků}
     \WHILE{existuje hodnota seznam[x]}
     \STATE{posunovanyradek=seznam[x]}
     \STATE{vlož souřadnice seznam[0] do posunovanyradek}
     \STATE{zapiš posunovanyradek}
+\algstore{myalg}
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}                     
+\begin{algorithmic} [1]
+\algrestore{myalg}
     \STATE{vymaž seznam[0]}
     \STATE{seek(pozice)}
     \STATE{načti do seznamu další řádek}
@@ -237,12 +253,18 @@ jaká se rozpíná mezi dvěma body. V~takovém případě je třeba v~momentě 
 vzdálenosti přepočítat trajektorii na novou dvojici bodů a~o~tuto hodnotu požadovanou
 délku posunu snížit. 
 
-Z~tohoto důvodu proběhne v~každém cyklu čtení \textit{x} řádků ve vnořeném cyklu \textit{while}.
+Z~tohoto důvodu proběhne v~každém cyklu čtení \textit{x} řádků ve vnořeném cyklu \textit{while}
+(pseudokód~\ref{alg:pseudokladnavzd-vnitrni}-4~až~11).
 Tentokrát není \textit{x} daná hodnota, její velikost závisí na rozestupy mezi jednotlivými body.
 V~každé smyčce vnitřního \textit{while} cyklu dojde k~výpočtu vzdálenosti mezi dvěma momentálně
-načtenými body. Je-li vypočtená vzdálenost větší než délka posunu, cyklus skončí. 
-Avšak není-li, délka posunu se zkrátí o~vzdálenost mezi těmito body a~bodem~2 se nahradí bod~1.
-Vzápětí se čte další řádek představující nový bod~2 a~cyklus se opakuje. V~momentě, kdy
+načtenými body. Je-li vypočtená vzdálenost větší než délka posunu, cyklus skončí
+(pseudokód~\ref{alg:pseudokladnavzd-vnitrni}-4). 
+Avšak není-li, délka posunu se zkrátí o~vzdálenost mezi těmito body
+(pseudokód~\ref{alg:pseudokladnavzd-vnitrni}-5) a~bodem~2 se nahradí bod~1
+(pseudokód~\ref{alg:pseudokladnavzd-vnitrni}-6).
+Vzápětí se čte další řádek představující nový bod~2
+(pseudokód~\ref{alg:pseudokladnavzd-vnitrni}-7)
+a~cyklus se opakuje. V~momentě, kdy
 skončí, máme tedy novou dvojici bodů a~zbytek z posunu náležející na tento úsek.
 %%% ML: probiha? poli?
 Výpočet první geodetické úlohy tedy probíhá až v~takto předpřipraveném prostředí. 
@@ -278,8 +300,8 @@ a~vnější cyklus se může opakovat.
 %    \begin{figure}[h]
  %   \centering
 \begin{algorithm}
-\label{fig:pseudokladnavzd-vnejsi}
 \caption{Posun o kladnou vzdálenost, vnější cyklus}
+\label{alg:pseudokladnavzd-vnejsi}
     \begin{algorithmic}[1]
     \STATE{posunovanyradek=přečti řádek}
     \STATE{pozice=ulož pozici ve vstupním souboru}
@@ -289,9 +311,6 @@ a~vnější cyklus se může opakovat.
     \STATE{pozice=ulož pozici ve vstupním souboru}
     \IF{existuje radek}
     \STATE{vnitřní cyklus, viz pseudokód \ref{alg:pseudokladnavzd-vnitrni}}
-	\STATE{výpočet první geodetické úlohy}
-	\STATE{vlož vypočtené souřadnice do posunovanyradek}
-    \STATE{zapiš posunovanyradek}
 \algstore{myalg}
 \end{algorithmic}
 \end{algorithm}
@@ -299,6 +318,9 @@ a~vnější cyklus se může opakovat.
 \begin{algorithm}                     
 \begin{algorithmic} [1]
 \algrestore{myalg}
+	\STATE{výpočet první geodetické úlohy}
+	\STATE{vlož vypočtené souřadnice do posunovanyradek}
+    \STATE{zapiš posunovanyradek}
     \STATE{posunovanyradek=radek}
     \ENDIF
     \ENDWHILE
@@ -321,17 +343,18 @@ potřebnou dávkou řádků.
 
 Opět si vypomůžeme seznamem hodnot (řádků). Ponejprve byl vytvořen vstup\-ní seznam
 na stejném principu, jako v~předchozím případě (porovnávání \textit{uražené} vzdálenosti se
-vzdáleností mezi body), s~tím rozdílem, že tentokráte již použité body vkládáme do seznamu hodnot.
+vzdáleností mezi body), s~tím rozdílem, že tentokráte již použité body vkládáme do seznamu hodnot
+(pseudokód~\ref{alg:pseudozapornavzd-vstup}-5~až~9).
 
 %    \begin{figure}[h]
  %   \centering
 \begin{algorithm}
-\label{fig:pseudozapornavzd-vstup}
 \caption{Posun o zápornou vzdálenost, vytvoření vstupního seznamu}
+\label{alg:pseudozapornavzd-vstup}
     \begin{algorithmic}[1]
     \STATE{seznam=přečti 2 řádky}
     \STATE{x=1}
-    \STATE{delkaposunu=absolutní hodnota uživatelem volené hodnoty posunu}
+    \STATE{delkaposunu=algolutní hodnota uživatelem volené hodnoty posunu}
     \STATE{urazenavzdalenost=vzdálenost mezi seznam[0] a seznam[1]}
     \WHILE{delkaposunu>urazenavzdalenost}
     \STATE{načti do seznamu další řádek}
@@ -347,8 +370,9 @@ vzdáleností mezi body), s~tím rozdílem, že tentokráte již použité body 
 Základní cyklus, jenž by se poznovu dal nazvat cyklem vnějším, se skládá ze dvou na sebe
 navazujících cyklů vnitřních. 
 
-První vnitřní cyklus slouží k revizi, zda není seznam vstupující do výpočtu zbytečně obsáhlý.
-Zjistí-li, že posun nepřekročí více než \textit{x} prvků, smaže redundantní prvky z~počátku seznamu (posouváme bod
+První vnitřní cyklus slouží k~revizi, zda není seznam vstupující do výpočtu zbytečně obsáhlý.
+Zjistí-li, že posun nepřekročí více než \textit{x} prvků
+(pseudokód~\ref{alg:pseudozapornavzd-hlavnicyklus}-5), smaže redundantní prvky z~počátku seznamu (posouváme bod
 z~konce seznamu). Na každý pád vstupuje do výpočtu seznam o~rozsahu právě onoho \textit{x}. 
 
 Po dobrozdání výpočet vstupuje do cyklu spočívajícího ve výpočtu první geode\-tické úlohy.
@@ -357,13 +381,13 @@ posun překročit vzdálenost mezi dvěma body, kvůli úspoře se výpočet př
 proměnných se zapíšou přímo souřadnice druhého z~bodů. 
 
 Po smyčce, při kteréž již dojde k~výpočtu první geodetické úlohy
-(dojde k~ní mezi prvními dvěma body seznamu), je proveden zápis do výstupního
-souboru - zapíše se poslední řádek ze seznamu se zeměpisnými souřadnicemi přepsanými
-souřadnicemi vypočtenými. 
+(dojde k~ní mezi prvními dvěma body seznamu - pseudokód~\ref{alg:pseudozapornavzd-hlavnicyklus}-10),
+je proveden zápis do výstupního souboru - zapíše se poslední řádek ze seznamu se
+zeměpisnými souřadnicemi přepsanými souřadnicemi vypočtenými (pseudokód~\ref{alg:pseudozapornavzd-hlavnicyklus}-11). 
 
 \begin{algorithm}
 \caption{Posun o zápornou vzdálenost, hlavní cyklus}
-    \label{fig:pseudozapornavzd-hlavnicyklus}
+    \label{alg:pseudozapornavzd-hlavnicyklus}
 %    \begin{figure}[h]
  %   \centering
     \begin{algorithmic}[1]
@@ -477,10 +501,11 @@ V~základním cyklu pak algoritmus čte další řádek. Ten představuje bod, k
 trajektorie, po níž prvý bod posouváme. 
 
 V~tomto vnějším cyklu opět pracuje cyklus vnitřní, v~kterémžto dochází k~porov\-ná\-vá\-ní našeho
-\textit{x} s~dobou, za kterou měřicí zařízení urazilo vzdálenost mezi právě načtenou dvojicí bodů. 
+\textit{x} s~dobou, za kterou měřicí zařízení urazilo vzdálenost mezi právě načtenou dvojicí bodů
+(pseudokód~\ref{alg:pseudokladnycas}-10~až~15). 
 
 Je-li \textit{x} menší než tato doba, proběhne výpočet první geodetické úlohy na trajektorii
-a~s~uvážením rychlosti mezi těmito dvěma body. 
+a~s~uvážením rychlosti mezi těmito dvěma body (pseudokód~\ref{alg:pseudokladnycas}-11). 
 
 Pokud se tyto hodnoty rovnají, jedná se o~podmínky pro výpočet ještě příznivější. Dojde k~pouhému
 zápisu souřadnic druhého bodu do příslušných proměnných. V~ta\-ko\-vém
@@ -488,32 +513,37 @@ případě by se posun dal označit za posun o~hodnoty.
 
 Zákeřněji působí možnost, při níž je hodnota \textit{x} větší než doba mezi měřením dvou
 bodů v~momentální paměti. Pak je zapotřebí dobu posunu \textit{x} zmenšit o~dobu, kterou
-vrtulník mezi dvěma body urazil, druhý bod vložit do bodu prvního a~načíst nový druhý bod. Následně
+vrtulník mezi dvěma body urazil (pseudokód~\ref{alg:pseudokladnycas}-12),
+druhý bod vložit do bodu prvního (pseudokód~\ref{alg:pseudokladnycas}-13) a~načíst
+nový druhý bod (pseudokód~\ref{alg:pseudokladnycas}-14). Následně
 se vnitřní cyklus zabývající se dobrozdáním ohledně hodnoty \textit{x} a~hodnoty
 rozdílu časových značek mezi dvěma body v~paměti může opakovat. 
 
 Poté, co jednou z~možných cest skončí vnitřní cyklus, dojde k~vložení nových souřadnic
 (ať už vypočtených, nebo jen vyjmutých) do odpovídajících sloupců první\-ho čteného řádku.
-Ten se zapíše do výstupního souboru, do proměnné \textit{x} se opět načte uživatelem volená
+Ten se zapíše do výstupního souboru (pseudokód~\ref{alg:pseudokladnycas}-16),
+do proměnné \textit{x} se opět načte uživatelem volená
 hodnota posunu, ve čtení se vyvolá pozice před započetím vnitřního cyklu, a~vnější cyklus se
-opakuje s~řádky o~jeden posunutými. 
+opakuje s~řádky o~jeden posunutými (pseudokód~\ref{alg:pseudokladnycas}-4~až~19). 
 
 \begin{algorithm}
     \caption{Posun o kladný čas}
-    \label{fig:pseudokladnycas}
+    \label{alg:pseudokladnycas}
 %    \begin{figure}[h]
  %   \centering
     \begin{algorithmic}[1]
-    \STATE{posunovanyradek, radek1=přečti řádek}
+    \STATE{posunovanyradek=přečti řádek}
+    \STATE{radek1=posunovanyradek}
     \STATE{pozice=ulož pozici ve vstupním souboru}
     \WHILE{existuje posunovanyradek}
+    \STATE{x=uživatelem zadaná hodnota posunu}
     \STATE{seek(pozice)}
-    \STATE{nasledujiciradek, radek2=přečti řádek}
+    \STATE{nasledujiciradek=přečti řádek}
+    \STATE{radek2=nasledujiciradek}
     \STATE{pozice=ulož pozici ve vstupním souboru}
     \WHILE{x>0}
      \STATE{vypočti první úlohu mezi radek1 a radek2}
      \STATE{x=x-(doba uplynulá mezi měřeními radek1 a radek2)}
-     \STATE{radek1=radek2}
 \algstore{myalg}
 \end{algorithmic}
 \end{algorithm}
@@ -521,10 +551,12 @@ opakuje s~řádky o~jeden posunutými.
 \begin{algorithm}                     
 \begin{algorithmic} [1]
 \algrestore{myalg}
+     \STATE{radek1=radek2}
      \STATE{radek2=přečti řádek}
     \ENDWHILE
     \STATE{vlož vypočtené souřadnice do posunovanyradek a zapiš jej}
-    \STATE{posunovanyradek, radek1=nasledujiciradek}
+    \STATE{posunovanyradek=nasledujiciradek}
+    \STATE{radek1=posunovanyradek}
     \ENDWHILE
     \end{algorithmic}
 \end{algorithm}
@@ -539,11 +571,12 @@ Pro posun o~záporný časový úsek se jako ideální řešení opět zdálo vy
 Tento seznam byl načten před samotným započetím vnějšího cyklu a~hodnoty do něj byly
 přidávány do té doby, dokud součet rozdílů časových značek mezi jednotlivými body
 nepřekročí uživatelem požadovanou hodnotu posunu (lépe řečeno její absolutní hodnotu,
-poněvadž uživatel volí hodnotu zápornou). 
+poněvadž uživatel volí hodnotu zápornou). Tvoření seznamu naznačuje
+pseudokód~\ref{alg:pseudokladnycas}-5~až~9). 
 
 \begin{algorithm}
     \caption{Posun o záporný čas, vytvoření vstupního seznamu}
-    \label{fig:pseudozapornycas-vstup}
+    \label{alg:pseudozapornycas-vstup}
 %    \begin{figure}[h]
  %   \centering
     \begin{algorithmic}[1]
@@ -567,14 +600,16 @@ soubor a~posunout veškeré body. Tento cyklus se skládá ze dvou cyklů vnitř
 
 První vnitřní cyklus reviduje vstupující seznam hodnot. Zjišťuje, zda není přes\-příliš obsáhlý.
 Kontrolu provádí na základě porovnávání součtu rozdílů časových značek s~uživatelem
-voleným časovým posunem. Narazí-li algoritmus na hodnoty, jež by nebyly při výpočtu využity,
-ze seznamu je kvůli úspoře paměti umaže (protože se nové hodnoty - posouvající se body - přidávají
+voleným časovým posunem (pseudokód~\ref{alg:pseudozapornycas-hlavnicyklus}-3~až~8).
+Narazí-li algoritmus na hodnoty, jež by nebyly při výpočtu využity
+(pseudokód~\ref{alg:pseudozapornycas-hlavnicyklus}-5~až~7), ze seznamu je kvůli úspoře
+paměti umaže (protože se nové hodnoty - posouvající se body - přidávají
 na konec seznamu, nadbytečné hodnoty se nachází na jeho začátku). Tyto řádky totiž nebudou
-třeba ani k~žádné z~následujících smyček. 
+třeba k~žádné z~následujících smyček. 
 
 Druhý z~vnitřních cyklů se příliš neliší od toho popsaného v~kapitole \ref{zapornavzdalenost}.
 Čte v~reversním pořadí seznam hodnot a~spočívá v~analýze vstupujících dat. Analýza
-probíhá s~pomocnou proměnnou (ze zvyku si ji označme
+probíhá s~pomocnou proměnnou (v~textu si ji označme
 \textit{x}), která představuje čas posunu od momentálního bodu. 
 
 Pokud \textit{x} převyšuje dobu, za niž měřicí zařízení urazilo vzdálenost mezi dvěma načtenými
@@ -585,16 +620,18 @@ Rovnají-li se tyto dvě hodnoty, do paměti se uloží
 souřadnice bodu 1 (bodu, k~němuž se počítá trajektorie). 
 
 V~případě, že je absolutní hodnota \textit{x} menší než rozdíl časových značek, dochází
-k~výpočtu první geodetické úlohy. 
+k~výpočtu první geodetické úlohy. Pseudokódy jsou jen schematické, poslední kroky
+tedy shrnuje pseudokód (pseudokód~\ref{alg:pseudozapornycas-hlavnicyklus}-9~a~10)
 
 Následuje chvíle pro již typickou koncovku vnějšího cyklu. Souřadnice z~paměti se vloží
-do odpovídajících sloupců řádku s~posunovaným bodem a~ten se zapíše do výstupního souboru.
+do odpovídajících sloupců řádku s~posunovaným bodem a~ten se zapíše do
+výstupního souboru (pseudokód~\ref{alg:pseudozapornycas-hlavnicyklus}-11).
 Následně se na konec seznamu hodnot načte další řádek (nový posunovaný bod) a~\textit{x}
 se nastaví na uživatelem volenou hodnotu posunu. Cyklus pokračuje další smyčkou. 
 
 \begin{algorithm}
     \caption{Pseudokód - Posun o záporný čas, hlavní cyklus}
-    \label{fig:pseudozapornycas-hlavnicyklus}
+    \label{alg:pseudozapornycas-hlavnicyklus}
 %    \begin{figure}[h]
  %   \centering
     \begin{algorithmic}[1]
@@ -607,8 +644,15 @@ se nastaví na uživatelem volenou hodnotu posunu. Cyklus pokračuje další smy
     \ENDIF
     \ENDFOR
     \STATE{casposunu=casuzivatel-(rozdíl časových značek seznam[i] a seznam[1])}
+\algstore{myalg}
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}                     
+\begin{algorithmic} [1]
+\algrestore{myalg}
     \STATE{první geodetická úloha mezi seznam[1] a seznam[0], vzdálenost vypočtená z casposunu}
-    \STATE{vložíme vypočtené hodnoty do seznam[i] a zapíšeme jej}
+    \STATE{vložíme vypočtené hodnoty do seznam[velikost seznam-1] a zapíšeme jej}
     \STATE{načteme na konec seznamu další řádek}
     \ENDWHILE
     \end{algorithmic}
