@@ -140,9 +140,13 @@ v~paměti tedy zbude první a~poslední z~čtených řádků. Hodnoty ze sloupc�
 načteného řádku vložíme do příslušných sloupců prvního čteného řádku. Modifikovaný první
 řádek se zapíše do výstupního souboru. Načte se poloha konce prvního řádku a~cyklus se může opakovat. 
 
-    \begin{figure}[h]
-    \centering
+%    \begin{figure}[h]
+%    \centering
+\begin{algorithm}
+\label{fig:pseudokladnehodnoty}
+    \caption{Posun o kladné hodnoty}
     \begin{algorithmic}[1]
+
     \STATE{posunovanyradek=přečti první řádek}
     \WHILE{existuje posunovanyradek}
     \STATE{pozice=ulož pozici ve vstupním souboru}
@@ -153,9 +157,10 @@ načteného řádku vložíme do příslušných sloupců prvního čteného ř�
     \STATE{posunovanyradek=přečti řádek}
     \ENDWHILE
     \end{algorithmic}
-    \caption{Pseudokód - Posun o kladné hodnoty}
-    \label{fig:pseudokladnehodnoty}
-    \end{figure}
+\end{algorithm}
+%    \caption{Pseudokód - Posun o kladné hodnoty}
+%    \label{fig:pseudokladnehodnoty}
+%    \end{figure}
 
 %%% ML: uvazit pridani pseudokodu i pro ostatni algoritmu
 \subsection{Posun o záporný počet hodnot}
@@ -172,8 +177,11 @@ se zapíše do výstupního souboru. Nyní je třeba doplnit seznam opět na \te
 se dosáhne čtením dalšího řádku ze vstupního souboru a~jeho vložením na konec seznamu. Cyklus
 se může opakovat. 
 
-    \begin{figure}[h]
-    \centering
+%    \begin{figure}[h]
+ %   \centering
+\begin{algorithm}
+\label{fig:pseudozapornehodnoty}
+\caption{Posun o záporné hodnoty}
     \begin{algorithmic}[1]
     \STATE{seznam=přečti \textit{x} řádků}
     \WHILE{existuje hodnota seznam[x]}
@@ -185,9 +193,10 @@ se může opakovat.
     \STATE{načti do seznamu další řádek}
     \ENDWHILE
     \end{algorithmic}
-    \caption{Pseudokód - Posun o záporné hodnoty}
-    \label{fig:pseudozapornehodnoty}
-    \end{figure}
+\end{algorithm}
+%    \caption{Pseudokód - Posun o záporné hodnoty}
+ %   \label{fig:pseudozapornehodnoty}
+  %  \end{figure}
 
 \subsection{Posun o nulový počet hodnot}
 \label{nulovehodnoty}
@@ -238,35 +247,11 @@ skončí, máme tedy novou dvojici bodů a~zbytek z posunu náležející na ten
 %%% ML: probiha? poli?
 Výpočet první geodetické úlohy tedy probíhá až v~takto předpřipraveném prostředí. 
 
-Kromě zeměpisných souřadnic je ale třeba veškeré ostatní informace převzít z~prvního
-čteného řádku (jediný, který kromě momentálního páru bodů zůstává v~paměti). Takto vytvořený
-řádek se zapíše do výstupního souboru. Načte se poloha konce prvního čteného řádku
-a~vnější cyklus se může opakovat. 
-
-    \begin{figure}[h]
-    \centering
-    \begin{algorithmic}[1]
-    \STATE{posunovanyradek=přečti řádek}
-    \STATE{pozice=ulož pozici ve vstupním souboru}
-    \WHILE{existuje posunovanyradek}
-    \STATE{seek(pozice)}
-    \STATE{radek=přečti řádek}
-    \STATE{pozice=ulož pozici ve vstupním souboru}
-    \IF{existuje radek}
-    \STATE{vnitřní cyklus, viz obr. \ref{fig:pseudokladnavzd-vnitrni}}
-    \STATE{výpočet první geodetické úlohy}
-	\STATE{vlož vypočtené souřadnice do posunovanyradek}
-    \STATE{zapiš posunovanyradek}
-    \STATE{posunovanyradek=radek}
-    \ENDIF
-    \ENDWHILE
-    \end{algorithmic}
-    \caption{Pseudokód - Posun o kladnou vzdálenost, vnější cyklus}
-    \label{fig:pseudokladnavzd-vnejsi}
-    \end{figure}
-    
-    \begin{figure}[h]
-    \centering
+%    \begin{figure}[h]
+ %   \centering
+\begin{algorithm}
+\caption{Posun o kladnou vzdálenost, vnitřní cyklus}
+\label{alg:pseudokladnavzd-vnitrni}
     \begin{algorithmic}[1]
     \STATE{radek2=radek}
     \STATE{vzdalenost=vzdálenost mezi posunovanyradek a radek}
@@ -280,9 +265,48 @@ a~vnější cyklus se může opakovat.
     \ENDIF
     \ENDWHILE
     \end{algorithmic}
-    \caption{Pseudokód - Posun o kladnou vzdálenost, vnitřní cyklus}
-    \label{fig:pseudokladnavzd-vnitrni}
-    \end{figure}
+\end{algorithm}
+%    \caption{Pseudokód - Posun o kladnou vzdálenost, vnitřní cyklus}
+ %   \label{fig:pseudokladnavzd-vnitrni}
+  %  \end{figure}
+
+Kromě zeměpisných souřadnic je ale třeba veškeré ostatní informace převzít z~prvního
+čteného řádku (jediný, který kromě momentálního páru bodů zůstává v~paměti). Takto vytvořený
+řádek se zapíše do výstupního souboru. Načte se poloha konce prvního čteného řádku
+a~vnější cyklus se může opakovat. 
+
+%    \begin{figure}[h]
+ %   \centering
+\begin{algorithm}
+\label{fig:pseudokladnavzd-vnejsi}
+\caption{Posun o kladnou vzdálenost, vnější cyklus}
+    \begin{algorithmic}[1]
+    \STATE{posunovanyradek=přečti řádek}
+    \STATE{pozice=ulož pozici ve vstupním souboru}
+    \WHILE{existuje posunovanyradek}
+    \STATE{seek(pozice)}
+    \STATE{radek=přečti řádek}
+    \STATE{pozice=ulož pozici ve vstupním souboru}
+    \IF{existuje radek}
+    \STATE{vnitřní cyklus, viz pseudokód \ref{alg:pseudokladnavzd-vnitrni}}
+	\STATE{výpočet první geodetické úlohy}
+	\STATE{vlož vypočtené souřadnice do posunovanyradek}
+    \STATE{zapiš posunovanyradek}
+\algstore{myalg}
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}                     
+\begin{algorithmic} [1]
+\algrestore{myalg}
+    \STATE{posunovanyradek=radek}
+    \ENDIF
+    \ENDWHILE
+    \end{algorithmic}
+\end{algorithm}
+%    \caption{Pseudokód - Posun o kladnou vzdálenost, vnější cyklus}
+ %   \label{fig:pseudokladnavzd-vnejsi}
+  %  \end{figure}
 
 \subsection{Posun o zápornou vzdálenost}
 \label{zapornavzdalenost}
@@ -299,8 +323,11 @@ Opět si vypomůžeme seznamem hodnot (řádků). Ponejprve byl vytvořen vstup\
 na stejném principu, jako v~předchozím případě (porovnávání \textit{uražené} vzdálenosti se
 vzdáleností mezi body), s~tím rozdílem, že tentokráte již použité body vkládáme do seznamu hodnot.
 
-    \begin{figure}[h]
-    \centering
+%    \begin{figure}[h]
+ %   \centering
+\begin{algorithm}
+\label{fig:pseudozapornavzd-vstup}
+\caption{Posun o zápornou vzdálenost, vytvoření vstupního seznamu}
     \begin{algorithmic}[1]
     \STATE{seznam=přečti 2 řádky}
     \STATE{x=1}
@@ -312,9 +339,10 @@ vzdáleností mezi body), s~tím rozdílem, že tentokráte již použité body 
     \STATE{urazenavzdalenost=urazenavzdalenost+délka mezi seznam[x-1] a seznam[x]}
     \ENDWHILE
     \end{algorithmic}
-    \caption{Pseudokód - Posun o zápornou vzdálenost, vytvoření vstupního seznamu}
-    \label{fig:pseudozapornavzd-vstup}
-    \end{figure}
+\end{algorithm}
+%    \caption{Pseudokód - Posun o zápornou vzdálenost, vytvoření vstupního seznamu}
+ %   \label{fig:pseudozapornavzd-vstup}
+  %  \end{figure}
 
 Základní cyklus, jenž by se poznovu dal nazvat cyklem vnějším, se skládá ze dvou na sebe
 navazujících cyklů vnitřních. 
@@ -333,8 +361,11 @@ Po smyčce, při kteréž již dojde k~výpočtu první geodetické úlohy
 souboru - zapíše se poslední řádek ze seznamu se zeměpisnými souřadnicemi přepsanými
 souřadnicemi vypočtenými. 
 
-    \begin{figure}[h]
-    \centering
+\begin{algorithm}
+\caption{Posun o zápornou vzdálenost, hlavní cyklus}
+    \label{fig:pseudozapornavzd-hlavnicyklus}
+%    \begin{figure}[h]
+ %   \centering
     \begin{algorithmic}[1]
     \WHILE{poslední hodnota seznamu není prázdný řádek}
     \STATE{urazenavzdalenost=0}
@@ -350,9 +381,10 @@ souřadnicemi vypočtenými.
     \STATE{načteme na konec seznamu další řádek}
     \ENDWHILE
     \end{algorithmic}
-    \caption{Pseudokód - Posun o zápornou vzdálenost, hlavní cyklus}
-    \label{fig:pseudozapornavzd-hlavnicyklus}
-    \end{figure}
+\end{algorithm}
+%    \caption{Pseudokód - Posun o zápornou vzdálenost, hlavní cyklus}
+ %   \label{fig:pseudozapornavzd-hlavnicyklus}
+  %  \end{figure}
 
 \subsection{Posun o nulovou vzdálenost}
 \label{nulovavzdalenost}
@@ -466,8 +498,11 @@ Ten se zapíše do výstupního souboru, do proměnné \textit{x} se opět načt
 hodnota posunu, ve čtení se vyvolá pozice před započetím vnitřního cyklu, a~vnější cyklus se
 opakuje s~řádky o~jeden posunutými. 
 
-    \begin{figure}[h]
-    \centering
+\begin{algorithm}
+    \caption{Posun o kladný čas}
+    \label{fig:pseudokladnycas}
+%    \begin{figure}[h]
+ %   \centering
     \begin{algorithmic}[1]
     \STATE{posunovanyradek, radek1=přečti řádek}
     \STATE{pozice=ulož pozici ve vstupním souboru}
@@ -479,15 +514,23 @@ opakuje s~řádky o~jeden posunutými.
      \STATE{vypočti první úlohu mezi radek1 a radek2}
      \STATE{x=x-(doba uplynulá mezi měřeními radek1 a radek2)}
      \STATE{radek1=radek2}
+\algstore{myalg}
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}                     
+\begin{algorithmic} [1]
+\algrestore{myalg}
      \STATE{radek2=přečti řádek}
     \ENDWHILE
     \STATE{vlož vypočtené souřadnice do posunovanyradek a zapiš jej}
     \STATE{posunovanyradek, radek1=nasledujiciradek}
     \ENDWHILE
     \end{algorithmic}
-    \caption{Pseudokód - Posun o kladný čas}
-    \label{fig:pseudokladnycas}
-    \end{figure}
+\end{algorithm}
+ %   \caption{Pseudokód - Posun o kladný čas}
+  %  \label{fig:pseudokladnycas}
+   % \end{figure}
 
 \subsection{Posun o záporný časový úsek}
 \label{zapornycas}
@@ -498,8 +541,11 @@ přidávány do té doby, dokud součet rozdílů časových značek mezi jednot
 nepřekročí uživatelem požadovanou hodnotu posunu (lépe řečeno její absolutní hodnotu,
 poněvadž uživatel volí hodnotu zápornou). 
 
-    \begin{figure}[h]
-    \centering
+\begin{algorithm}
+    \caption{Posun o záporný čas, vytvoření vstupního seznamu}
+    \label{fig:pseudozapornycas-vstup}
+%    \begin{figure}[h]
+ %   \centering
     \begin{algorithmic}[1]
     \STATE{seznam=přečti 2 řádky}
     \STATE{x=1}
@@ -511,9 +557,10 @@ poněvadž uživatel volí hodnotu zápornou).
     \STATE{ubehlycas=ubehlycas+rozdíl časových značek seznam[x] a seznam[x-1]}
     \ENDWHILE
     \end{algorithmic}
-    \caption{Pseudokód - Posun o záporný čas, vytvoření vstupního seznamu}
-    \label{fig:pseudozapornycas-vstup}
-    \end{figure}
+\end{algorithm}
+%    \caption{Pseudokód - Posun o záporný čas, vytvoření vstupního seznamu}
+ %   \label{fig:pseudozapornycas-vstup}
+  %  \end{figure}
 
 Seznam již vstupuje do vnějšího cyklu, jehož cílem je postupně projít celý vstupní
 soubor a~posunout veškeré body. Tento cyklus se skládá ze dvou cyklů vnitřních. 
@@ -545,8 +592,11 @@ do odpovídajících sloupců řádku s~posunovaným bodem a~ten se zapíše do 
 Následně se na konec seznamu hodnot načte další řádek (nový posunovaný bod) a~\textit{x}
 se nastaví na uživatelem volenou hodnotu posunu. Cyklus pokračuje další smyčkou. 
 
-    \begin{figure}[h]
-    \centering
+\begin{algorithm}
+    \caption{Pseudokód - Posun o záporný čas, hlavní cyklus}
+    \label{fig:pseudozapornycas-hlavnicyklus}
+%    \begin{figure}[h]
+ %   \centering
     \begin{algorithmic}[1]
     \WHILE{poslední hodnota seznamu není prázdný řádek}
     \STATE{ubehlycas=0}
@@ -562,9 +612,10 @@ se nastaví na uživatelem volenou hodnotu posunu. Cyklus pokračuje další smy
     \STATE{načteme na konec seznamu další řádek}
     \ENDWHILE
     \end{algorithmic}
-    \caption{Pseudokód - Posun o záporný čas, hlavní cyklus}
-    \label{fig:pseudozapornycas-hlavnicyklus}
-    \end{figure}
+\end{algorithm}
+%    \caption{Pseudokód - Posun o záporný čas, hlavní cyklus}
+ %   \label{fig:pseudozapornycas-hlavnicyklus}
+  %  \end{figure}
 
 \subsection{Posun o nulový časový úsek}
 \label{nulovycas}
