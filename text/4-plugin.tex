@@ -121,6 +121,13 @@ soubory související se zkoumanou pro\-blematikou, tedy obsah move.py.
 \section{Posun o hodnoty}
 \label{by_points}
 
+  \begin{figure}[H]
+   \centering
+	\includegraphics[scale=1]{./pictures/3-values-shift.png}
+	\caption[Ukázka - Posun o 3 hodnoty]{Ukázka - Posun o 3 hodnoty (červeně vyznačeny posunuté body)
+      \label{fig:values-shift}}
+  \end{figure}
+
 %%% ML: by_points() je metoda tridy Move. + dalsi vyskyty
 Posun o~hodnoty se skrývá pod metodou {\tt by\_points} třídy {\tt Move}.
 Zde nejprve proběhne analýza vstupních dat.
@@ -197,13 +204,13 @@ se může opakovat.
     \STATE{posunovanyradek=seznam[x]}
     \STATE{vlož souřadnice seznam[0] do posunovanyradek}
     \STATE{zapiš posunovanyradek}
-\algstore{myalg}
-\end{algorithmic}
-\end{algorithm}
+%\algstore{myalg}
+%\end{algorithmic}
+%\end{algorithm}
 
-\begin{algorithm}                     
-\begin{algorithmic} [1]
-\algrestore{myalg}
+%\begin{algorithm}                     
+%\begin{algorithmic} [1]
+%\algrestore{myalg}
     \STATE{vymaž seznam[0]}
     \STATE{seek(pozice)}
     \STATE{načti do seznamu další řádek}
@@ -224,6 +231,13 @@ odůvodnění.
 
 \section{Posun o konstantní vzdálenost}
 \label{by_distance}
+
+  \begin{figure}[H]
+   \centering
+	\includegraphics[scale=1]{./pictures/distance-shift.png}
+	\caption[Ukázka - Posun o 9.823 metrů]{Ukázka - Posun o 9.823 metrů (červeně vyznačeny posunuté body)
+      \label{fig:distance-shift}}
+  \end{figure}
 
 Posun o~konstantní vzdálenost je obsažen v~{\tt Move.by\_distance}. 
 
@@ -283,6 +297,13 @@ Výpočet první geodetické úlohy tedy probíhá až v~takto předpřipravené
     \STATE{radek1=radek2}
     \STATE{radek2=přečti řádek}
     \IF{existuje radek2}
+\algstore{myalg}
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}                     
+\begin{algorithmic} [1]
+\algrestore{myalg}
     \STATE{vzdalenost=vzdálenost mezi radek1 a radek2}
     \ENDIF
     \ENDWHILE
@@ -311,13 +332,13 @@ a~vnější cyklus se může opakovat.
     \STATE{pozice=ulož pozici ve vstupním souboru}
     \IF{existuje radek}
     \STATE{vnitřní cyklus, viz pseudokód \ref{alg:pseudokladnavzd-vnitrni}}
-\algstore{myalg}
-\end{algorithmic}
-\end{algorithm}
+%\algstore{myalg}
+%\end{algorithmic}
+%\end{algorithm}
 
-\begin{algorithm}                     
-\begin{algorithmic} [1]
-\algrestore{myalg}
+%\begin{algorithm}                     
+%\begin{algorithmic} [1]
+%\algrestore{myalg}
 	\STATE{výpočet první geodetické úlohy}
 	\STATE{vlož vypočtené souřadnice do posunovanyradek}
     \STATE{zapiš posunovanyradek}
@@ -393,6 +414,13 @@ zeměpisnými souřadnicemi přepsanými souřadnicemi vypočtenými (pseudokód
     \begin{algorithmic}[1]
     \WHILE{poslední hodnota seznamu není prázdný řádek}
     \STATE{urazenavzdalenost=0}
+\algstore{myalg}
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}                     
+\begin{algorithmic} [1]
+\algrestore{myalg}
     \FOR{i=obrácená řada od 1 do [velikost seznam]}
     \STATE{urazenavzdalenost=urazenavzdalenost+délka mezi seznam[i-1] a seznam[i]}
     \IF{delkaposunu<=urazenavzdalenost}
@@ -453,6 +481,13 @@ prakticky nulový vliv.
 
 \section{Posun o konstantní čas (proměnnou vzdálenost)}
 \label{by_seconds}
+
+  \begin{figure}[H]
+   \centering
+	\includegraphics[scale=1]{./pictures/time-shift.png}
+	\caption[Ukázka - Posun o 2.718 sekund]{Ukázka - Posun o 2.718 sekund (červeně vyznačeny posunuté body)
+      \label{fig:time-shift}}
+  \end{figure}
 
 Velká část popisu kódu v~kapitole \ref{by_distance} se týká též posunu o~konstantní
 čas - o~vzdále\-nost s~uvážením rychlosti. Odkazujeme se zde na základní přípravu hrací plochy,
