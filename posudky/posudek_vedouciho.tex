@@ -1,0 +1,89 @@
+\documentclass[czech,11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{a4wide}
+\usepackage[pdftex,breaklinks=true,colorlinks=true,urlcolor=blue,
+  pagecolor=black,linkcolor=black]{hyperref}
+\usepackage[czech]{babel}
+
+\pagestyle{empty}
+
+\begin{document}
+
+\begin{center}
+  {\Large --- Posudek vedoucího bakalářské práce ---}
+\end{center}
+
+\vspace{.2cm}
+
+\noindent \begin{tabular}{rp{.9\textwidth}}
+  {\bf Název:} & Posun letecky měřených bodů po trajektorii v prostředí QGIS \\
+  {\bf Student:} & Ondřej Pešek \\
+  {\bf Vedoucí:} & Ing. Martin Landa, Ph.D. \\
+  {\bf Fakulta:} & Fakulta stavební ČVUT v Praze \\ 
+  {\bf Katedra:} & Katedra geomatiky \\
+  {\bf Oponent:} & RNDr. Marcel Ohera \\
+  {\bf Pracoviště oponenta:} & EnviMO, Vlčnovská 16, 628 00 Brno \\
+\end{tabular}
+
+\vspace{1cm}
+
+Zadání práce vzešlo z objednávky od kolegů ze Státního ústavu radiační
+ochrany (dále SURO). Jejím cílem bylo navrhnout nástroj umožňující
+posun letecky měřených bodů po trajektorii. Odůvodnění potřeby
+takového nástroje je vysvětleno v kapitole 2.2. Pro jeho vývoj byla
+použita open source platforma QGIS, která je na SURO současně i
+certifikována. Tento bod je důležitým předpokladem pro nasazení v
+prostředí tohoto ústavu. Výsledkem je nástroj (tzv. zásuvný modul) pro
+QGIS volně dostupný pod licencí GNU GPL, který je ze strany SURO dále
+testován a plánován k využití do ostrého provozu. Aktuálně je dostupný
+z repositáře OSGeoREL (Open Source Geospatial Research and Education
+Laboratory) na ČVUT v Praze, v budoucnu se počítá s jeho začleněním do
+oficiálního repositáře QGIS. \newline
+
+Student musel nejprve vstřebat nutný teoretický základ potřebný pro
+další zpracování praktické části vedoucí k výše zmíněnému zásuvnému
+modulu QGIS, a to úvod do scintilační spektrometrie a aparátu
+potřebného pro výpočet posunu souřadnic na referenční ploše elipsoidu,
+tj. první geodetické úlohy. Použité technologie vycházejí z platformy
+QGIS. Pro vývoj nástroje byl použit programovací jazyk Python a
+grafický framework PyQt. Výsledný produkt je popsán v kapitole 4 a
+příloze A, která je vzhledem k tomu, že bude využita pro základ
+dokumentace nástroje, zpracována na rozdíl od zbytku práce v jazyce
+anglickém. \newline
+
+Jako vedoucí práce si cením především přístupu studenta. Na pravidelné
+konzultace dochá\-zel vždy připraven, stanovené úkoly plnil s lehkostí
+a samozřejmostí. Tento přístup bohužel není u našich studentů obvyklý
+a bylo by mi potěšením se s ním setkávat častěji než
+výjimečně. \newline
+
+Zmínku si zaslouží jazyková stránka práce, kde se projevuje hravost
+autora a jeho zájem o český jazyk. Skloubit archaická slova s jazykem
+současné technické práce se mu podařilo především v teoretické
+části. V praktické části naopak působí tato snaha na několika místech
+kostrbatě a jaksi nuceně. Výsledkem je nicméně čtivá práce, která
+svého čtenáře kromě obsahu zaujme i svým jazykem. Příkladem může být
+věta na předělu stran 12 a 13, viz. poznámka pod čarou číslo 2. Osobně
+jsem text práce četl s potěšením a radostí, což nebývá u technických
+prací obvyklé. \newline
+
+\newpage
+
+Na základě výše uvedeného doporučuji předloženou práci k obhajobě a
+hodnotím ji klasifikačním stupněm
+
+\begin{center}
+  {\bf --- A (výborně) --- }
+\end{center}
+
+\noindent a navrhuji udělení pochvaly za vynikající zpracování závěrečné práce.
+
+\vskip 2cm
+
+\begin{tabular}{lp{.2\textwidth}r}
+& & \ldots\ldots\ldots\ldots\ldots\ldots\ldots \\
+V~Praze dne 24. června 2016 & & Ing. Martin Landa, Ph.D. \\
+& & Fakulta stavební, ČVUT v Praze \\
+\end{tabular}
+
+\end{document}
