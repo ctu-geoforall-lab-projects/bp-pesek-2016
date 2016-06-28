@@ -12,6 +12,10 @@ Ondřej Pešek
 
 Ing. Martin Landa, Ph.D.
 
+## Oponent
+
+RNDr. Marcel Ohera 
+
 ## Obhajoba
 
 06/2016
