@@ -10,7 +10,7 @@
 \documentclass[%
   12pt,         			% Velikost základního písma je 12 bodů
   a4paper,      			% Formát papíru je A4
-  twoside,       			% Oboustranný tisk
+  oneside,       			% Oboustranný tisk
   pdftex,				    % překlad bude proveden programem 'pdftex' do PDF
 %%%  draft
 ]{report}       			% Dokument třídy 'zpráva'
@@ -122,17 +122,19 @@
 \abstrakt 
 {Cílem bakalářské práce je návrh softwarového nástroje umožňujícího posun letecky měřených bodů po
 trajektorii. Takový nástroj je třeba z~toho důvodu, že přístroj při
-leteckých měřeních zapisuje souřadnice s~určitým zpožděním. V~praktické části práce se objevuje jeho
-implementace jako tzv.~zásuvného modulu do prostředí open source projektu QGIS s~využitím grafického
-frameworku Qt. Při vyvíjení zásuvného modulu bude přihlíženo
+%%% ML: objevuje implementace - zni neobratne, zkus preformulovat
+leteckých měřeních zapisuje souřadnice s~určitým zpožděním. Praktická část práce zahrnuje jeho
+implementaci jako tzv.~zásuvného modulu do prostředí open source projektu QGIS s~využitím grafického
+%%% ML: budouci cas v abstraktu zni nevhodne, lepsi - podle meho nazoru - je cas minuly
+frameworku Qt. Při vyvíjení zásuvného modulu bylo přihlíženo
 k~požadavkům a~připomínkám Státního ústavu radiační ochrany, který tento projekt inicioval.
-Z~důvodu zachování úzu prostředí QGIS bude zásuvný modul vytvářen v jazyku Python.}%
+Z~důvodu zachování úzu prostředí QGIS byl zásuvný modul vytvářen v~jazyku Python.}%
 {The object of bachelor thesis is creation of software tool for shifting aerial data by their trajectory
 (GPS position lag correction). The reason for this tool is that the instrument for
 aerial data surveying is recording data with some delay. In practical part of bachelor thesis is
 implementation of this tool as plugin into open source project QGIS using graphical framework Qt.
 While developing the~plugin, comments and requests by National Radiation Protection Institute
-(initiators of the~project) will be taken into consideration. Due to recent habit of QGIS software
+(initiators of the~project) have been taken into consideration. Due to recent habit of QGIS software
 the~plugin will be created in language Python. 
  }
 
@@ -172,8 +174,8 @@ the~plugin will be created in language Python.
 
 % Vysázení listu zadani
 \stranka{}%
-	{\sffamily\Huge\centering\ ZDE VLOŽIT LIST ZADÁNÍ}%
-	{\sffamily\centering Z~důvodu správného číslování stránek}
+	{\includegraphics[scale=0.7]{./pictures/zadanibp2.pdf}}%\sffamily\Huge\centering\ }%ZDE VLOŽIT LIST ZADÁNÍ}%
+	%{\sffamily\centering Z~důvodu správného číslování stránek}
 
 % Vysázení stránky s abstraktem
 \vytvorabstrakt
